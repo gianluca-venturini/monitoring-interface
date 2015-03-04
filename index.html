@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <meta name="description" content="">
+
+    <title>Monitoring Interface</title>
+
+    <script src="js/lib/d3.v3.min.js" charset="utf-8"></script>
+
+    <script src="js/d3/window-manager.js" charset="utf-8"></script>
+    <script src="js/d3/ui/ui-application.js" charset="utf-8"></script>
+</head>
+<body>
+
+<svg id="container"></svg>
+
+</body>
+
+<script>
+
+    var svg = d3.select("#container");
+
+    var windowManager = WindowManager(svg);
+
+</script>
+
+</html>
