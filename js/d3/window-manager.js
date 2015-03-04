@@ -24,22 +24,38 @@ var WindowManager = function(svg) {
 
     self.renderData = function(data) {
 
-        console.log(data);
-
+        // Create new applications
         self._svg.selectAll("g")
             .data(data)
             .enter()
             .append("g")
             .each(function(data) {
-                console.log(d3.select(this));
                 var application = UIApplication(d3.select(this));
+                application.data = data;
+                this.application = application;
                 self._uiApplications.push(application);
             });
 
-        // Render of the single application
-        self._uiApplications.forEach(function(application) {
-            application.render();
-        });
+        // Update data in applications
+        self._svg.selectAll("g")
+            .data(data)
+            .each(function(data) {
+                var application = this.application;
+                application.data = data;
+
+                // Render the application
+                application.render();
+            });
+
+        // Delete old applications
+        self._svg.selectAll("g")
+            .data(data)
+            .exit()
+            .each(function(data) {
+                var application = this.application;
+                application.deinit();
+            })
+            .remove();
     };
 
     self.init = function() {
@@ -52,6 +68,8 @@ var WindowManager = function(svg) {
         window.addEventListener("resize", self.updateViewBox);
 
         self.fetchData("data/data.json");
+
+        setTimeout(function(){ self.fetchData("data/data2.json"); }, 3000);
 
     }();
 
