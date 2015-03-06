@@ -1,8 +1,5 @@
 var UITabTable = function(layer) {
-    var self = UIElement();
-
-    // Protected variables
-    self._layer = undefined;
+    var self = UIElement(layer);
 
     // Public variables
     self.data = undefined;
@@ -13,6 +10,8 @@ var UITabTable = function(layer) {
             self._layer.selectAll("rect")
                 .data(self.data)
                 .enter()
+                .tabTable()
+                .lineHeight(50)
                 .append("rect")
                 .attr("width", "200")
                 .attr("height", "50")

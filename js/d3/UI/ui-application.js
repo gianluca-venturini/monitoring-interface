@@ -1,5 +1,5 @@
 var UIApplication = function(layer) {
-    var self = UIElement();
+    var self = UIElement(layer);
 
     // Static attributes
     UIApplication.style = {
@@ -10,9 +10,6 @@ var UIApplication = function(layer) {
     var appRect = undefined;
     var appLabel = undefined;
     var tabTable = undefined;
-
-    // Protected variables
-    self._layer = undefined;
 
     // Public variables
     self.data = undefined;
@@ -62,7 +59,9 @@ var UIApplication = function(layer) {
                 .attr("y", -height/2 + UIApplication.style.margin);
 
             tabTable = self._layer.append("g")
-                .attr("transform", function(d) { return "translate(" + (-width/2 + UIApplication.style.margin) + "," + ( -height/2 + UIApplication.style.margin) + ")"})
+                .margin(UIApplication.style.margin)
+                .translate(-width/2, -height/2)
+                //.attr("transform", function(d) { return "translate(" + (-width/2 + UIApplication.style.margin) + "," + ( -height/2 + UIApplication.style.margin) + ")"})
                 .each(function(data) {
                     this.tabTable = UITabTable(d3.select(this));
 
@@ -94,7 +93,7 @@ var UIApplication = function(layer) {
 
     // Constructor
     self.init = function() {
-        self._layer = layer;
+
     }();
 
     // Destructor
