@@ -39,6 +39,7 @@ var WindowManager = function(svg) {
         // Update data in applications
         self._svg.selectAll("g")
             .data(data)
+            .attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
             .each(function(data) {
                 var application = this.application;
                 application.data = data;
@@ -58,6 +59,14 @@ var WindowManager = function(svg) {
             .remove();
     };
 
+    self.getWidth = function() {
+        return self._width;
+    };
+
+    self.getHeight = function() {
+        return self._height;
+    };
+
     self.init = function() {
 
         self._svg = svg;
@@ -69,7 +78,7 @@ var WindowManager = function(svg) {
 
         self.fetchData("data/data.json");
 
-        setTimeout(function(){ self.fetchData("data/data2.json"); }, 3000);
+        //setTimeout(function(){ self.fetchData("data/data2.json"); }, 3000);
 
     }();
 
