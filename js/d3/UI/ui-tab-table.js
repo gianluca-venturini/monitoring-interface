@@ -13,8 +13,8 @@ var UITabTable = function(layer) {
                 .tabTable()
                 .lineHeight(50)
                 .append("rect")
-                .attr("width", "200")
-                .attr("height", "50")
+                .width(200)
+                .height(50)
                 .attr("x", function(d) { return 200; })
                 .attr("y", function(d,i) { return i*50;  })
                 .attr("fill", "#e74c3c");
