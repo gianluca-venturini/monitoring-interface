@@ -13,6 +13,11 @@ var WindowManager = function(svg) {
         svg.attr("viewBox", "0 0 " + self._width + " " + self._height);
     };
 
+    self.resizeWindow = function() {
+        self.updateViewBox();
+        self.fetchData("data/data.json");
+    };
+
     self.fetchData = function(url) {
         d3.json(url, function(error, data) {
             if (error)
@@ -74,7 +79,7 @@ var WindowManager = function(svg) {
 
         self.updateViewBox();
 
-        window.addEventListener("resize", self.updateViewBox);
+        window.addEventListener("resize", self.resizeWindow);
 
         self.fetchData("data/data.json");
 
