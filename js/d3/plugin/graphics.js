@@ -17,8 +17,11 @@
     d3.selection.prototype.rotateText = d3.selection.enter.prototype.rotateText = function() {
         var self = this;
 
-        this.attr("text-anchor", function(d) { return d.degree < 180 ? "start" : "end"; })
-            .attr("transform", function(d) { return d.degree < 180 ? null : "rotate(180)"; });
+        console.log(d.radius);
+
+        this.attr("transform", function(d) { return "translate(" + d.radius + ", 0)"})
+            .attr("text-anchor", function(d) { return d.angle < 180 ? "start" : "end"; })
+            .attr("transform", function(d) { return d.angle < 180 ? null : "rotate(180)"; });
 
         return this;
     };
