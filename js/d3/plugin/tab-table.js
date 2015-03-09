@@ -1,10 +1,7 @@
 (function() {
-    d3.selection.prototype.tabTable = d3.selection.enter.prototype.tabTable = function() {
+    d3.selection.prototype.tabTable = d3.selection.enter.prototype.tabTable = d3.transition.prototype.tabTable = function() {
 
-        this.lineHeight = function(height) {
-            this.lineHeight = height;
-            return this;
-        };
+
 
         return this;
     };

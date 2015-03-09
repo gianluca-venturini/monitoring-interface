@@ -39,7 +39,7 @@
 
                 component.startAngle = angle;
                 component.endAngle = angle * numChannels * self.numChannels;
-            };
+            });
 
             return this;
         };
