@@ -59,7 +59,7 @@ var UIConnectionView = function(layer) {
             .data(radialLayout.channels)
             .enter()
             .append("text")
-            .rotateText()
+            //.rotateText()
             .text(function(channel) {return channel.channel;});
     };
 
