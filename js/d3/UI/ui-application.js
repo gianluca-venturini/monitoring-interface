@@ -39,6 +39,7 @@ var UIApplication = function(delegate) {
             layer.selectAll("rect")
                 .transition()
                 .fill(self.palette.primary.normal)
+                .margin(undefined)
                 .width(100)
                 .height(100)
                 .x(-50)
@@ -47,7 +48,7 @@ var UIApplication = function(delegate) {
 
         // Application name
         layer.selectAll(".name")
-            .data({})
+            .data([{}])
             .enter()
             .append("text")
             .class("name")
@@ -57,10 +58,6 @@ var UIApplication = function(delegate) {
             .text(delegate.name);
 
         layer.selectAll(".name")
-            .data({})
-            .x(0)
-            .y(0)
-            .attr("text-anchor", "middle")
             .text(delegate.name);
 
         /*

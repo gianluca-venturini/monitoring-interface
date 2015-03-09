@@ -16,13 +16,22 @@ var WindowViewController = function(view) {
     // Private variables
     var rectGrid = undefined;
 
-    self.updateViewBox = function() {
+    self.updateViewBoxAnimated = function() {
         self._width  = window.innerWidth;
         self._height = window.innerHeight;
         if(self._center == undefined)
             self._view.transition().attr("viewBox", "0 0 " + self._width + " " + self._height);
         else
             self._view.transition().attr("viewBox", (-self._width/2 + self._center.x) + "  " + (-self._height/2 + self._center.y) + " " + self._width + " " + self._height);
+    };
+
+    self.updateViewBox = function() {
+        self._width  = window.innerWidth;
+        self._height = window.innerHeight;
+        if(self._center == undefined)
+            self._view.attr("viewBox", "0 0 " + self._width + " " + self._height);
+        else
+            self._view.attr("viewBox", (-self._width/2 + self._center.x) + "  " + (-self._height/2 + self._center.y) + " " + self._width + " " + self._height);
     };
 
     self.resizeWindow = function() {
@@ -34,6 +43,11 @@ var WindowViewController = function(view) {
             .size([window.innerWidth - WindowViewController.style.margin,
                 window.innerHeight- WindowViewController.style.margin])
             .padding([0.1, 0.1]);
+
+        if(applicationModel.data != undefined) {
+            self.renderData(applicationModel.data.applications)
+        }
+
 
         //TODO: Send notification
     };
@@ -67,6 +81,7 @@ var WindowViewController = function(view) {
         self._view.selectAll("g")
             .data(rectGrid(data))
             //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
+            .transition()
             .attr("transform", function(d) { return "translate(" + (d.x + rectGrid.nodeSize()[0]/2) + "," + (d.y + rectGrid.nodeSize()[1]/2) + ")"; })
             .each(function(data) {
                 var applicationViewController = this.applicationViewController;
@@ -92,12 +107,12 @@ var WindowViewController = function(view) {
 
     self.center = function(x, y) {
         self._center = {x: x, y: y};
-        self.updateViewBox();
+        self.updateViewBoxAnimated();
     };
 
     self.resetCenter = function() {
         self._center = undefined;
-        self.updateViewBox();
+        self.updateViewBoxAnimated();
     };
 
     // Constructor
@@ -106,6 +121,15 @@ var WindowViewController = function(view) {
         notificationCenter.subscribe(Notifications.data.APPLICATION_DATA_CHANGE,
             function() {
                 self.renderData(applicationModel.data.applications);
+            });
+
+        // Subscribe to application expansion notification
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED,
+            function() {
+                rectGrid = d3.layout.grid()
+                    .bands()
+                    .size([10000, 10000])
+                    .padding([0.1, 0.1]);
             });
 
         window.addEventListener("resize", self.resizeWindow);

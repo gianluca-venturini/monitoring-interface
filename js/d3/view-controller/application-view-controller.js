@@ -22,12 +22,14 @@ var ApplicationViewController = function(name, view) {
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
             self.expanded = true;
             windowViewController.center(self.coordinates.x, self.coordinates.y);
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANDED);
         }
         else {
             applicationModel.viewControllerApplicationSelected = undefined;
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
             self.expanded = false;
             windowViewController.resetCenter();
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCED);
         }
 
         self.render();
