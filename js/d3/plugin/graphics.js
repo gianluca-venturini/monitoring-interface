@@ -67,7 +67,9 @@
     };
 
     d3.selection.prototype.class = d3.selection.enter.prototype.class = d3.transition.prototype.class = function(className) {
-        this.classed({className: true});
+        var cn = {};
+        cn[className] = true;
+        this.classed(cn);
         return this;
     };
 

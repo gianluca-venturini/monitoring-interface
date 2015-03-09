@@ -37,7 +37,6 @@ var WindowViewController = function(view) {
     self.resizeWindow = function() {
         self.updateViewBox();
 
-        // Init the grid layout
         rectGrid = d3.layout.grid()
             .bands()
             .size([window.innerWidth - WindowViewController.style.margin,
@@ -123,13 +122,25 @@ var WindowViewController = function(view) {
                 self.renderData(applicationModel.data.applications);
             });
 
-        // Subscribe to application expansion notification
+        // Subscribe to application expansion
         notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED,
             function() {
                 rectGrid = d3.layout.grid()
                     .bands()
-                    .size([10000, 10000])
+                    .size([2000, 2000])
                     .padding([0.1, 0.1]);
+                self.renderData(applicationModel.data.applications)
+            });
+
+        // Subscribe to application reduction
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCED,
+            function() {
+                rectGrid = d3.layout.grid()
+                    .bands()
+                    .size([window.innerWidth - WindowViewController.style.margin,
+                        window.innerHeight- WindowViewController.style.margin])
+                    .padding([0.1, 0.1]);
+                self.renderData(applicationModel.data.applications)
             });
 
         window.addEventListener("resize", self.resizeWindow);

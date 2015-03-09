@@ -57,8 +57,10 @@ var UIApplication = function(delegate) {
             .attr("text-anchor", "middle")
             .text(delegate.name);
 
+        /*
         layer.selectAll(".name")
             .text(delegate.name);
+        */
 
         /*
 
