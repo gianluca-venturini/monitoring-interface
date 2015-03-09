@@ -40,6 +40,7 @@ var NotificationCenter = function() {
     };
 
     self.dispatch = function(notification) {
+        console.log("Notification center > dispatch: "+notification);
         _.filter(_callbacks,
             function(c){return c.notification === notification})
             .forEach(

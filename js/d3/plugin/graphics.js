@@ -17,23 +17,27 @@
     d3.selection.prototype.rotateText = d3.selection.enter.prototype.rotateText = function() {
         var self = this;
 
-        console.log(d.radius);
+        this.attr("transform", function(d) { return "translate(" + d.radius*Math.cos(d.angle) + ", " + d.radius*Math.sin(d.angle) + ")rotate(" + d.angle + ")"; });
 
+        /*
         this.attr("transform", function(d) { return "translate(" + d.radius + ", 0)"})
             .attr("text-anchor", function(d) { return d.angle < 180 ? "start" : "end"; })
             .attr("transform", function(d) { return d.angle < 180 ? null : "rotate(180)"; });
+        */
 
         return this;
     };
 
     d3.selection.prototype.width = d3.selection.enter.prototype.width = d3.transition.prototype.width = function(width) {
         var self = this;
-        return this.attr("width", width);
+        var margin = this.margin.x || 0;
+        return this.attr("width", width - margin * 2);
     };
 
     d3.selection.prototype.height = d3.selection.enter.prototype.height = d3.transition.prototype.height = function(height) {
         var self = this;
-        return this.attr("height", height);
+        var margin = this.margin.y || 0;
+        return this.attr("height", height - margin * 2);
     };
 
     d3.selection.prototype.x = d3.selection.enter.prototype.x = d3.transition.prototype.x = function(x) {
@@ -58,7 +62,14 @@
         return this;
     };
 
-    d3.selection.prototype.newLayer = d3.selection.enter.prototype.newLayer = function() {
+    d3.selection.prototype.newLayer = d3.selection.enter.prototype.newLayer = d3.transition.prototype.newLayer = function() {
         return this.append("g");
     };
+
+    d3.selection.prototype.class = d3.selection.enter.prototype.class = d3.transition.prototype.class = function(className) {
+        this.classed({className: true});
+        return this;
+    };
+
+
 })();

@@ -1,5 +1,5 @@
-var UIApplication = function(layer) {
-    var self = UIElement(layer);
+var UIApplication = function(delegate) {
+    var self = UIElement(delegate);
 
     // Static attributes
     UIApplication.style = {
@@ -8,28 +8,62 @@ var UIApplication = function(layer) {
     };
 
     // Private
-    var appRect = undefined;
-    var appLabel = undefined;
-    var tabTable = undefined;
-    var width = undefined;
-    var height = undefined;
-    var connectionView = undefined;
 
     // Public variables
     self.data = undefined;
     self.expanded = false;
 
-    self.render = function() {
-        if(appRect == undefined) {
-            appRect = self._layer.append("rect")
+    self.render = function(layer) {
+
+        // Background rect
+        layer.selectAll("rect")
+            .data([{}])
+            .enter()
+            .append("rect")
+            .fill(self.palette.primary.normal)
+            .on("click", function() {
+                delegate.clicked();
+            });
+
+        if(self.delegate.expanded) {
+            layer.selectAll("rect")
+                .transition()
                 .fill(self.palette.primary.normal)
-                .on("click", function() {
-                    if(self.expanded)
-                        self.reduce();
-                    else
-                        self.expand();
-                });
+                .margin(UIApplication.style.margin)
+                .width(windowViewController.width)
+                .height(windowViewController.height)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin)
+                .y(-windowViewController.height / 2 + UIApplication.style.margin);
         }
+        else {
+            layer.selectAll("rect")
+                .transition()
+                .fill(self.palette.primary.normal)
+                .width(100)
+                .height(100)
+                .x(-50)
+                .y(-50);
+        }
+
+        // Application name
+        layer.selectAll(".name")
+            .data({})
+            .enter()
+            .append("text")
+            .class("name")
+            .x(0)
+            .y(0)
+            .attr("text-anchor", "middle")
+            .text(delegate.name);
+
+        layer.selectAll(".name")
+            .data({})
+            .x(0)
+            .y(0)
+            .attr("text-anchor", "middle")
+            .text(delegate.name);
+
+        /*
 
         if(appLabel == undefined) {
             appLabel = self._layer.append("text")
@@ -108,6 +142,8 @@ var UIApplication = function(layer) {
             .attr("text-anchor", "middle")
             .text(self.data.name);
 
+         */
+
     };
 
     self.instanceData = function(selectedInstance) {
@@ -121,6 +157,8 @@ var UIApplication = function(layer) {
         return d[0];
     };
 
+    /*
+
     // Expand
     self.expand = function() {
         self.expanded = true;
@@ -132,6 +170,8 @@ var UIApplication = function(layer) {
         self.expanded = false;
         self.render();
     };
+
+    */
 
     self.getWidth = function() {
         return width  - UIApplication.style.margin * 2;

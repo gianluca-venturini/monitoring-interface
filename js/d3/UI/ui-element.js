@@ -1,5 +1,8 @@
-var UIElement = function(layer) {
+var UIElement = function(delegate) {
     var self = {};
+
+    // Public variables
+    self.delegate = undefined;
 
     // Static attributes
     UIElement.defaultPalette = {
@@ -16,12 +19,11 @@ var UIElement = function(layer) {
     };
 
     // Protected variables
-    self._layer = undefined;
     self.palette = UIElement.defaultPalette;
 
     // Constructor
     self.init = function() {
-        self._layer = layer;
+        self.delegate = delegate;
     }();
 
     // Destructor

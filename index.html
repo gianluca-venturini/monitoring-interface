@@ -8,9 +8,17 @@
     <title>Monitoring Interface</title>
 
     <script src="js/lib/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/lib/underscore-min.js" charset="utf-8"></script>
 
     <script src="js/d3/notification/notifications.js" charset="utf-8"></script>
     <script src="js/d3/notification/notification-center.js" charset="utf-8"></script>
+
+    <script src="js/d3/model/applications-model.js" charset="utf-8"></script>
+
+    <script src="js/d3/view-controller/view-controller.js" charset="utf-8"></script>
+    <script src="js/d3/view-controller/window-view-controller.js" charset="utf-8"></script>
+    <script src="js/d3/view-controller/application-view-controller.js" charset="utf-8"></script>
+    <script src="js/d3/view-controller/instance-view-controller.js" charset="utf-8"></script>
 
     <script src="js/d3/plugin/graphics.js" charset="utf-8"></script>
     <script src="js/d3/plugin/tab-table.js" charset="utf-8"></script>
@@ -18,7 +26,6 @@
     <script src="js/d3/layout/radial-layout.js" charset="utf-8"></script>
 
     <script src="js/d3/ui/ui-element.js" charset="utf-8"></script>
-    <script src="js/d3/window-manager.js" charset="utf-8"></script>
     <script src="js/d3/ui/ui-application.js" charset="utf-8"></script>
     <script src="js/d3/ui/ui-tab-table.js" charset="utf-8"></script>
     <script src="js/d3/ui/ui-connection-view.js" charset="utf-8"></script>
@@ -34,7 +41,12 @@
 
     var svg = d3.select("#container");
 
-    var windowManager = WindowManager(svg);
+    windowViewController.view = svg;
+    windowViewController.updateViewBox();
+
+
+
+    //var windowManager = WindowManager(svg);
 
 </script>
 
