@@ -52,10 +52,24 @@ var UIApplication = function(delegate) {
             .enter()
             .append("text")
             .class("name")
-            .x(0)
-            .y(0)
             .attr("text-anchor", "middle")
             .text(delegate.name);
+
+        // Application name
+        if(self.delegate.expanded) {
+            layer.selectAll("text")
+                .transition()
+                .duration(1000)
+                .x(0)
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
+        }
+        else {
+            layer.selectAll("text")
+                .transition()
+                .x(0)
+                .y(0);
+        }
+
 
         layer.selectAll(".name")
             .text(delegate.name);

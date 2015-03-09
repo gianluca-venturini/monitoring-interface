@@ -60,16 +60,21 @@ var ApplicationViewController = function(name, view) {
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED, function() {
             oldCoordinates = self.coordinates;
-            self.coordinates = {x: -1000, y: -1000};
+            self.coordinates = {x: (self.coordinates.x - windowViewController.width/2) * 10,
+                y: (self.coordinates.y - windowViewController.height/2) * 5
+            };
             if(self.expanded == false) {
-                self._view.transition().translate(self.coordinates.x, self.coordinates.y);
+                self._view.transition().duration(900).translate(self.coordinates.x, self.coordinates.y);
             }
         });
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCED, function() {
             self.coordinates = oldCoordinates;
             if(self.expanded == false) {
-                self._view.transition().translate(oldCoordinates.x, oldCoordinates.y);
+                self._view
+                    .transition()
+                    .duration(1500)
+                    .translate(oldCoordinates.x, oldCoordinates.y);
             }
         });
     }();
