@@ -55,6 +55,23 @@ var ApplicationViewController = function(name, view) {
             self.expanded = false;
             self.render();
         });
+
+        var oldCoordinates = undefined;
+
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED, function() {
+            oldCoordinates = self.coordinates;
+            self.coordinates = {x: -1000, y: -1000};
+            if(self.expanded == false) {
+                self._view.transition().translate(self.coordinates.x, self.coordinates.y);
+            }
+        });
+
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCED, function() {
+            self.coordinates = oldCoordinates;
+            if(self.expanded == false) {
+                self._view.transition().translate(oldCoordinates.x, oldCoordinates.y);
+            }
+        });
     }();
 
     return self;

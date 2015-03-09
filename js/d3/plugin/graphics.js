@@ -1,7 +1,9 @@
 (function() {
     d3.selection.prototype.translate = d3.selection.enter.prototype.translate = d3.transition.prototype.translate = function(x, y) {
         var self = this;
-        return this.attr("transform", function(d) { return "translate(" + (x + self.margin.x) + "," + (y + self.margin.y) + ")"});
+        var marginX = self.margin.x || 0;
+        var marginY = self.margin.y || 0;
+        return this.attr("transform", function(d) { return "translate(" + (x + marginX) + "," + (y + marginY) + ")"});
     };
 
     d3.selection.prototype.rotate = d3.selection.enter.prototype.rotate = function(degree, x, y) {
@@ -67,9 +69,10 @@
     };
 
     d3.selection.prototype.class = d3.selection.enter.prototype.class = d3.transition.prototype.class = function(className) {
-        this.classed({className: true});
+        var cn = {};
+        cn[className] = true;
+        this.classed(cn);
         return this;
     };
-
 
 })();
