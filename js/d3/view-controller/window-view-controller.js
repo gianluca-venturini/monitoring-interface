@@ -1,11 +1,20 @@
 var WindowViewController = function(view) {
     var self = ViewController(view);
 
+    // Static variables
+    WindowViewController.style = {
+        margin: 10
+    };
+
     // Protected variables
     self._width = undefined;
     self._height = undefined;
     self._applicationViewControllers = {};   // UIApplication array
-    self._center = undefined
+    self._center = undefined;
+
+
+    // Private variables
+    var rectGrid = undefined;
 
     self.updateViewBox = function() {
         self._width  = window.innerWidth;
@@ -18,6 +27,13 @@ var WindowViewController = function(view) {
 
     self.resizeWindow = function() {
         self.updateViewBox();
+
+        // Init the grid layout
+        rectGrid = d3.layout.grid()
+            .bands()
+            .size([window.innerWidth - WindowViewController.style.margin,
+                window.innerHeight- WindowViewController.style.margin])
+            .padding([0.1, 0.1]);
 
         //TODO: Send notification
     };
@@ -49,11 +65,14 @@ var WindowViewController = function(view) {
 
         // Update data in applications
         self._view.selectAll("g")
-            .data(data)
+            .data(rectGrid(data))
             //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
+            .attr("transform", function(d) { return "translate(" + (d.x + rectGrid.nodeSize()[0]/2) + "," + (d.y + rectGrid.nodeSize()[1]/2) + ")"; })
             .each(function(data) {
                 var applicationViewController = this.applicationViewController;
                 applicationViewController.name = data.name;
+                applicationViewController.coordinates = {x: data.x + rectGrid.nodeSize()[0] / 2,
+                    y: data.y + rectGrid.nodeSize()[1]/2};
 
                 // Render the application
                 applicationViewController.render();
@@ -90,6 +109,13 @@ var WindowViewController = function(view) {
             });
 
         window.addEventListener("resize", self.resizeWindow);
+
+        // Init the grid layout
+        rectGrid = d3.layout.grid()
+            .bands()
+            .size([window.innerWidth-WindowViewController.style.margin,
+                window.innerHeight-WindowViewController.style.margin])
+            .padding([0.1, 0.1]);
     }();
 
     // Destructor
