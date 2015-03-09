@@ -21,6 +21,7 @@ var UIApplication = function(delegate) {
             .enter()
             .append("rect")
             .fill(self.palette.primary.normal)
+            .class("pointer")
             .on("click", function() {
                 delegate.clicked();
             });

@@ -85,8 +85,10 @@ var WindowViewController = function(view) {
             .each(function(data) {
                 var applicationViewController = this.applicationViewController;
                 applicationViewController.name = data.name;
-                applicationViewController.coordinates = {x: data.x + rectGrid.nodeSize()[0] / 2,
-                    y: data.y + rectGrid.nodeSize()[1]/2};
+                applicationViewController.coordinates = {
+                    x: data.x + rectGrid.nodeSize()[0] / 2,
+                    y: data.y + rectGrid.nodeSize()[1] / 2
+                };
 
                 // Render the application
                 applicationViewController.render();
@@ -120,27 +122,6 @@ var WindowViewController = function(view) {
         notificationCenter.subscribe(Notifications.data.APPLICATION_DATA_CHANGE,
             function() {
                 self.renderData(applicationModel.data.applications);
-            });
-
-        // Subscribe to application expansion
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED,
-            function() {
-                rectGrid = d3.layout.grid()
-                    .bands()
-                    .size([2000, 2000])
-                    .padding([0.1, 0.1]);
-                self.renderData(applicationModel.data.applications)
-            });
-
-        // Subscribe to application reduction
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCED,
-            function() {
-                rectGrid = d3.layout.grid()
-                    .bands()
-                    .size([window.innerWidth - WindowViewController.style.margin,
-                        window.innerHeight- WindowViewController.style.margin])
-                    .padding([0.1, 0.1]);
-                self.renderData(applicationModel.data.applications)
             });
 
         window.addEventListener("resize", self.resizeWindow);
