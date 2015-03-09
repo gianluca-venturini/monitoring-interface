@@ -1,5 +1,5 @@
 (function() {
-    d3.selection.prototype.translate = d3.selection.enter.prototype.translate = function(x, y) {
+    d3.selection.prototype.translate = d3.selection.enter.prototype.translate = d3.transition.prototype.translate = function(x, y) {
         var self = this;
         return this.attr("transform", function(d) { return "translate(" + (x + self.margin.x) + "," + (y + self.margin.y) + ")"});
     };
@@ -26,17 +26,33 @@
         return this;
     };
 
-    d3.selection.prototype.width = d3.selection.enter.prototype.width = function(width) {
+    d3.selection.prototype.width = d3.selection.enter.prototype.width = d3.transition.prototype.width = function(width) {
         var self = this;
         return this.attr("width", width);
     };
 
-    d3.selection.prototype.height = d3.selection.enter.prototype.height = function(height) {
+    d3.selection.prototype.height = d3.selection.enter.prototype.height = d3.transition.prototype.height = function(height) {
         var self = this;
         return this.attr("height", height);
     };
 
-    d3.selection.prototype.margin = d3.selection.enter.prototype.margin = function(margin) {
+    d3.selection.prototype.x = d3.selection.enter.prototype.x = d3.transition.prototype.x = function(x) {
+        var self = this;
+        return this.attr("x", x);
+    };
+
+    d3.selection.prototype.y = d3.selection.enter.prototype.y = d3.transition.prototype.y = function(y) {
+        var self = this;
+        return this.attr("y", y);
+    };
+
+    d3.selection.prototype.fill = d3.selection.enter.prototype.fill = d3.transition.prototype.fill = function(fill) {
+        var self = this;
+        return this.attr("fill", fill);
+    };
+
+
+    d3.selection.prototype.margin = d3.selection.enter.prototype.margin = d3.transition.prototype.margin = function(margin) {
         this.margin.x = margin;
         this.margin.y = margin;
         return this;

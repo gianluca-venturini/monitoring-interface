@@ -1,25 +1,34 @@
-var UITabTable = function(layer) {
+var UITabTable = function(layer, parentApplication) {
     var self = UIElement(layer);
+
 
     // Public variables
     self.data = undefined;
+    self.parentApplication = parentApplication;
+    self.tabs = [];
 
     // Render the element
     self.render = function() {
         if(self.data != undefined) {
-            self._layer.selectAll("rect")
+            self._layer.selectAll("g")
                 .data(self.data)
                 .enter()
                 .tabTable()
-                .lineHeight(50)
-                .append("rect")
-                .width(200)
-                .height(50)
-                .attr("x", function(d) { return 200; })
-                .attr("y", function(d,i) { return i*50;  })
-                .attr("fill", "#e74c3c");
+                .append("g")
+                .each(function(data, index) {
+                    this.tab = UITab(d3.select(this), self, index, data);
+                    self.tabs.push(this.tab);
+                    // Render the tab
+                    this.tab.render();
+                });
 
         }
+    };
+
+    self.deselectAllTabs = function() {
+        self.tabs.forEach(function(tab) {
+            tab.deselect();
+        });
     };
 
     // Constructor
@@ -29,8 +38,12 @@ var UITabTable = function(layer) {
 
     // Destructor
     self.deinit = function() {
-        // Place here the code for dealloc eventual objects
+        // TODO ?
+        //tabs.each(function(tab){
+        //    tab.deinit();
+        //}).remove();
     };
+
 
     return self;
 
