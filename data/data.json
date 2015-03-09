@@ -1,81 +1,162 @@
 {
-  "applications": [{
-                     "name": "application1",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   },
-                   {
-                     "name": "application2",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   },
-                   {
-                     "name": "application3",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   },
-                   {
-                     "name": "application4",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   },
-                   {
-                     "name": "application5",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   },
-                   {
-                     "name": "application6",
-                     "instances": [{
-                                     "name": "instance1"
-                                   },
-                                   {
-                                     "name": "instance2"
-                                   },
-                                   {
-                                     "name": "instance3"
-                                   }
-                     ]
-                   }
+  "applications": [
+    {
+      "name": "application1",
+      "instances": [
+        {
+          "name": "instance1",
+          "components": [
+            {
+              "name": "component1",
+              "publish": [
+                {
+                  "channel": "channel1"
+                },
+                {
+                  "channel": "channel2"
+                }
+              ],
+              "subscribe": [
+                {
+                  "channel": "channel4"
+                },
+                {
+                  "channel": "channel5"
+                }
+              ],
+              "request": [
+                {
+                  "channel": "channel6"
+                },
+                {
+                  "channel": "channel7"
+                }
+              ],
+              "handle_request": [
+                {
+                  "channel": "channel8"
+                },
+                {
+                  "channel": "channel9"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    },
+    {
+      "name": "application2",
+      "instances": [
+        {
+          "name": "instance1"
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    },
+    {
+      "name": "application3",
+      "instances": [
+        {
+          "name": "instance1"
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    },
+    {
+      "name": "application4",
+      "instances": [
+        {
+          "name": "instance1"
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    },
+    {
+      "name": "application5",
+      "instances": [
+        {
+          "name": "instance1"
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    },
+    {
+      "name": "application6",
+      "instances": [
+        {
+          "name": "instance1",
+          "components": [
+            {
+              "name": "component1",
+              "publish": [
+                {
+                  "channel": "channel1"
+                },
+                {
+                  "channel": "channel2"
+                }
+              ],
+              "subscribe": [
+                {
+                  "channel": "channel4"
+                },
+                {
+                  "channel": "channel5"
+                }
+              ],
+              "request": [
+                {
+                  "channel": "channel6"
+                },
+                {
+                  "channel": "channel7"
+                }
+              ],
+              "handle_request": [
+                {
+                  "channel": "channel8"
+                },
+                {
+                  "channel": "channel9"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "instance2"
+        },
+        {
+          "name": "instance3"
+        }
+      ]
+    }
   ]
 }

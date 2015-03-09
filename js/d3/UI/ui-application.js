@@ -10,6 +10,7 @@ var UIApplication = function(layer) {
     var appRect = undefined;
     var appLabel = undefined;
     var tabTable = undefined;
+    var connectionView = undefined;
 
     // Public variables
     self.data = undefined;
@@ -47,11 +48,17 @@ var UIApplication = function(layer) {
 
                 tabTable = undefined;
             }
+
+            if(connectionView != undefined) {
+                connectionView.deinit();
+                connectionView = undefined;
+            }
         }
         else {
             var width = windowManager.getWidth();
             var height = windowManager.getHeight();
 
+            // Background rectangle
             appRect.transition()
                 .attr("width", width - UIApplication.style.margin * 2)
                 .attr("height", height - UIApplication.style.margin * 2)
@@ -70,6 +77,27 @@ var UIApplication = function(layer) {
                     // Render the application
                     this.tabTable.render();
                 });
+
+            if(connectionView == undefined) {
+                // Create connectionView component
+                var layer = self._layer.newLayer();
+
+                connectionView = UIConnectionView(layer);
+                var instanceData = self.instanceData("instance1");
+                if(instanceData.components != undefined) {
+                    connectionView.data = instanceData.components;
+                }
+                connectionView.render();
+            }
+            else {
+                // Update connectionView component
+                var instanceData = self.instanceData("instance1");
+                if(instanceData.components != undefined) {
+                    connectionView.data = instanceData.components;
+                }
+
+                connectionView.render();
+            }
         }
 
         appLabel.attr("x", 0)
@@ -77,6 +105,17 @@ var UIApplication = function(layer) {
             .attr("text-anchor", "middle")
             .text(self.data.name);
 
+    };
+
+    self.instanceData = function(selectedInstance) {
+        var d = self.data.instances.filter(function(d) {
+            return d.name == selectedInstance
+        });
+
+        if(d.count == 0)
+            return undefined;
+
+        return d[0];
     };
 
     // Expand

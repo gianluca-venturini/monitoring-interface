@@ -30,7 +30,7 @@ var UITabTable = function(layer) {
     // Destructor
     self.deinit = function() {
         // Place here the code for dealloc eventual objects
-    }
+    };
 
     return self;
 
