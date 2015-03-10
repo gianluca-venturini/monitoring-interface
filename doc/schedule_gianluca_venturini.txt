@@ -4,4 +4,4 @@
 
 - UIApplication development -- Mon 03/09 by 11pm (estimate: 1 hrs)
 - UIConnectionView development -- Thu 03/12 by 11pm (estimate: 8 hrs)
-- ConnectionViewController -- Sat 03/14 by 11pm (estimate: 2 hrs)
+- UIConnectionView integration -- Sat 03/14 by 11pm (estimate: 2 hrs)
