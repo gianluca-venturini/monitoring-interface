@@ -6,7 +6,8 @@ var UIConnectionView = function(delegate) {
 
     // Static attributes
     UIConnectionView.style = {
-        margin: 10
+        margin: 10,
+        linkTension: 0.6
     };
 
     // Private variables
@@ -22,10 +23,12 @@ var UIConnectionView = function(delegate) {
 
         var components = layer.layerWithName("components");
         var channelTexts = layer.layerWithName("channelTexts");
+        var links = layer.layerWithName("links");
 
         if(self.delegate.expanded == false) {
             components.remove();
             channelTexts.remove();
+            links.remove();
             return;
         }
 
@@ -34,6 +37,7 @@ var UIConnectionView = function(delegate) {
         var radialLayout = d3.layout.radial()
             .margin(0.2)
             .radius(self._outerRadius)
+            .linkRadius(self._innerRadius)
             .data(componentsData);
 
         // Create component arcs
@@ -65,12 +69,66 @@ var UIConnectionView = function(delegate) {
             .remove();
 
         // Create new publish channels
-        channelTexts.selectAll("text")
+        channelTexts.selectAll(".channel")
             .data(radialLayout.channels)
             .enter()
             .append("text")
+            .class("channel")
             .rotateText()
             .text(function(channel) {return channel.channel;});
+
+        // Update already present text
+        channelTexts.selectAll(".channel")
+            .data(radialLayout.channels)
+            .rotateText()
+            .text(function(channel) {return channel.channel;});
+
+        // Create arg generator utility
+        var lineGenerator = d3.svg.line.radial()
+            .interpolate("bundle")
+            // TODO: .tension(UIConnectionView.style.linkTension)
+            .tension(0.6)
+            .radius(function(d) { return d.radius; })
+            .angle(function(d) { return d.angle; });
+
+        // Create new links between channels
+        links.selectAll(".link")
+            .data(radialLayout.links.map(function(link) {
+                    return [link.coordinates[0],
+                            link.coordinates[0],
+                            link.coordinates[0]];
+                }))
+            .enter()
+            .append("path")
+            .class("link")
+            .class("pointer")
+            .attr("class", "link")
+            .attr("d", lineGenerator);
+
+        // Update already present links between
+        links.selectAll(".link")
+            .data(radialLayout.links.map(function(link) {
+                return link.coordinates;
+            }))
+            .transition()
+            .delay(1000)
+            .duration(1500)
+            .attr("d", lineGenerator);
+
+        // Remove links no more present
+        links.selectAll(".link")
+            .data(radialLayout.links.map(function(link) {
+                return [link.coordinates[1],
+                    link.coordinates[1],
+                    link.coordinates[1]];
+            }))
+            .exit()
+            .transition()
+            .duration(1500)
+            .attr("d", lineGenerator)
+            .remove();
+
+
     };
 
     // Constructor

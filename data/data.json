@@ -163,7 +163,7 @@
               ],
               "subscribe": [
                 {
-                  "channel": "channel12"
+                  "channel": "channel1"
                 },
                 {
                   "channel": "channel13"
@@ -190,7 +190,7 @@
               "name": "component3",
               "publish": [
                 {
-                  "channel": "channel18"
+                  "channel": "channel1"
                 },
                 {
                   "channel": "channel19"
