@@ -83,6 +83,11 @@
         return this;
     };
 
+    d3.selection.prototype.opacity = d3.selection.enter.prototype.opacity = d3.transition.prototype.opacity = function(opacity) {
+        this.attr("opacity", opacity);
+        return this;
+    };
+
     d3.selection.prototype.layerWithName = function(className) {
         this.selectAll("."+className)
             .data([{}])

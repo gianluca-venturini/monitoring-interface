@@ -86,22 +86,20 @@ var UIConnectionView = function(delegate) {
         // Create arg generator utility
         var lineGenerator = d3.svg.line.radial()
             .interpolate("bundle")
-            // TODO: .tension(UIConnectionView.style.linkTension)
-            .tension(0.6)
+            .tension(UIConnectionView.style.linkTension)
             .radius(function(d) { return d.radius; })
             .angle(function(d) { return d.angle; });
 
         // Create new links between channels
         links.selectAll(".link")
             .data(radialLayout.links.map(function(link) {
-                    return [link.coordinates[0],
-                            link.coordinates[0],
-                            link.coordinates[0]];
+                    return link.coordinates;
                 }))
             .enter()
             .append("path")
             .class("link")
             .class("pointer")
+            .opacity(0)
             .attr("class", "link")
             .attr("d", lineGenerator);
 
@@ -111,20 +109,19 @@ var UIConnectionView = function(delegate) {
                 return link.coordinates;
             }))
             .transition()
-            .delay(1000)
-            .duration(1500)
+            .delay(Animations.connectionView.LINK_FADE_IN.delay)
+            .duration(Animations.connectionView.LINK_FADE_IN.duration)
+            .opacity(1)
             .attr("d", lineGenerator);
 
         // Remove links no more present
         links.selectAll(".link")
             .data(radialLayout.links.map(function(link) {
-                return [link.coordinates[1],
-                    link.coordinates[1],
-                    link.coordinates[1]];
+                return link.coordinates;
             }))
             .exit()
             .transition()
-            .duration(1500)
+            .duration(Animations.connectionView.LINK_FADE_IN.duration)
             .attr("d", lineGenerator)
             .remove();
 
