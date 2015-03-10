@@ -17,6 +17,23 @@ var ApplicationsModel = function() {
         return appData[0];
     };
 
+    self.getInstanceData = function(appName, instanceName) {
+        var appData = self.getApplicationData(appName);
+
+        if(appData == undefined)
+            return undefined;
+
+        var instanceData = appData.instances.filter(function(instance) {
+            return instance.name == instanceName;
+        });
+
+        if(instanceData.length == 0) {
+            return undefined;
+        }
+
+        return instanceData[0];
+    };
+
     // Destructor
     self.deinit = function() {
         // Place here the code for dealloc eventual objects
@@ -35,7 +52,7 @@ var ApplicationsModel = function() {
 
     // Constructor
     self.init = function() {
-        self.fetchData("data/data2.json");
+        self.fetchData("data/data.json");
     }();
 
     return self;

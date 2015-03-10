@@ -53,19 +53,23 @@ var UIApplication = function(delegate) {
             .enter()
             .append("text")
             .class("name")
+            .class("pointer")
             .attr("text-anchor", "middle")
+            .on("click", function() {
+                delegate.clicked();
+            })
             .text(delegate.name);
 
         // Application name
         if(self.delegate.expanded) {
-            layer.selectAll("text")
+            layer.selectAll(".name")
                 .transition()
                 .duration(1000)
                 .x(0)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
         }
         else {
-            layer.selectAll("text")
+            layer.selectAll(".name")
                 .transition()
                 .x(0)
                 .y(0);

@@ -17,9 +17,17 @@
     };
 
     d3.selection.prototype.rotateText = d3.selection.enter.prototype.rotateText = function() {
+
+        function toDegrees (radians) {
+            return radians * (180 / Math.PI);
+        }
+
         var self = this;
 
-        this.attr("transform", function(d) { return "translate(" + d.radius*Math.cos(d.angle) + ", " + d.radius*Math.sin(d.angle) + ")rotate(" + d.angle + ")"; });
+        this.attr("transform", function(d) { return "translate(" + d.radius*Math.sin(d.angle) + ", " + (-d.radius*Math.cos(d.angle)) + ")" +
+                                                    "rotate(" + toDegrees(-Math.PI/2+d.angle) + ")" +
+                                                    (d.angle > Math.PI ? "rotate(180)" : ""); })
+            .attr("text-anchor", function(d) { return d.angle < Math.PI ? "start" : "end"; });
 
         /*
         this.attr("transform", function(d) { return "translate(" + d.radius + ", 0)"})
@@ -74,5 +82,15 @@
         this.classed(cn);
         return this;
     };
+
+    d3.selection.prototype.layerWithName = function(className) {
+        this.selectAll("."+className)
+            .data([{}])
+            .enter()
+            .append("g")
+            .class(className);
+
+        return this.selectAll("."+className);
+    }
 
 })();

@@ -121,6 +121,9 @@
                 },
                 {
                   "channel": "channel2"
+                },
+                {
+                  "channel": "channel3"
                 }
               ],
               "subscribe": [

@@ -26,6 +26,11 @@ var ViewController = function(view) {
         self.addUiComponent(uiApplication);
     };
 
+    self.addUIConnectionView = function() {
+        var uiConnectionView = UIConnectionView(self);
+        self.addUiComponent(uiConnectionView);
+    };
+
     self.addUiComponent = function(ui) {
         self._uis.push(ui);
     };

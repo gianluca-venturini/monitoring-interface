@@ -49,7 +49,10 @@ var ApplicationViewController = function(name, view) {
 
         self.expanded = false;
 
+        // Add graphic components
+
         self.addUIApplication();
+        self.addUIConnectionView();
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.expanded = false;

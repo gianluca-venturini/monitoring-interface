@@ -50,9 +50,30 @@
                 angle = component.endAngle + angleMargin;
 
                 // Calculate angle for every channel
-                var deltaAngle = (component.endAngle - component.startAngle) / (numChannels * 2);
-                var channelAngle = component.startAngle + deltaAngle;
+                var deltaAngle = (component.endAngle - component.startAngle) / numChannels;
+                var channelAngle = component.startAngle + deltaAngle / 2.0;
                 component.publish.forEach(function(publish) {
+                    publish.angle = channelAngle;
+                    publish.radius = self._radius;
+                    channelAngle += deltaAngle;
+
+                    self.channels.push(publish);
+                });
+                component.subscribe.forEach(function(publish) {
+                    publish.angle = channelAngle;
+                    publish.radius = self._radius;
+                    channelAngle += deltaAngle;
+
+                    self.channels.push(publish);
+                });
+                component.request.forEach(function(publish) {
+                    publish.angle = channelAngle;
+                    publish.radius = self._radius;
+                    channelAngle += deltaAngle;
+
+                    self.channels.push(publish);
+                });
+                component.handle_request.forEach(function(publish) {
                     publish.angle = channelAngle;
                     publish.radius = self._radius;
                     channelAngle += deltaAngle;

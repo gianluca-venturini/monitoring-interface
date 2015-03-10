@@ -66,10 +66,11 @@ var WindowViewController = function(view) {
     self.renderData = function(data) {
 
         // Create application view controllers
-        self._view.selectAll("g")
+        self._view.selectAll(".applicationView")
             .data(data)
             .enter()
             .append("g")
+            .class("applicationView")
             .each(function(data) {
                 var applicationViewController = ApplicationViewController(data.name, d3.select(this));
                 this.applicationViewController = applicationViewController;
@@ -77,7 +78,7 @@ var WindowViewController = function(view) {
             });
 
         // Update data in applications
-        self._view.selectAll("g")
+        self._view.selectAll(".applicationView")
             .data(rectGrid(data))
             //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
             .transition()
@@ -95,7 +96,7 @@ var WindowViewController = function(view) {
             });
 
         // Delete old applications
-        self._view.selectAll("g")
+        self._view.selectAll(".applicationView")
             .data(data)
             .exit()
             .each(function(data) {
