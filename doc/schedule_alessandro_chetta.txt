@@ -1,0 +1,6 @@
+- Application skeleton -- Thu 03/05 by 6pm (estimate: 5 hrs)
+- Data format engineering -- Thu 03/06 by 6pm (estimate: 1 hrs)
+- Application framework engineering -- Thu 03/09 by 11pm (estimate: 15 hrs)
+- UIApplication: graphic optimization -- Mon 03/09 by 11pm (estimate: 2 hrs)
+- UIApplication: navigation paradigm implementation -- Tue 03/10 by 11pm (estimate: 2 hrs)
+- UIApplication: animation implementation -- Wed 03/11 by 11pm (estimate: 4 hrs)
