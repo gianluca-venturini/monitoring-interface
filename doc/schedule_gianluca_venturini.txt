@@ -1,0 +1,7 @@
+- Application skeleton -- Thu 03/05 by 6pm (estimate: 5 hrs)
+- Data format engineering -- Fri 03/06 by 6pm (estimate: 1 hrs)
+- Application framework engineering -- Mon 03/09 by 11pm (estimate: 15 hrs)
+
+- UIApplication development -- Mon 03/09 by 11pm (estimate: 1 hrs)
+- UIConnectionView development -- Thu 03/12 by 11pm (estimate: 8 hrs)
+- ConnectionViewController -- Sat 03/14 by 11pm (estimate: 2 hrs)
