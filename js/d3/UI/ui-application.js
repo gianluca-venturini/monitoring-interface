@@ -34,7 +34,10 @@ var UIApplication = function(delegate) {
                 .width(windowViewController.width)
                 .height(windowViewController.height)
                 .x(-windowViewController.width / 2 + UIApplication.style.margin)
-                .y(-windowViewController.height / 2 + UIApplication.style.margin);
+                .y(-windowViewController.height / 2 + UIApplication.style.margin)
+                .each("end", function(){
+                    notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANSION_FINISHED);
+                });
         }
         else {
             layer.selectAll("rect")

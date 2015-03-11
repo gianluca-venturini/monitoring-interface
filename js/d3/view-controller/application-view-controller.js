@@ -1,10 +1,12 @@
 var ApplicationViewController = function(name, view) {
     var self = ViewController(view);
 
+    // Protected variables
+    self._instanceViewControllers = {};
+
     // Public variables
     self.name = undefined;
     self.expanded = undefined;
-
     self.coordinates = undefined;
 
     // Render function of the component
@@ -35,10 +37,48 @@ var ApplicationViewController = function(name, view) {
         self.render();
     };
 
-    // Destructor
-    self.deinit = function() {
-        // Place here the code for dealloc eventual objects
+    self.renderInstances = function() {
+        var instances = applicationModel.getApplicationData(self.name).instances;
+        if(instances != undefined) {
+            self._view.selectAll(".instance_tabs")
+                .data(instances)
+                .enter()
+                .tabTable()
+                .append("g")
+                .class("instance_tab")
+                .each(function(data, index) {
+                    this.instanceViewController = InstanceViewController(self, data.name, index, d3.select(this), self);
+                    self._instanceViewControllers[data.name] = this.instanceViewController;
+                });
+
+            // Update data in applications
+            self._view.selectAll(".instance_tab")
+                .data(instances)
+                //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
+                .each(function(data) {
+                    var instanceViewController = this.instanceViewController;
+                    instanceViewController.name = data.name;
+
+                    // Render the application
+                    instanceViewController.render();
+                });
+
+            // Delete old applications
+            self._view.selectAll(".instance_tab")
+                .data(instances)
+                .exit()
+                .each(function(data) {
+                    var instanceViewController = this.instanceViewController;
+                    instanceViewController.deinit();
+                    delete self._instanceViewControllers[data.name];
+                })
+                .remove();
+
+
+
+        }
     };
+
 
     // Constructor
     self.init = function() {
@@ -57,6 +97,10 @@ var ApplicationViewController = function(name, view) {
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.expanded = false;
             self.render();
+        });
+
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, function() {
+            self.renderInstances();
         });
 
         var oldCoordinates = undefined;
@@ -82,6 +126,10 @@ var ApplicationViewController = function(name, view) {
         });
     }();
 
+    // Destructor
+    self.deinit = function() {
+        // Place here the code for dealloc eventual objects
+    };
     return self;
 
 };

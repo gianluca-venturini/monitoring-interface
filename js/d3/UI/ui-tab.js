@@ -1,62 +1,65 @@
-var UITab = function(layer, tabTable, index, data) {
-    var self = UIElement(layer);
+var UITab = function(delegate, index) {
+    var self = UIElement(delegate);
 
 
     UITab.style = {
         maxHeight: 100,
         width: 200,
-        outScreen: -400,
         delay: 500
     };
 
     // Private variables
-    var selected = undefined;
     var rect = undefined;
 
-    // Public variables
-    self.data = data;
 
 
-    self.render = function() {
-        rect = self._layer.append("rect")
-            .x(UITab.style.outScreen)
+    self.render = function(layer) {
+        rect = layer.append("rect");
+
+        rect
+            .x(self.getLeftParent() - 400)
             .on("mouseover", function() {
-                d3.select(this).fill(self.palette.accent.bright);
+                if(!delegate.selected()) {
+                    d3.select(this).fill(self.palette.accent.bright);
+                }
             })
             .on("mouseout", function() {
-                d3.select(this).fill(self.getColor());
+                d3.select(this).fill(self.getTabColor());
             })
             .on("click", function() {
-                tabTable.deselectAllTabs();
-                self.select();
-                // TODO launch instanceView
+                self.delegate.clicked();
             })
-            .fill(self.palette.accent.normal)
+            .fill(self.getTabColor())
             .transition()
             .delay(UITab.style.delay)
             .width(UITab.style.width)
             .height(self.getTabHeight())
-            .x(0)
-            .y(index * self.getTabHeight() + UIApplication.style.titleBarHeight);
+            .x(self.getLeftParent())
+            .y(self.getTopParent() + index * self.getTabHeight() + UIApplication.style.titleBarHeight);
 
-        self._layer
+        layer
             .append("text")
-            .x(UITab.style.outScreen)
+            .x(self.getLeftParent()-400)
+            //.x(UITab.style.outScreen)
             .transition()
             .delay(UITab.style.delay)
-            .x(UITab.style.width/2)
-            .y(index * self.getTabHeight() + UIApplication.style.titleBarHeight + self.getTabHeight()/2)
+            .x(self.getLeftParent() + UITab.style.width/2)
+            .y(self.getTopParent() + index * self.getTabHeight() + UIApplication.style.titleBarHeight + self.getTabHeight()/2)
             .attr("text-anchor", "middle")
-            .text(self.data.name);
+            .text(self.delegate.name);
+    };
+
+    self.updateColor = function() {
+        rect.fill(self.getTabColor());
     };
 
     self.getTabHeight = function() {
-        return Math.min(UITab.style.maxHeight, tabTable.parentApplication.getHeight()/tabTable.tabs.length);
+        return Math.min(UITab.style.maxHeight, self.getParentHeight()/delegate.getTabsNumber());
     };
 
-    self.getColor = function() {
+    self.getTabColor = function() {
         var color;
-        if(selected) {
+        if(delegate.selected()) {
             color = self.palette.accent.dark;
         }
         else {
@@ -65,24 +68,27 @@ var UITab = function(layer, tabTable, index, data) {
         return color;
     };
 
-    self.select = function() {
-        selected = true;
-        self.colorTab();
+    self.getTopParent = function() {
+        return -windowViewController.height / 2 + UIApplication.style.margin;
     };
 
-    self.deselect = function() {
-        selected = false;
-        self.colorTab();
+    self.getLeftParent = function() {
+        return -windowViewController.width / 2 + UIApplication.style.margin;
     };
 
-    self.colorTab = function() {
-        self._layer.select("rect").fill(self.getColor());
+    self.getParentHeight = function() {
+        return windowViewController.height - 2 * UIApplication.style.margin;
     };
+    self.getParentWidth = function() {
+        return windowViewController.width - 2 * UIApplication.style.margin;
+    };
+
 
     // Constructor
     self.init = function() {
-        rect = layer;
-        selected = false;
+        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
+            self.updateColor();
+        });
     }();
 
     // Destructor
