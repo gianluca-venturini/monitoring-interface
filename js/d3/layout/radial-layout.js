@@ -14,12 +14,23 @@
         this.channels = undefined;
         this.links = undefined;
 
+        this.publishChannels = undefined;
+        this.subscribeChannels = undefined;
+        this.requestChannels = undefined;
+        this.handleRequestChannels = undefined;
+
+
         this.data = function(components) {
             var self = this;
 
             this.components = [];
             this.channels = [];
             this.links = [];
+
+            this.publishChannels = [];
+            this.subscribeChannels = [];
+            this.requestChannels = [];
+            this.handleRequestChannels = [];
 
             this._numComponents = components.length;
             var numChannels = 0;
@@ -61,27 +72,31 @@
                     channelAngle += deltaAngle;
 
                     self.channels.push(publish);
+                    self.publishChannels.push(publish);
                 });
-                component.subscribe.forEach(function(publish) {
-                    publish.angle = channelAngle;
-                    publish.radius = self._radius;
+                component.subscribe.forEach(function(subscribe) {
+                    subscribe.angle = channelAngle;
+                    subscribe.radius = self._radius;
                     channelAngle += deltaAngle;
 
-                    self.channels.push(publish);
+                    self.channels.push(subscribe);
+                    self.subscribeChannels.push(subscribe);
                 });
-                component.request.forEach(function(publish) {
-                    publish.angle = channelAngle;
-                    publish.radius = self._radius;
+                component.request.forEach(function(request) {
+                    request.angle = channelAngle;
+                    request.radius = self._radius;
                     channelAngle += deltaAngle;
 
-                    self.channels.push(publish);
+                    self.channels.push(request);
+                    self.requestChannels.push(request);
                 });
-                component.handle_request.forEach(function(publish) {
-                    publish.angle = channelAngle;
-                    publish.radius = self._radius;
+                component.handle_request.forEach(function(handleRequest) {
+                    handleRequest.angle = channelAngle;
+                    handleRequest.radius = self._radius;
                     channelAngle += deltaAngle;
 
-                    self.channels.push(publish);
+                    self.channels.push(handleRequest);
+                    self.handleRequestChannels.push(handleRequest);
                 });
             });
 

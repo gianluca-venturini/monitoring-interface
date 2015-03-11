@@ -114,4 +114,18 @@
         return this;
     };
 
+    d3.selection.prototype.rotateLayer = d3.selection.enter.prototype.rotateLayer = d3.transition.prototype.rotateLayer = function() {
+
+        function toDegrees (radians) {
+            return radians * (180 / Math.PI);
+        }
+
+        var self = this;
+
+        this.attr("transform", function(d) { return "translate(" + d.radius*Math.sin(d.angle) + ", " + (-d.radius*Math.cos(d.angle)) + ")" +
+            "rotate(" + toDegrees(d.angle) + ")"});
+
+        return this;
+    };
+
 })();

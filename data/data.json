@@ -128,7 +128,7 @@
               ],
               "subscribe": [
                 {
-                  "channel": "channel4"
+                  "channel": "channel1"
                 },
                 {
                   "channel": "channel5"
@@ -155,7 +155,7 @@
               "name": "component2",
               "publish": [
                 {
-                  "channel": "channel10"
+                  "channel": "channel1"
                 },
                 {
                   "channel": "channel11"

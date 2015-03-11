@@ -9,7 +9,8 @@ var UIConnectionView = function(delegate) {
         margin: 100,
         linkTension: 0.6,
         componentThickness: 10,
-
+        arrow_thick: 11,
+        arrow_ratio: 1.5,
     };
 
     // Private variables
@@ -27,9 +28,9 @@ var UIConnectionView = function(delegate) {
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
         self._outerRadius = self._innerRadius + UIConnectionView.style.componentThickness;
 
+        var links = layer.layerWithName("links");
         var components = layer.layerWithName("components");
         var channelTexts = layer.layerWithName("channelTexts");
-        var links = layer.layerWithName("links");
 
         if(self.delegate.expanded == false) {
             components.remove();
@@ -143,7 +144,38 @@ var UIConnectionView = function(delegate) {
             .duration(Animations.connectionView.LINK_FADE_IN.duration)
             .remove();
 
+        // Create triangles for the subscribed channels
+        var arrowData = [
+            { "x":  0.0, "y": 0.0},
+            { "x":  1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick},
+            { "x": -1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick}
+        ];
 
+        var lineFunction = d3.svg.line()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .interpolate("linear");
+
+        components.selectAll(".subscribeTriangle")
+            .data(radialLayout.publishChannels)
+            .enter()
+            .append("g")
+            .class("subscribeTriangle")
+            //.rotateLayer()
+                .append("path")
+                .attr("d", lineFunction(arrowData))
+                .attr("fill", self.palette.accent.dark);
+
+        components.selectAll(".subscribeTriangle")
+            .data(radialLayout.publishChannels)
+            .transition()
+            .duration(Animations.connectionView.ARROW_EXPANSION.duration)
+            .rotateLayer();
+
+        components.selectAll(".subscribeTriangle")
+            .data(radialLayout.publishChannels)
+            .exit()
+            .remove();
     };
 
     // Constructor
