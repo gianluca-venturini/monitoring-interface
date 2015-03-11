@@ -130,15 +130,7 @@ var UIConnectionView = function(delegate) {
             .transition()
             .delay(Animations.connectionView.LINK_FADE_IN.delay)
             .duration(Animations.connectionView.LINK_FADE_IN.duration)
-            .opacity(1);
-
-        links.selectAll(".link")
-            .data(radialLayout.links.map(function(link) {
-                return link.coordinates;
-            }))
-            .transition()
-            .delay(Animations.connectionView.CIRCLE_EXPANSION.delay)
-            .duration(Animations.connectionView.CIRCLE_EXPANSION.duration)
+            .opacity(1)
             .attr("d", lineGenerator);
 
         // Remove links no more present
