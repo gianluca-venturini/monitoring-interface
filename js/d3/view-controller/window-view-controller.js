@@ -71,6 +71,7 @@ var WindowViewController = function(view) {
             .enter()
             .append("g")
             .class("applicationView")
+            .translate(self._width / 2, self._height / 2)
             .each(function(data) {
                 var applicationViewController = ApplicationViewController(data.name, d3.select(this));
                 this.applicationViewController = applicationViewController;

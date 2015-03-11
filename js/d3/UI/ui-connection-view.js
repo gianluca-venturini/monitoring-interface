@@ -40,10 +40,17 @@ var UIConnectionView = function(delegate) {
             .linkRadius(self._innerRadius)
             .data(componentsData);
 
-        // Create component arcs
+        // Create component arc generator
         var arc = d3.svg.arc()
             .innerRadius(self._innerRadius)
             .outerRadius(self._outerRadius)
+            .startAngle(function(d){return d.startAngle;})
+            .endAngle(function(d){return d.endAngle;});
+
+        // Create component arc generator zero radius
+        var arcZeroRadius = d3.svg.arc()
+            .innerRadius(0.1)
+            .outerRadius(0.1)
             .startAngle(function(d){return d.startAngle;})
             .endAngle(function(d){return d.endAngle;});
 
@@ -55,11 +62,14 @@ var UIConnectionView = function(delegate) {
             .style("fill", function(d){
                 return "#E4F1FE";
             })
-            .attr("d", arc);
+            .attr("d", arcZeroRadius);
 
         // Update component arcs
         components.selectAll("path")
             .data(radialLayout.components)
+            .transition()
+            .delay(Animations.connectionView.CIRCLE_EXPANSION.delay)
+            .duration(Animations.connectionView.CIRCLE_EXPANSION.duration)
             .attr("d", arc);
 
         // Remove component arcs
@@ -74,12 +84,15 @@ var UIConnectionView = function(delegate) {
             .enter()
             .append("text")
             .class("channel")
-            .rotateText()
-            .text(function(channel) {return channel.channel;});
+            .rotateTextZeroAngle()
+            .text(function(channel) { return channel.channel; });
 
         // Update already present text
         channelTexts.selectAll(".channel")
             .data(radialLayout.channels)
+            .transition()
+            .delay(Animations.connectionView.CIRCLE_EXPANSION.delay)
+            .duration(Animations.connectionView.CIRCLE_EXPANSION.duration)
             .rotateText()
             .text(function(channel) {return channel.channel;});
 

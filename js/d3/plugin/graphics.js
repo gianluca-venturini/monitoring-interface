@@ -16,7 +16,7 @@
         return this;
     };
 
-    d3.selection.prototype.rotateText = d3.selection.enter.prototype.rotateText = function() {
+    d3.selection.prototype.rotateText = d3.selection.enter.prototype.rotateText = d3.transition.prototype.rotateText = function() {
 
         function toDegrees (radians) {
             return radians * (180 / Math.PI);
@@ -96,6 +96,22 @@
             .class(className);
 
         return this.selectAll("."+className);
-    }
+    };
+
+    d3.selection.prototype.rotateTextZeroAngle = d3.selection.enter.prototype.rotateTextZeroAngle = d3.transition.prototype.rotateTextZeroAngle = function() {
+
+        function toDegrees (radians) {
+            return radians * (180 / Math.PI);
+        }
+
+        var self = this;
+
+        this.attr("transform", function(d) { return "rotate(" + toDegrees(-Math.PI/2+d.angle) + ")" +
+            (d.angle > Math.PI ? "rotate(180)" : ""); })
+            .attr("text-anchor", function(d) { return d.angle < Math.PI ? "start" : "end"; });
+
+
+        return this;
+    };
 
 })();

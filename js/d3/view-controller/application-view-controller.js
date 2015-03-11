@@ -3,6 +3,8 @@ var ApplicationViewController = function(name, view) {
 
     // Protected variables
     self._instanceViewControllers = {};
+    self._expansionAnimationFinished = undefined;
+    self._reductionAnimationFinished = undefined;
 
     // Public variables
     self.name = undefined;
@@ -15,6 +17,8 @@ var ApplicationViewController = function(name, view) {
         var data = applicationModel.getApplicationData(self.name);
 
         render();
+
+        self.renderInstances();
     };
 
     self.clicked = function() {
@@ -40,6 +44,8 @@ var ApplicationViewController = function(name, view) {
     self.renderInstances = function() {
         var instances = applicationModel.getApplicationData(self.name).instances;
         if(instances != undefined) {
+
+            // Create new instance tabs
             self._view.selectAll(".instance_tabs")
                 .data(instances)
                 .enter()
@@ -51,7 +57,7 @@ var ApplicationViewController = function(name, view) {
                     self._instanceViewControllers[data.name] = this.instanceViewController;
                 });
 
-            // Update data in applications
+            // Update instance tabs
             self._view.selectAll(".instance_tab")
                 .data(instances)
                 //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
@@ -63,7 +69,7 @@ var ApplicationViewController = function(name, view) {
                     instanceViewController.render();
                 });
 
-            // Delete old applications
+            // Delete instance tabs
             self._view.selectAll(".instance_tab")
                 .data(instances)
                 .exit()
@@ -73,9 +79,6 @@ var ApplicationViewController = function(name, view) {
                     delete self._instanceViewControllers[data.name];
                 })
                 .remove();
-
-
-
         }
     };
 
@@ -100,8 +103,13 @@ var ApplicationViewController = function(name, view) {
         });
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, function() {
-            self.renderInstances();
+            self._expansionAnimationFinished = true;
         });
+
+        notificationCenter.subscribe(Notifications.ui.APPL, function() {
+            self._expansionAnimationFinished = true;
+        });
+
 
         var oldCoordinates = undefined;
 
