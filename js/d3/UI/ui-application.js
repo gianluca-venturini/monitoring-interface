@@ -30,28 +30,26 @@ var UIApplication = function(delegate) {
         if(self.delegate.expanded) {
             layer.selectAll(".applicationBackground")
                 .transition()
+                .delay(Animations.application.APPLICATION_EXPANSION.delay)
+                .duration(Animations.application.APPLICATION_EXPANSION.duration)
                 .fill(self.palette.primary.normal)
                 .margin(UIApplication.style.margin)
                 .width(windowViewController.width)
                 .height(windowViewController.height)
                 .x(-windowViewController.width / 2 + UIApplication.style.margin)
-                .y(-windowViewController.height / 2 + UIApplication.style.margin)
-                .each("end", function(){
-                    notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANSION_FINISHED);
-                });
+                .y(-windowViewController.height / 2 + UIApplication.style.margin);
         }
         else {
             layer.selectAll(".applicationBackground")
                 .transition()
+                .delay(Animations.application.APPLICATION_REDUCTION.delay)
+                .duration(Animations.application.APPLICATION_REDUCTION.duration)
                 .fill(self.palette.primary.normal)
                 .margin(undefined)
                 .width(100)
                 .height(100)
                 .x(-50)
-                .y(-50)
-                .each("end", function(){
-                    notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_FINISHED);
-                });
+                .y(-50);
         }
 
         // Application name

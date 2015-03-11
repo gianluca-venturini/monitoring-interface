@@ -6,5 +6,7 @@ Animations.connectionView = {
 };
 
 Animations.application = {
-    GRID_LAYOUT_REPOSITION : {delay: 0, duration: 500}
+    GRID_LAYOUT_REPOSITION : {delay: 0, duration: 500},
+    APPLICATION_EXPANSION: {delay: 0, duration: 500},
+    APPLICATION_REDUCTION: {delay: 0, duration: 500}
 };

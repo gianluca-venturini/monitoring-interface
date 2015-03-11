@@ -28,14 +28,25 @@ var ApplicationViewController = function(name, view) {
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
             self.expanded = true;
             windowViewController.center(self.coordinates.x, self.coordinates.y);
-            notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANDED);
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANSION_STARTED);
+
+            // Notify the end of the animation
+            setTimeout(function(){
+                notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANSION_FINISHED);
+            }, Animations.application.APPLICATION_EXPANSION.delay + Animations.application.APPLICATION_EXPANSION.duration);
+
         }
         else {
             applicationModel.viewControllerApplicationSelected = undefined;
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
             self.expanded = false;
             windowViewController.resetCenter();
-            notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCED);
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_STARTED);
+
+            // Notify the end of the animation
+            setTimeout(function(){
+                notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_FINISHED);
+            }, Animations.application.APPLICATION_REDUCTION.delay + Animations.application.APPLICATION_REDUCTION.duration);
         }
 
         self.render();
@@ -113,7 +124,7 @@ var ApplicationViewController = function(name, view) {
 
         var oldCoordinates = undefined;
 
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANDED, function() {
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_STARTED, function() {
             oldCoordinates = self.coordinates;
             self.coordinates = {x: (self.coordinates.x - windowViewController.width/2) * 15,
                 y: (self.coordinates.y - windowViewController.height/2) * 15
@@ -123,7 +134,7 @@ var ApplicationViewController = function(name, view) {
             }
         });
 
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCED, function() {
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCTION_STARTED, function() {
             self.coordinates = oldCoordinates;
             if(self.expanded == false) {
                 self._view
