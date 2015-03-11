@@ -92,7 +92,7 @@ var UITab = function(delegate, index) {
     };
 
     self.getParentHeight = function() {
-        return windowViewController.height - 2 * UIApplication.style.margin;
+        return windowViewController.height - 2 * UIApplication.style.margin - UIApplication.style.titleBarHeight;
     };
     self.getParentWidth = function() {
         return windowViewController.width - 2 * UIApplication.style.margin;
