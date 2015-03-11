@@ -11,7 +11,6 @@ var UIApplication = function(delegate) {
 
     // Public variables
     self.data = undefined;
-    self.expanded = false;
 
     self.render = function(layer) {
 

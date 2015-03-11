@@ -8,7 +8,7 @@ var ApplicationViewController = function(name, view) {
 
     // Public variables
     self.name = undefined;
-    self.expanded = undefined;
+    //self.expanded = undefined;
     self.coordinates = undefined;
 
     // Render function of the component
@@ -26,7 +26,7 @@ var ApplicationViewController = function(name, view) {
         if(self.expanded == false) {
             applicationModel.viewControllerApplicationSelected = self;
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
-            self.expanded = true;
+            //self.expanded = true;
             windowViewController.center(self.coordinates.x, self.coordinates.y);
             notificationCenter.dispatch(Notifications.ui.APPLICATION_EXPANSION_STARTED);
 
@@ -39,7 +39,7 @@ var ApplicationViewController = function(name, view) {
         else {
             applicationModel.viewControllerApplicationSelected = undefined;
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
-            self.expanded = false;
+            //self.expanded = false;
             windowViewController.resetCenter();
             notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_STARTED);
 
@@ -51,6 +51,20 @@ var ApplicationViewController = function(name, view) {
 
         self.render();
     };
+
+    // Data relative to the current selected instance
+    self.__defineGetter__("instanceComponentData", function() {
+        if(applicationModel.viewControllerInstanceSelected == undefined)
+            return undefined;
+
+        var instanceData = applicationModel.getInstanceData(self.name, applicationModel.viewControllerInstanceSelected.name);
+
+        return instanceData.components;
+    });
+
+    self.__defineGetter__("expanded", function() {
+        return self == applicationModel.viewControllerApplicationSelected;
+    });
 
     self.renderInstances = function() {
         var instances = applicationModel.getApplicationData(self.name).instances;
@@ -100,15 +114,13 @@ var ApplicationViewController = function(name, view) {
 
         self.name = name;
 
-        self.expanded = false;
-
         // Add graphic components
 
         self.addUIApplication();
         self.addUIConnectionView();
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
-            self.expanded = false;
+            //self.expanded = false;
             self.render();
         });
 
@@ -133,17 +145,10 @@ var ApplicationViewController = function(name, view) {
             }
         });
 
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCTION_STARTED, function() {
-            self.coordinates = oldCoordinates;
-            if(self.expanded == false) {
-                /*
-                self._view
-                    .transition()
-                    .duration(Animations.application.APPLICATION_REDUCTION.duration)
-                    .translate(oldCoordinates.x, oldCoordinates.y);
-                */
-            }
+        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
+            self.render();
         });
+
     }();
 
     // Destructor

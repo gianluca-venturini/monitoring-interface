@@ -19,10 +19,6 @@ var UIConnectionView = function(delegate) {
 
     // Render the element
     self.render = function(layer) {
-        /*
-        if(self.delegate.currentInstanceData == undefined)
-            return;
-        */
 
         // Take the width of the screen
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
@@ -32,14 +28,15 @@ var UIConnectionView = function(delegate) {
         var components = layer.layerWithName("components");
         var channelTexts = layer.layerWithName("channelTexts");
 
-        if(self.delegate.expanded == false) {
+        var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
+
+        if(self.delegate.expanded == false ||
+            componentsData == undefined) {
             components.remove();
             channelTexts.remove();
             links.remove();
             return;
         }
-
-        var componentsData = applicationModel.getInstanceData("application6","instance1").components;
 
         var radialLayout = d3.layout.radial()
             .margin(0.2)
