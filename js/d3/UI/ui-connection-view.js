@@ -6,13 +6,15 @@ var UIConnectionView = function(delegate) {
 
     // Static attributes
     UIConnectionView.style = {
-        margin: 10,
-        linkTension: 0.6
+        margin: 100,
+        linkTension: 0.6,
+        componentThickness: 10,
+
     };
 
     // Private variables
-    self._innerRadius = 300;
-    self._outerRadius = 310;
+    self._innerRadius = undefined;
+    self._outerRadius = undefined;
 
     // Render the element
     self.render = function(layer) {
@@ -20,6 +22,10 @@ var UIConnectionView = function(delegate) {
         if(self.delegate.currentInstanceData == undefined)
             return;
         */
+
+        // Take the width of the screen
+        self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
+        self._outerRadius = self._innerRadius + UIConnectionView.style.componentThickness;
 
         var components = layer.layerWithName("components");
         var channelTexts = layer.layerWithName("channelTexts");

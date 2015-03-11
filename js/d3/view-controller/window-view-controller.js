@@ -35,6 +35,7 @@ var WindowViewController = function(view) {
     };
 
     self.resizeWindow = function() {
+
         self.updateViewBox();
 
         rectGrid = d3.layout.grid()
@@ -46,7 +47,6 @@ var WindowViewController = function(view) {
         if(applicationModel.data != undefined) {
             self.renderData(applicationModel.data.applications)
         }
-
 
         //TODO: Send notification
     };
@@ -81,8 +81,8 @@ var WindowViewController = function(view) {
         // Update data in applications
         self._view.selectAll(".applicationView")
             .data(rectGrid(data))
-            //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
             .transition()
+            .duration(Animations.application.GRID_LAYOUT_REPOSITION.duration)
             .attr("transform", function(d) { return "translate(" + (d.x + rectGrid.nodeSize()[0]/2) + "," + (d.y + rectGrid.nodeSize()[1]/2) + ")"; })
             .each(function(data) {
                 var applicationViewController = this.applicationViewController;
@@ -106,6 +106,11 @@ var WindowViewController = function(view) {
                 delete self._applicationViewControllers[data.name];
             })
             .remove();
+
+        if(applicationModel.viewControllerApplicationSelected != undefined) {
+            var coordinates =  applicationModel.viewControllerApplicationSelected.coordinates;
+            self.center(coordinates.x, coordinates.y);
+        }
     };
 
     self.center = function(x, y) {

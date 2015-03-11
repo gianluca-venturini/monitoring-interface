@@ -53,7 +53,6 @@ var ApplicationsModel = function() {
 
     // Constructor
     self.init = function() {
-        self.fetchData("data/data.json");
     }();
 
     return self;

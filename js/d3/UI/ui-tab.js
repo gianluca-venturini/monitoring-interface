@@ -15,7 +15,10 @@ var UITab = function(delegate, index) {
             .append("rect")
             .class("instanceTab")
             .class("pointer")
-            .x(self.getLeftParent() - 400)
+            //.x(self.getLeftParent() - 400)
+            .x(self.getLeftParent())
+            .margin(undefined)
+            .width(0.001)
             .on("mouseover", function () {
                 if (!delegate.selected()) {
                     d3.select(this).fill(self.palette.accent.bright);
@@ -36,7 +39,8 @@ var UITab = function(delegate, index) {
             .class("pointer")
             .class("instanceTabText")
             .class("no_interaction")
-            .x(self.getLeftParent()-400);
+            .opacity(0)
+            .x(self.getLeftParent() + UITab.style.width/2);
 
         if(self.delegate.parentApplicationViewController.expanded) {
             layer.selectAll(".instanceTab")
@@ -50,9 +54,12 @@ var UITab = function(delegate, index) {
             layer.selectAll(".instanceTabText")
                 .transition()
                 .delay(UITab.style.delay)
+                .duration(1000)
+                // TODO: move all in Animations
                 .x(self.getLeftParent() + UITab.style.width/2)
                 .y(self.getTopParent() + index * self.getTabHeight() + UIApplication.style.titleBarHeight + self.getTabHeight()/2)
                 .attr("text-anchor", "middle")
+                .opacity(1)
                 .text(self.delegate.name);
         }
         else {
@@ -102,7 +109,7 @@ var UITab = function(delegate, index) {
     // Constructor
     self.init = function() {
         notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
-            self.updateColor();
+            //self.updateColor();
         });
     }();
 
