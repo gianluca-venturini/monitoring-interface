@@ -71,7 +71,6 @@ var ApplicationViewController = function(name, view) {
             // Update instance tabs
             self._view.selectAll(".instance_tab")
                 .data(instances)
-                //.attr("transform", function(d) { return "translate(" + self._width/2 + "," + self._height/2 + ")"})
                 .each(function(data) {
                     var instanceViewController = this.instanceViewController;
                     instanceViewController.name = data.name;
@@ -137,10 +136,12 @@ var ApplicationViewController = function(name, view) {
         notificationCenter.subscribe(Notifications.ui.APPLICATION_REDUCTION_STARTED, function() {
             self.coordinates = oldCoordinates;
             if(self.expanded == false) {
+                /*
                 self._view
                     .transition()
-                    .duration(1500)
+                    .duration(Animations.application.APPLICATION_REDUCTION.duration)
                     .translate(oldCoordinates.x, oldCoordinates.y);
+                */
             }
         });
     }();
