@@ -13,6 +13,7 @@ var UIApplication = function(delegate) {
     self.data = undefined;
     self.expanded = false;
 
+    
     self.render = function(layer) {
 
         // Background rect
