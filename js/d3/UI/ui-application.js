@@ -4,7 +4,11 @@ var UIApplication = function(delegate) {
     // Static attributes
     UIApplication.style = {
         margin: 10,
-        titleBarHeight: 50
+        titleBarHeight: 50,
+        applicationBackgroundWidthNotExpanded: 100,
+        applicationBackgroundHeightNotExpanded: 100,
+        headerRectHeightNotExpanded: 10,
+        headerRectHeightExpanded: 30
     };
 
     // Private
@@ -13,7 +17,7 @@ var UIApplication = function(delegate) {
     self.data = undefined;
     self.expanded = false;
 
-    
+
     self.render = function(layer) {
 
         // Background rect
@@ -42,8 +46,8 @@ var UIApplication = function(delegate) {
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(undefined)
-                .width(100)
-                .height(100)
+                .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
+                .height(UIApplication.style.applicationBackgroundHeightNotExpanded)
                 .x(-50)
                 .y(-50);
         }
@@ -139,9 +143,7 @@ var UIApplication = function(delegate) {
                 .transition()
                 .x(-windowViewController.width / 2 + UIApplication.style.margin )
                 .y(-windowViewController.height / 2 + UIApplication.style.margin)
-                .transition()
-                .duration(1000)
-                .style("opacity", 1);
+                .attr('height', UIApplication.style.headerRectHeightExpanded)
 
         }
         else {
@@ -151,11 +153,11 @@ var UIApplication = function(delegate) {
                 .y(0);
 
             layer.selectAll(".nameGroup").selectAll(".headerRect")
-                .attr('width', 100)
-                .attr('height', 20)
+                .attr('width', UIApplication.style.applicationBackgroundWidthNotExpanded)
+                .attr('height', UIApplication.style.headerRectHeightNotExpanded)
                 .transition()
-                .x(0)
-                .y(0);
+                .x(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
+                .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
         }
 
         layer.selectAll(".nameGroup").selectAll(".name")
