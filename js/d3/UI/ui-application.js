@@ -34,14 +34,13 @@ var UIApplication = function(delegate) {
             .enter()
             .append("rect")
             .fill(self.palette.primary.normal)
-            .class("pointer")
-            .class("applicationBackground")
-            .on("click", function() {
-                delegate.clicked();
-            });
+            .class("applicationBackground");
+
 
         if(self.delegate.expanded) {
             layer.selectAll(".applicationBackground")
+                .classRemove("pointer")
+                .on("click", null)
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(UIApplication.style.margin)
@@ -52,6 +51,10 @@ var UIApplication = function(delegate) {
         }
         else {
             layer.selectAll(".applicationBackground")
+                .class("pointer")
+                .on("click", function() {
+                    delegate.clicked();
+                })
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(undefined)
