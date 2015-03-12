@@ -18,10 +18,9 @@ var UIApplication = function(delegate) {
     // Public variables
     self.data = undefined;
     self.expanded = false;
-    self.status = true;
 
     self.statusColor = function() {
-      if(self.status)
+      if(self.delegate.status)
         return UIApplication.style.activeStatusColor;
 
         return UIApplication.style.disabledStatusColor;
@@ -36,6 +35,7 @@ var UIApplication = function(delegate) {
             .append("rect")
             .fill(self.palette.primary.normal)
             .class("pointer")
+            .class("applicationBackground")
             .on("click", function() {
                 delegate.clicked();
             });
@@ -116,7 +116,7 @@ var UIApplication = function(delegate) {
          delegate.clicked();
          })
          .text(delegate.name);
-*/
+        */
 
         // Application name group
         nameGroup = layer.selectAll(".nameGroup")
@@ -125,9 +125,13 @@ var UIApplication = function(delegate) {
             .append("g")
             .class("nameGroup");
 
+        // Create the status rect
         nameGroup.append("rect")
-            .fill(self.statusColor())
-            .classed("headerRect", true);
+            .class("headerRect");
+
+        // Update the status rect
+        layer.selectAll(".headerRect")
+            .fill(self.statusColor());
 
         nameGroup.append("text")
             .class("name")

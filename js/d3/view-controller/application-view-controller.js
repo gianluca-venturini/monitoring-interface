@@ -71,6 +71,12 @@ var ApplicationViewController = function(name, view) {
         return self == applicationModel.viewControllerApplicationSelected;
     });
 
+    self.__defineGetter__("status", function() {
+
+
+        return true;
+    });
+
     self.renderInstances = function() {
         var instances = applicationModel.getApplicationData(self.name).instances;
         if(instances != undefined) {
