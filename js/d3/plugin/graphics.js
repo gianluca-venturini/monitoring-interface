@@ -83,6 +83,13 @@
         return this;
     };
 
+    d3.selection.prototype.classRemove = d3.selection.enter.prototype.classRemove = d3.transition.prototype.classRemove = function(className) {
+        var cn = {};
+        cn[className] = false;
+        this.classed(cn);
+        return this;
+    };
+
     d3.selection.prototype.opacity = d3.selection.enter.prototype.opacity = d3.transition.prototype.opacity = function(opacity) {
         this.attr("opacity", opacity);
         return this;
