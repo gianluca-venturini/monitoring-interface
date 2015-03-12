@@ -129,6 +129,14 @@ var UIApplication = function(delegate) {
             })
             .text(delegate.name);
 
+        // add close button
+        nameGroup.append("svg:image")
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr("xlink:href","img/cross.svg")
+            .classed("closeApp", true)
+            .style("opacity", 0);
+
         // Application name
         if(self.delegate.expanded) {
             // move the name
@@ -139,11 +147,22 @@ var UIApplication = function(delegate) {
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
             // move the rect
             layer.selectAll(".nameGroup").selectAll(".headerRect")
-                .attr('width', windowViewController.width - UIApplication.style.margin * 2)
                 .transition()
                 .x(-windowViewController.width / 2 + UIApplication.style.margin )
                 .y(-windowViewController.height / 2 + UIApplication.style.margin)
+                .transition()
                 .attr('height', UIApplication.style.headerRectHeightExpanded)
+                .transition()
+                .attr('width', windowViewController.width - UIApplication.style.margin * 2);
+
+            // move close button
+            layer.selectAll(".nameGroup").selectAll(".closeApp")
+                .transition()
+                .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
+                .transition()
+                .delay(750)
+                .style("opacity", 1);
 
         }
         else {
@@ -158,6 +177,11 @@ var UIApplication = function(delegate) {
                 .transition()
                 .x(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
+
+            layer.selectAll(".nameGroup").selectAll(".closeApp")
+                .x(0)
+                .y(0)
+                .style("opacity", 0);
         }
 
         layer.selectAll(".nameGroup").selectAll(".name")
