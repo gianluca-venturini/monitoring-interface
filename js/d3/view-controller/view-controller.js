@@ -31,6 +31,11 @@ var ViewController = function(view) {
         self.addUiComponent(uiConnectionView);
     };
 
+    self.addUITab = function(index) {
+        var uiTab = UITab(self, index);
+        self.addUiComponent(uiTab);
+    };
+
     self.addUiComponent = function(ui) {
         self._uis.push(ui);
     };

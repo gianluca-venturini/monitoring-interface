@@ -16,19 +16,18 @@ var UIApplication = function(delegate) {
     self.render = function(layer) {
 
         // Background rect
-        layer.selectAll(".appRect")
+        layer.selectAll(".applicationBackground")
             .data([{}])
             .enter()
             .append("rect")
             .fill(self.palette.primary.normal)
-            .class("appRect")
             .class("pointer")
             .on("click", function() {
                 delegate.clicked();
             });
 
         if(self.delegate.expanded) {
-            layer.selectAll(".appRect")
+            layer.selectAll(".applicationBackground")
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(UIApplication.style.margin)
@@ -38,7 +37,7 @@ var UIApplication = function(delegate) {
                 .y(-windowViewController.height / 2 + UIApplication.style.margin);
         }
         else {
-            layer.selectAll(".appRect")
+            layer.selectAll(".applicationBackground")
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(undefined)

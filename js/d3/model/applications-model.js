@@ -4,6 +4,7 @@ var ApplicationsModel = function() {
     // Public variables
     self.data = undefined;
     self.viewControllerApplicationSelected = undefined;
+    self.viewControllerInstanceSelected = undefined;
 
     self.getApplicationData = function(name) {
         var appData = self.data.applications.filter(function(d) {
@@ -52,7 +53,6 @@ var ApplicationsModel = function() {
 
     // Constructor
     self.init = function() {
-        self.fetchData("data/data.json");
     }();
 
     return self;
