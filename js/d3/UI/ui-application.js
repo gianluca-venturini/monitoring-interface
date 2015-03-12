@@ -103,6 +103,7 @@ var UIApplication = function(delegate) {
          })
          .text(delegate.name);
 */
+
         // Application name group
         nameGroup = layer.selectAll(".nameGroup")
             .data([{}])
