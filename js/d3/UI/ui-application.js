@@ -139,10 +139,8 @@ var UIApplication = function(delegate) {
         nameGroup.append("text")
             .class("name")
             .class("pointer")
+            .class("no_interaction")
             .attr("text-anchor", "middle")
-            .on("click", function() {
-                delegate.clicked();
-            })
             .text(delegate.name);
 
         // add close button
@@ -188,6 +186,7 @@ var UIApplication = function(delegate) {
                 .transition()
                 .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
+                .attr("xlink:href","img/cross_red_border_white.svg")
                 .transition()
                 .delay(750)
                 .style("opacity", 1);
