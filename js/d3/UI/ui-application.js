@@ -16,18 +16,19 @@ var UIApplication = function(delegate) {
     self.render = function(layer) {
 
         // Background rect
-        layer.selectAll("rect")
+        layer.selectAll(".appRect")
             .data([{}])
             .enter()
             .append("rect")
             .fill(self.palette.primary.normal)
+            .class("appRect")
             .class("pointer")
             .on("click", function() {
                 delegate.clicked();
             });
 
         if(self.delegate.expanded) {
-            layer.selectAll("rect")
+            layer.selectAll(".appRect")
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(UIApplication.style.margin)
@@ -37,7 +38,7 @@ var UIApplication = function(delegate) {
                 .y(-windowViewController.height / 2 + UIApplication.style.margin);
         }
         else {
-            layer.selectAll("rect")
+            layer.selectAll(".appRect")
                 .transition()
                 .fill(self.palette.primary.normal)
                 .margin(undefined)
@@ -47,11 +48,74 @@ var UIApplication = function(delegate) {
                 .y(-50);
         }
 
-        // Application name
-        layer.selectAll(".name")
+        /*
+        layer.selectAll(".headerRect")
             .data([{}])
             .enter()
-            .append("text")
+            .append("rect")
+            .attr('width', windowViewController.width - UIApplication.style.margin * 2)
+            .attr('height', 30)
+            .attr("fill","red")
+            .style("opacity", 0)
+            .classed("headerRect", true)
+            .x(-windowViewController.width / 2 + UIApplication.style.margin )
+            .y(-windowViewController.height / 2 + UIApplication.style.margin);
+
+        // add close button
+        layer.selectAll(".closeApp")
+            .data([{}])
+            .enter()
+            .append("svg:image")
+            .attr('width', 20)
+            .attr('height', 20)
+            .attr("xlink:href","img/cross.svg")
+            .classed("closeApp", true)
+            .style("opacity", 1)
+            .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
+            .y(-windowViewController.height / 2 + UIApplication.style.margin + 5);
+
+        // Application header
+        if(self.delegate.expanded) {
+            // add header rect
+            layer.selectAll(".headerRect")
+                .transition()
+                .duration(1000)
+                .style("opacity", 1);
+
+            layer.selectAll(".closeApp")
+                .transition()
+                .duration(1000)
+                .style("opacity", 1);
+        }
+        else {
+            //layer.selectAll(".headerRect").style("opacity", 0);
+            //layer.selectAll(".closeApp").style("opacity", 0);
+        }
+         // Application name
+         layer.selectAll(".name")
+         .data([{}])
+         .enter()
+         .append("text")
+         .class("name")
+         .class("pointer")
+         .attr("text-anchor", "middle")
+         .on("click", function() {
+         delegate.clicked();
+         })
+         .text(delegate.name);
+*/
+        // Application name group
+        nameGroup = layer.selectAll(".nameGroup")
+            .data([{}])
+            .enter()
+            .append("g")
+            .class("nameGroup");
+
+        nameGroup.append("rect")
+            .fill("red")
+            .classed("headerRect", true);
+
+        nameGroup.append("text")
             .class("name")
             .class("pointer")
             .attr("text-anchor", "middle")
@@ -62,21 +126,38 @@ var UIApplication = function(delegate) {
 
         // Application name
         if(self.delegate.expanded) {
-            layer.selectAll(".name")
+            // move the name
+            layer.selectAll(".nameGroup").selectAll(".name")
                 .transition()
                 .duration(1000)
                 .x(0)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
+            // move the rect
+            layer.selectAll(".nameGroup").selectAll(".headerRect")
+                .attr('width', windowViewController.width - UIApplication.style.margin * 2)
+                .transition()
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin)
+                .transition()
+                .duration(1000)
+                .style("opacity", 1);
+
         }
         else {
-            layer.selectAll(".name")
+            layer.selectAll(".nameGroup").selectAll(".name")
+                .transition()
+                .x(0)
+                .y(0);
+
+            layer.selectAll(".nameGroup").selectAll(".headerRect")
+                .attr('width', 100)
+                .attr('height', 20)
                 .transition()
                 .x(0)
                 .y(0);
         }
 
-
-        layer.selectAll(".name")
+        layer.selectAll(".nameGroup").selectAll(".name")
             .text(delegate.name);
 
         /*
