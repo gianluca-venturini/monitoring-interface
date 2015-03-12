@@ -21,6 +21,7 @@ var ApplicationViewController = function(name, view) {
         self.renderInstances();
     };
 
+
     self.closeButtonClicked = function() {
         self.clicked();
     };

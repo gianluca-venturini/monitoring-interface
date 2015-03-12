@@ -8,7 +8,9 @@ var UIApplication = function(delegate) {
         applicationBackgroundWidthNotExpanded: 100,
         applicationBackgroundHeightNotExpanded: 100,
         headerRectHeightNotExpanded: 10,
-        headerRectHeightExpanded: 30
+        headerRectHeightExpanded: 30,
+        activeStatusColor: "green",
+        disabledStatusColor: "red"
     };
 
     // Private
@@ -16,7 +18,14 @@ var UIApplication = function(delegate) {
     // Public variables
     self.data = undefined;
     self.expanded = false;
+    self.status = true;
 
+    self.statusColor = function() {
+      if(self.status)
+        return UIApplication.style.activeStatusColor;
+
+        return UIApplication.style.disabledStatusColor;
+    };
 
     self.render = function(layer) {
 
@@ -117,7 +126,7 @@ var UIApplication = function(delegate) {
             .class("nameGroup");
 
         nameGroup.append("rect")
-            .fill("red")
+            .fill(self.statusColor())
             .classed("headerRect", true);
 
         nameGroup.append("text")
@@ -133,10 +142,16 @@ var UIApplication = function(delegate) {
         nameGroup.append("svg:image")
             .attr('width', 20)
             .attr('height', 20)
-            .attr("xlink:href","img/cross.svg")
+            .attr("xlink:href","img/cross_red_border_white.svg")
             .classed("closeApp", true)
             .class("pointer")
             .style("opacity", 0)
+            .on("mouseover", function() {
+                d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
+            })
             .on("click", function() {
                 delegate.closeButtonClicked();
             });
