@@ -14,30 +14,7 @@ var UINotification = function(delegate, x, y) {
 
         var notificationGroup = layer.layerWithName("notificationGroup");
 
-        notificationGroup.selectAll(".notificationCircle")
-            .data([{}])
-            .enter()
-            .append("circle")
-            .class("notificationCircle")
-            .cx(self.x)
-            .cy(self.y)
-            .r(UINotification.style.notificationRadius)
-            .fill(self.palette.accent.normal);
-
-        notificationGroup.selectAll(".notificationText")
-            .data([{}])
-            .enter()
-            .append("text")
-            .class("notificationText")
-            .attr("text-anchor", "middle")
-            .attr("font-size", UINotification.style.notificationFontSize)
-            .x(self.x)
-            .y(self.y+UINotification.style.notificationFontSize/3)
-            .text(delegate.notification(self.name));
-
-        if(delegate.expanded ||
-            delegate.notification(self.name) == 0) {
-
+        if(self.show == false) {
             notificationGroup
                 .transition()
                 .duration(Animations.notification.NOTIFICATION_FADE_OUT.duration)
@@ -52,6 +29,26 @@ var UINotification = function(delegate, x, y) {
                 .opacity(1);
         }
 
+        notificationGroup.selectAll(".notificationCircle")
+            .data([{}])
+            .enter()
+            .append("circle")
+            .class("notificationCircle")
+            .cx(self.x)
+            .cy(self.y)
+            .r(UINotification.style.notificationRadius)
+            .fill(self.palette.accent.dark);
+
+        notificationGroup.selectAll(".notificationText")
+            .data([{}])
+            .enter()
+            .append("text")
+            .class("notificationText")
+            .attr("text-anchor", "middle")
+            .attr("font-size", UINotification.style.notificationFontSize)
+            .x(self.x)
+            .y(self.y+UINotification.style.notificationFontSize/3)
+            .text(delegate.notification(self.name));
     };
 
     // Constructor

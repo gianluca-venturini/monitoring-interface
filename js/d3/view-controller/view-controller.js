@@ -24,22 +24,26 @@ var ViewController = function(view) {
     self.addUIApplication = function() {
         var uiApplication = UIApplication(self);
         self.addUiComponent(uiApplication);
+        return uiApplication;
     };
 
     self.addUIConnectionView = function() {
         var uiConnectionView = UIConnectionView(self);
         self.addUiComponent(uiConnectionView);
+        return uiConnectionView;
     };
 
     self.addUITab = function(index) {
         var uiTab = UITab(self, index);
         self.addUiComponent(uiTab);
+        return uiTab;
     };
 
     self.addUINotification = function(x, y, notificationName) {
         var uiNotification = UINotification(self, x, y);
         uiNotification.name = notificationName;
         self.addUiComponent(uiNotification);
+        return uiNotification;
     };
 
     self.addUiComponent = function(ui) {

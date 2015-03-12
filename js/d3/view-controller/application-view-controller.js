@@ -5,6 +5,7 @@ var ApplicationViewController = function(name, view) {
     self._instanceViewControllers = {};
     self._expansionAnimationFinished = undefined;
     self._reductionAnimationFinished = undefined;
+    self._notification = undefined;
 
     // Public variables
     self.name = undefined;
@@ -14,6 +15,14 @@ var ApplicationViewController = function(name, view) {
     var render = self.render;
     self.render = function() {
         var data = applicationModel.getApplicationData(self.name);
+
+        // Check if the notification must be displayed or not
+        if(self.expanded || self.notification() == 0) {
+            self._notification.show = false;
+        }
+        else {
+            self._notification.show = true;
+        }
 
         render();
 
@@ -148,7 +157,7 @@ var ApplicationViewController = function(name, view) {
         // Add graphic components
         self.addUIApplication();    // Graphical visualization of the application
         self.addUIConnectionView(); // Connection view component
-        self.addUINotification(50, -50);   // Application notification
+        self._notification = self.addUINotification(50, -50);   // Application notification
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.render();

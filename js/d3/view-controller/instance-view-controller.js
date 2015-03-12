@@ -1,6 +1,9 @@
 var InstanceViewController = function(parentApplicationViewController, name, index, layer) {
     var self = ViewController(layer);
 
+    // Private variables
+    self._notification = undefined;
+
     // Public variables
     self.name = undefined;
     self.applicationName = undefined;
@@ -9,6 +12,16 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
 
     var render = self.render;
     self.render = function() {
+
+        // Display notification only if errors are present
+        if(applicationModel.viewControllerApplicationSelected == self.parentApplicationViewController &&
+            self.notification() > 0) {
+            self._notification.show = true;
+        }
+        else {
+            self._notification.show = false;
+        }
+
         render();
     };
 
@@ -19,7 +32,6 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
             notificationCenter.dispatch(Notifications.ui.INSTANCE_CLICKED);
             //self.selected = true;
         }
-
     };
 
     self.getTabsNumber = function() {
@@ -30,6 +42,11 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         return applicationModel.viewControllerInstanceSelected == self;
     };
 
+    self.notification = function() {
+        //return self.parentApplicationViewController.notification(name);
+        return index+1;
+    };
+
     // Constructor
     self.init = function() {
         self.name = name;
@@ -37,14 +54,11 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         self.applicationName = self.parentApplicationViewController.name;
         //self.selected = false;
 
-        self.addUITab(index);
+        var tab = self.addUITab(index);
 
-        //notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
-        //    //self.selected = false;
-        //    //self._uis.forEach(function(tab){
-        //    //    tab.updateColor();
-        //    //});
-        //});
+        // Calculate the position of the notification and add it
+        self._notification = self.addUINotification(tab.getLeftParent() + UITab.style.width,
+                                                    tab.getTopParent() + index * tab.getTabHeight() + UIApplication.style.titleBarHeight);
     }();
 
     // Destructor

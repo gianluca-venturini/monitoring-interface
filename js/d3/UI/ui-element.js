@@ -5,6 +5,7 @@ var UIElement = function(delegate, x, y) {
     self.delegate = undefined;
     self.x = 0;
     self.y = 0;
+    self.show = true;
 
     // Static attributes
     UIElement.defaultPalette = {
