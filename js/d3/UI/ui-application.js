@@ -135,7 +135,11 @@ var UIApplication = function(delegate) {
             .attr('height', 20)
             .attr("xlink:href","img/cross.svg")
             .classed("closeApp", true)
-            .style("opacity", 0);
+            .class("pointer")
+            .style("opacity", 0)
+            .on("click", function() {
+                delegate.closeButtonClicked();
+            });
 
         // Application name
         if(self.delegate.expanded) {
