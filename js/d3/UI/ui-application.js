@@ -150,12 +150,6 @@ var UIApplication = function(delegate) {
             .class("closeApp")
             .class("pointer")
             .style("opacity", 0)
-            .on("mouseover", function() {
-                d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
-            })
-            .on("mouseout", function() {
-                d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
-            })
             .on("click", function() {
                 delegate.closeButtonClicked();
             });
@@ -165,21 +159,29 @@ var UIApplication = function(delegate) {
             // move the name
             layer.selectAll(".nameGroup").selectAll(".name")
                 .transition()
-                .duration(Animations.application.APPLICATION_EXPANSION)
+                .duration(Animations.application.APPLICATION_EXPANSION.duration)
                 .x(0)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
+
             // move the rect
             layer.selectAll(".nameGroup").selectAll(".headerRect")
                 .transition()
                 .x(-windowViewController.width / 2 + UIApplication.style.margin )
                 .y(-windowViewController.height / 2 + UIApplication.style.margin)
+                .attr('width', windowViewController.width - UIApplication.style.margin * 2)
                 .transition()
                 .attr('height', UIApplication.style.headerRectHeightExpanded)
                 .transition()
-                .attr('width', windowViewController.width - UIApplication.style.margin * 2);
+                ;
 
             // move close button
             layer.selectAll(".nameGroup").selectAll(".closeApp")
+                .on("mouseover", function() {
+                    d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
+                })
                 .transition()
                 .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
@@ -195,13 +197,15 @@ var UIApplication = function(delegate) {
                 .y(0);
 
             layer.selectAll(".nameGroup").selectAll(".headerRect")
+                .transition()
                 .attr('width', UIApplication.style.applicationBackgroundWidthNotExpanded)
                 .attr('height', UIApplication.style.headerRectHeightNotExpanded)
-                .transition()
                 .x(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
 
             layer.selectAll(".nameGroup").selectAll(".closeApp")
+                .on("mouseover", null)
+                .on("mouseout", null)
                 .x(0)
                 .y(0)
                 .style("opacity", 0);
