@@ -60,6 +60,16 @@
         return this.attr("y", y);
     };
 
+    d3.selection.prototype.cx = d3.selection.enter.prototype.cx = d3.transition.prototype.cx = function(x) {
+        var self = this;
+        return this.attr("cx", x);
+    };
+
+    d3.selection.prototype.cy = d3.selection.enter.prototype.cy = d3.transition.prototype.cy = function(y) {
+        var self = this;
+        return this.attr("cy", y);
+    };
+
     d3.selection.prototype.fill = d3.selection.enter.prototype.fill = d3.transition.prototype.fill = function(fill) {
         var self = this;
         return this.attr("fill", fill);
@@ -91,7 +101,7 @@
     };
 
     d3.selection.prototype.opacity = d3.selection.enter.prototype.opacity = d3.transition.prototype.opacity = function(opacity) {
-        this.attr("opacity", opacity);
+        this.style("opacity", opacity);
         return this;
     };
 
@@ -131,6 +141,13 @@
 
         this.attr("transform", function(d) { return "translate(" + d.radius*Math.sin(d.angle) + ", " + (-d.radius*Math.cos(d.angle)) + ")" +
             "rotate(" + toDegrees(d.angle) + ")"});
+
+        return this;
+    };
+
+    d3.selection.prototype.r = d3.selection.enter.prototype.r = d3.transition.prototype.r = function(radius) {
+
+        this.attr("r", radius);
 
         return this;
     };

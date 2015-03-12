@@ -10,7 +10,7 @@ var UIApplication = function(delegate) {
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: "green",
-        disabledStatusColor: "red"
+        disabledStatusColor: "red",
     };
 
     // Private
@@ -35,7 +35,6 @@ var UIApplication = function(delegate) {
             .append("rect")
             .fill(self.palette.primary.normal)
             .class("applicationBackground");
-
 
         if(self.delegate.expanded) {
             layer.selectAll(".applicationBackground")
@@ -63,63 +62,6 @@ var UIApplication = function(delegate) {
                 .x(-50)
                 .y(-50);
         }
-
-        /*
-        layer.selectAll(".headerRect")
-            .data([{}])
-            .enter()
-            .append("rect")
-            .attr('width', windowViewController.width - UIApplication.style.margin * 2)
-            .attr('height', 30)
-            .attr("fill","red")
-            .style("opacity", 0)
-            .classed("headerRect", true)
-            .x(-windowViewController.width / 2 + UIApplication.style.margin )
-            .y(-windowViewController.height / 2 + UIApplication.style.margin);
-
-        // add close button
-        layer.selectAll(".closeApp")
-            .data([{}])
-            .enter()
-            .append("svg:image")
-            .attr('width', 20)
-            .attr('height', 20)
-            .attr("xlink:href","img/cross.svg")
-            .classed("closeApp", true)
-            .style("opacity", 1)
-            .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
-            .y(-windowViewController.height / 2 + UIApplication.style.margin + 5);
-
-        // Application header
-        if(self.delegate.expanded) {
-            // add header rect
-            layer.selectAll(".headerRect")
-                .transition()
-                .duration(1000)
-                .style("opacity", 1);
-
-            layer.selectAll(".closeApp")
-                .transition()
-                .duration(1000)
-                .style("opacity", 1);
-        }
-        else {
-            //layer.selectAll(".headerRect").style("opacity", 0);
-            //layer.selectAll(".closeApp").style("opacity", 0);
-        }
-         // Application name
-         layer.selectAll(".name")
-         .data([{}])
-         .enter()
-         .append("text")
-         .class("name")
-         .class("pointer")
-         .attr("text-anchor", "middle")
-         .on("click", function() {
-         delegate.clicked();
-         })
-         .text(delegate.name);
-        */
 
         // Application name group
         nameGroup = layer.selectAll(".nameGroup")
@@ -216,86 +158,7 @@ var UIApplication = function(delegate) {
         layer.selectAll(".nameGroup").selectAll(".name")
             .text(delegate.name);
 
-        /*
 
-        if(appLabel == undefined) {
-            appLabel = self._layer.append("text")
-        }
-
-        if(self.expanded == false) {
-            appRect.transition()
-                .width(100)
-                .height(100)
-                .x(-50)
-                .y(-50);
-
-            if(tabTable != undefined) {
-                tabTable.each(function(data) {
-                        // Destructor
-                        this.tabTable.deinit();
-                    })
-                    .remove();
-
-                tabTable = undefined;
-            }
-
-            if(connectionView != undefined) {
-                connectionView.deinit();
-                connectionView = undefined;
-            }
-        }
-        else {
-            width = windowManager.getWidth();
-            height = windowManager.getHeight();
-
-            // Background rectangle
-            appRect.transition()
-                .width(self.getWidth())
-                .height(self.getHeight())
-                .x(-width/2 + UIApplication.style.margin)
-                .y(-height/2 + UIApplication.style.margin);
-
-            tabTable = self._layer.append("g")
-                .margin(UIApplication.style.margin)
-                .translate(-width/2, -height/2)
-                .each(function(data) {
-                    this.tabTable = UITabTable(d3.select(this), self);
-
-                    this.tabTable.data = data.instances;
-
-                    // Render the application
-                    this.tabTable.render();
-                });
-
-            if(connectionView == undefined) {
-                // Create connectionView component
-                var layer = self._layer.newLayer();
-
-                connectionView = UIConnectionView(layer);
-                var instanceData = self.instanceData("instance1");
-                if(instanceData.components != undefined) {
-                    connectionView.data = instanceData.components;
-                }
-                connectionView.render();
-            }
-            else {
-                // Update connectionView component
-                var instanceData = self.instanceData("instance1");
-                if(instanceData.components != undefined) {
-                    connectionView.data = instanceData.components;
-                }
-
-                connectionView.render();
-            }
-        }
-
-        appLabel
-            .x(0)
-            .y(0)
-            .attr("text-anchor", "middle")
-            .text(self.data.name);
-
-         */
 
     };
 
@@ -309,22 +172,6 @@ var UIApplication = function(delegate) {
 
         return d[0];
     };
-
-    /*
-
-    // Expand
-    self.expand = function() {
-        self.expanded = true;
-        self.render();
-    };
-
-    // Reduce
-    self.reduce = function() {
-        self.expanded = false;
-        self.render();
-    };
-
-    */
 
     self.getWidth = function() {
         return width  - UIApplication.style.margin * 2;

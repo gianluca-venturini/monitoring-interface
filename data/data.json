@@ -2,6 +2,7 @@
   "applications": [
     {
       "name": "application1",
+      "problems": 1,
       "instances": [
         {
           "name": "instance1",
@@ -109,6 +110,7 @@
     },
     {
       "name": "application6",
+      "problems": 3,
       "instances": [
         {
           "name": "instance1",

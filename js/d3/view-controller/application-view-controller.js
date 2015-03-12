@@ -69,10 +69,33 @@ var ApplicationViewController = function(name, view) {
     });
 
     self.__defineGetter__("status", function() {
-
-
-        return true;
+        return applicationModel.getApplicationData(self.name).problems == undefined || applicationModel.getApplicationData(self.name).problems == 0;
     });
+
+    self.notification = function(name) {
+        var data = applicationModel.getApplicationData(self.name);
+
+        if(name == undefined) {
+            if(data.problems == undefined) {
+                return 0;
+            }
+            return data.problems;
+        }
+
+        var instance = data.instances.filter(function(instance) {
+            return instance.name == name;
+        });
+
+        if(instance.length == 0) {
+            return 0;
+        }
+
+        if(instance[0].problems == undefined) {
+            return 0;
+        }
+
+        return instance[0].problems;
+    };
 
     self.renderInstances = function() {
         var instances = applicationModel.getApplicationData(self.name).instances;
@@ -123,9 +146,9 @@ var ApplicationViewController = function(name, view) {
         self.name = name;
 
         // Add graphic components
-
-        self.addUIApplication();
-        self.addUIConnectionView();
+        self.addUIApplication();    // Graphical visualization of the application
+        self.addUIConnectionView(); // Connection view component
+        self.addUINotification(50, -50);   // Application notification
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.render();

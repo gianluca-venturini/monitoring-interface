@@ -1,8 +1,10 @@
-var UIElement = function(delegate) {
+var UIElement = function(delegate, x, y) {
     var self = {};
 
     // Public variables
     self.delegate = undefined;
+    self.x = 0;
+    self.y = 0;
 
     // Static attributes
     UIElement.defaultPalette = {
@@ -24,6 +26,8 @@ var UIElement = function(delegate) {
     // Constructor
     self.init = function() {
         self.delegate = delegate;
+        if(x != undefined) self.x = x;
+        if(y != undefined) self.y = y;
     }();
 
     // Destructor
