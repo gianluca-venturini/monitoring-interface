@@ -147,7 +147,7 @@ var UIApplication = function(delegate) {
             .attr('width', 20)
             .attr('height', 20)
             .attr("xlink:href","img/cross_red_border_white.svg")
-            .classed("closeApp", true)
+            .class("closeApp")
             .class("pointer")
             .style("opacity", 0)
             .on("mouseover", function() {
@@ -165,7 +165,7 @@ var UIApplication = function(delegate) {
             // move the name
             layer.selectAll(".nameGroup").selectAll(".name")
                 .transition()
-                .duration(1000)
+                .duration(Animations.application.APPLICATION_EXPANSION)
                 .x(0)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
             // move the rect
