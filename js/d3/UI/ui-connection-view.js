@@ -158,12 +158,10 @@ var UIConnectionView = function(delegate) {
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
             .enter()
-            .append("g")
+            .append("path")
             .class("subscribeTriangle")
-            //.rotateLayer()
-                .append("path")
-                .attr("d", lineFunction(arrowData))
-                .attr("fill", self.palette.accent.dark);
+            .attr("d", lineFunction(arrowData))
+            .attr("fill", self.palette.accent.dark);
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
