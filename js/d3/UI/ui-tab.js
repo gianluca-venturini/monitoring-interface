@@ -24,7 +24,7 @@ var UITab = function(delegate, index) {
             .width(0.001)
             .on("mouseover", function () {
                 if (!delegate.selected()) {
-                    d3.select(this).fill(self.palette.accent.bright);
+                    d3.select(this).fill(self.palette.accent1.bright);
                 }
             })
             .on("mouseout", function () {
@@ -85,10 +85,10 @@ var UITab = function(delegate, index) {
     self.getTabColor = function() {
         var color;
         if(delegate.selected()) {
-            color = self.palette.accent.dark;
+            color = self.palette.accent1.dark;
         }
         else {
-            color = self.palette.accent.normal;
+            color = self.palette.accent1.normal;
         }
         return color;
     };

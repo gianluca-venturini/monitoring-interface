@@ -137,6 +137,7 @@ var WindowViewController = function(view) {
 
     // Constructor
     self.init = function() {
+
         // Subscribe to data notification
         notificationCenter.subscribe(Notifications.data.APPLICATION_DATA_CHANGE,
             function() {

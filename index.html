@@ -48,6 +48,9 @@
 
     var svg = d3.select("#container");
 
+    // Set background color
+    svg.style("background", defaultPalette.background.normal);
+
     windowViewController.view = svg;
     windowViewController.updateViewBox();
 

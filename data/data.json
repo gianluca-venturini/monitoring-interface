@@ -114,6 +114,7 @@
       "instances": [
         {
           "name": "instance1",
+          "problems": 2,
           "components": [
             {
               "name": "component1",
@@ -226,10 +227,12 @@
         ]
         },
         {
-          "name": "instance2"
+          "name": "instance2",
+          "problems": 2
         },
         {
-          "name": "instance3"
+          "name": "instance3",
+          "problems": 5
         }
       ]
     }

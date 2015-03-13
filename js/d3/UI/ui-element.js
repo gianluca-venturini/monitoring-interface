@@ -1,3 +1,38 @@
+var defaultPalette = {
+    primary: {
+        dark: "#0288D1",
+        normal: "#03A9F4",
+        bright: "#B3E5FC"
+    },
+    text: {
+        dark: "#000000",
+        bright: "#FFFFFF"
+    },
+    accent1: {
+        dark: "#225378",
+        normal: "#F2F2F2",
+        bright: "#6AC2CC"
+    },
+    accent2: {
+        dark: "#F57C00",
+        normal: "#FF9800",
+        bright: "#FFE0B2"
+    },
+    accent3: {
+        dark: "#F57C00",
+        normal: "#FF9800",
+        bright: "#FFE0B2"
+    },
+    background: {
+        dark: "#ACF0F2",
+        normal: "#EDEDED"
+    },
+    state: {
+        red: "#F26A4B",
+        green: "#95BF93"
+    }
+};
+
 var UIElement = function(delegate) {
     var self = {};
 
@@ -10,22 +45,8 @@ var UIElement = function(delegate) {
     // Private variables
     self._view = undefined;
 
-    // Static attributes
-    UIElement.defaultPalette = {
-        primary: {
-            dark: "#0288D1",
-            normal: "#03A9F4",
-            bright: "#B3E5FC"
-        },
-        accent: {
-            dark: "#F57C00",
-            normal: "#FF9800",
-            bright: "#FFE0B2"
-        }
-    };
-
     // Protected variables
-    self.palette = UIElement.defaultPalette;
+    self.palette = defaultPalette;
 
     // Constructor
     self.init = function() {

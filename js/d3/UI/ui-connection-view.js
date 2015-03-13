@@ -161,7 +161,7 @@ var UIConnectionView = function(delegate) {
             .append("path")
             .class("subscribeTriangle")
             .attr("d", lineFunction(arrowData))
-            .attr("fill", self.palette.accent.dark);
+            .attr("fill", self.palette.accent1.dark);
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)

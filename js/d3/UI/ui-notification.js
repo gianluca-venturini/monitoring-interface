@@ -39,7 +39,7 @@ var UINotification = function(delegate) {
             .cx(self.x)
             .cy(self.y)
             .r(UINotification.style.notificationRadius)
-            .fill(self.palette.accent.dark);
+            .fill(self.palette.accent2.normal);
 
         notificationGroup.selectAll(".notificationText")
             .data([{}])

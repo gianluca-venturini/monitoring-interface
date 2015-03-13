@@ -43,8 +43,8 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
     };
 
     self.notification = function() {
-        //return self.parentApplicationViewController.notification(name);
-        return index+1;
+        return self.parentApplicationViewController.notification(name);
+        //return index+1;
     };
 
     // Constructor

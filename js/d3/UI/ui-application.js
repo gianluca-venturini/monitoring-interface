@@ -9,8 +9,8 @@ var UIApplication = function(delegate) {
         applicationBackgroundHeightNotExpanded: 100,
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
-        activeStatusColor: "green",
-        disabledStatusColor: "red",
+        activeStatusColor: defaultPalette.state.green,
+        disabledStatusColor: defaultPalette.state.red,
     };
 
     // Private
@@ -43,7 +43,7 @@ var UIApplication = function(delegate) {
                 .classRemove("pointer")
                 .on("click", null)
                 .transition()
-                .fill(self.palette.primary.normal)
+                .fill(self.palette.background.dark)
                 .margin(UIApplication.style.margin)
                 .width(windowViewController.width)
                 .height(windowViewController.height)
@@ -57,7 +57,7 @@ var UIApplication = function(delegate) {
                     delegate.clicked();
                 })
                 .transition()
-                .fill(self.palette.primary.normal)
+                .fill(self.palette.accent1.normal)
                 .margin(undefined)
                 .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
                 .height(UIApplication.style.applicationBackgroundHeightNotExpanded)
