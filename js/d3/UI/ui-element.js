@@ -1,4 +1,4 @@
-var UIElement = function(delegate, x, y) {
+var UIElement = function(delegate) {
     var self = {};
 
     // Public variables
@@ -6,6 +6,9 @@ var UIElement = function(delegate, x, y) {
     self.x = 0;
     self.y = 0;
     self.show = true;
+
+    // Private variables
+    self._view = undefined;
 
     // Static attributes
     UIElement.defaultPalette = {
@@ -27,14 +30,12 @@ var UIElement = function(delegate, x, y) {
     // Constructor
     self.init = function() {
         self.delegate = delegate;
-        if(x != undefined) self.x = x;
-        if(y != undefined) self.y = y;
+        self._view = self.delegate.newView();
     }();
 
     // Destructor
     self.deinit = function() {
-        // Place here the code for dealloc eventual objects
-
+        self._view.remove();
     };
 
     return self;

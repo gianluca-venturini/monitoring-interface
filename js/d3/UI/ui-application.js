@@ -26,7 +26,9 @@ var UIApplication = function(delegate) {
         return UIApplication.style.disabledStatusColor;
     };
 
-    self.render = function(layer) {
+    self.render = function() {
+
+        var layer = self._view;
 
         // Background rect
         layer.selectAll(".applicationBackground")

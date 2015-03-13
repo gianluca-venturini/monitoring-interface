@@ -82,7 +82,7 @@
         return this;
     };
 
-    d3.selection.prototype.newLayer = d3.selection.enter.prototype.newLayer = d3.transition.prototype.newLayer = function() {
+    d3.selection.prototype.newView = d3.selection.enter.prototype.newView = d3.transition.prototype.newView = function() {
         return this.append("g");
     };
 

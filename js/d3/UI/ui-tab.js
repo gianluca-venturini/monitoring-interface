@@ -8,7 +8,10 @@ var UITab = function(delegate, index) {
         delay: 500
     };
 
-    self.render = function(layer) {
+    self.render = function() {
+
+        var layer = self._view;
+
         layer.selectAll(".instanceTab")
             .data([{}])
             .enter()

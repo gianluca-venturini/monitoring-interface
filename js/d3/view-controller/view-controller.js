@@ -40,7 +40,9 @@ var ViewController = function(view) {
     };
 
     self.addUINotification = function(x, y, notificationName) {
-        var uiNotification = UINotification(self, x, y);
+        var uiNotification = UINotification(self);
+        uiNotification.x = x;
+        uiNotification.y = y;
         uiNotification.name = notificationName;
         self.addUiComponent(uiNotification);
         return uiNotification;
@@ -48,6 +50,10 @@ var ViewController = function(view) {
 
     self.addUiComponent = function(ui) {
         self._uis.push(ui);
+    };
+
+    self.newView = function() {
+        return self._view.newView();
     };
 
     // Constructor

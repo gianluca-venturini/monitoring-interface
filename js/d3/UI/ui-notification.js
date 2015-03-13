@@ -1,5 +1,5 @@
-var UINotification = function(delegate, x, y) {
-    var self = UIElement(delegate, x, y);
+var UINotification = function(delegate) {
+    var self = UIElement(delegate);
 
     // Static attributes
     UINotification.style = {
@@ -10,7 +10,9 @@ var UINotification = function(delegate, x, y) {
     // Public attributes
     self.name = undefined;   // Name of the notification
 
-    self.render = function(layer) {
+    self.render = function() {
+
+        var layer = self._view;
 
         var notificationGroup = layer.layerWithName("notificationGroup");
 

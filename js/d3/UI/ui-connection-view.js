@@ -18,7 +18,9 @@ var UIConnectionView = function(delegate) {
     self._outerRadius = undefined;
 
     // Render the element
-    self.render = function(layer) {
+    self.render = function() {
+
+        var layer = self._view;
 
         // Take the width of the screen
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
