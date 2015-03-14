@@ -3,7 +3,7 @@ text.channel {
 }
 
 .link {
-    stroke: steelblue;
+    /*stroke: steelblue;*/
     /*stroke-opacity: 1.4;*/
     stroke-width: 5;
     fill: none;

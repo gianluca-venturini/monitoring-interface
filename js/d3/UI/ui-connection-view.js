@@ -90,6 +90,7 @@ var UIConnectionView = function(delegate) {
             .enter()
             .append("text")
             .class("channel")
+            .fill(self.palette.text.dark)
             .rotateTextZeroAngle()
             .text(function(channel) { return channel.channel; });
 
@@ -120,6 +121,7 @@ var UIConnectionView = function(delegate) {
             .class("pointer")
             .opacity(0)
             .attr("class", "link")
+            .attr("stroke", self.palette.accent2.bright)
             .attr("d", lineGenerator);
 
         // Update already present links between
