@@ -10,7 +10,7 @@ var UIApplication = function(delegate) {
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
-        disabledStatusColor: defaultPalette.state.red,
+        disabledStatusColor: defaultPalette.state.red
     };
 
     // Private
@@ -35,6 +35,12 @@ var UIApplication = function(delegate) {
             .data([{}])
             .enter()
             .append("rect")
+            .on("mouseover", function() {
+                d3.select(this).fill(self.palette.accent1.bright);
+            })
+            .on("mouseout", function() {
+                d3.select(this).fill(self.palette.accent1.normal);
+            })
             .fill(self.palette.primary.normal)
             .class("applicationBackground");
 
@@ -42,6 +48,8 @@ var UIApplication = function(delegate) {
             layer.selectAll(".applicationBackground")
                 .classRemove("pointer")
                 .on("click", null)
+                .on("mouseover", null)
+                .on("mouseout", null)
                 .transition()
                 .fill(self.palette.background.dark)
                 .margin(UIApplication.style.margin)
@@ -55,6 +63,12 @@ var UIApplication = function(delegate) {
                 .class("pointer")
                 .on("click", function() {
                     delegate.clicked();
+                })
+                .on("mouseover", function() {
+                    d3.select(this).fill(self.palette.accent1.bright);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).fill(self.palette.accent1.normal);
                 })
                 .transition()
                 .fill(self.palette.accent1.normal)
@@ -85,6 +99,7 @@ var UIApplication = function(delegate) {
             .class("pointer")
             .class("no_interaction")
             .attr("text-anchor", "middle")
+            .fill(self.palette.text.bright)
             .text(delegate.name);
 
         // add close button

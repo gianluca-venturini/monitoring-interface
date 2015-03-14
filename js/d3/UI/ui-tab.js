@@ -42,6 +42,7 @@ var UITab = function(delegate, index) {
             .class("pointer")
             .class("instanceTabText")
             .class("no_interaction")
+            .fill(self.palette.text.bright)
             .opacity(0)
             .x(self.getLeftParent() + UITab.style.width/2);
 

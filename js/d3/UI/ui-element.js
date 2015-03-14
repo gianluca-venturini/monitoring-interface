@@ -1,7 +1,7 @@
 var defaultPalette = {
     primary: {
         dark: "#0288D1",
-        normal: "#03A9F4",
+        normal: "#19BB9B",
         bright: "#B3E5FC"
     },
     text: {
@@ -9,9 +9,9 @@ var defaultPalette = {
         bright: "#FFFFFF"
     },
     accent1: {
-        dark: "#225378",
-        normal: "#F2F2F2",
-        bright: "#6AC2CC"
+        dark: "#16a689",
+        normal: "#19BB9B",
+        bright: "#1dd9b4"
     },
     accent2: {
         dark: "#F57C00",
@@ -24,12 +24,15 @@ var defaultPalette = {
         bright: "#FFE0B2"
     },
     background: {
-        dark: "#ACF0F2",
-        normal: "#EDEDED"
+        dark: "#D2D7D3",
+        normal: "#EEEEEE"
+
     },
     state: {
-        red: "#F26A4B",
-        green: "#95BF93"
+        red: "#C0392B",
+        //red: "#96281B",
+        //red: "#F26A4B",
+        green: "#019875"
     }
 };
 
