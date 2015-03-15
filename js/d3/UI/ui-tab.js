@@ -59,6 +59,7 @@ var UITab = function(delegate, name) {
                 .duration(Animations.instance.INSTANCE_ENTER.duration)
                 .delay(Animations.instance.INSTANCE_ENTER.delay)
                 .width(UITab.style.width)
+                .fill(self.getTabColor())
                 .opacity(1);
 
             // Tab text
@@ -120,14 +121,9 @@ var UITab = function(delegate, name) {
         return windowViewController.width - 2 * UIApplication.style.margin;
     };
 
-
     // Constructor
     self.init = function() {
         self.name = name;
-
-        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
-            //self.updateColor();
-        });
     }();
 
     // Destructor

@@ -37,6 +37,9 @@ var ApplicationViewController = function(name, view) {
     self.clicked = function() {
 
         if(self.expanded == false) {
+            // Deselect the instance
+            applicationModel.viewControllerInstanceSelected = undefined;
+
             applicationModel.viewControllerApplicationSelected = self;
             notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
             windowViewController.center(self.coordinates.x, self.coordinates.y);
@@ -120,6 +123,11 @@ var ApplicationViewController = function(name, view) {
                 .each(function(data, index) {
                     this.instanceViewController = InstanceViewController(self, data.name, index, d3.select(this).newView());
                     self._instanceViewControllers[data.name] = this.instanceViewController;
+
+                    // Set the first instance as selected
+                    if(applicationModel.viewControllerInstanceSelected == undefined && self.expanded) {
+                        applicationModel.viewControllerInstanceSelected = this.instanceViewController;
+                    }
                 });
 
             // Update instance tabs
@@ -194,7 +202,7 @@ var ApplicationViewController = function(name, view) {
 
     // Destructor
     self.deinit = function() {
-        // Place here the code for dealloc eventual objects
+        applicationModel.viewControllerInstanceSelected = undefined;
     };
     return self;
 

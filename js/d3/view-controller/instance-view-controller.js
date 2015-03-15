@@ -60,7 +60,11 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
 
     // Getters
     self.__defineGetter__("selected", function() {
-        return self == applicationModel.viewControllerApplicationSelected;
+        if(applicationModel.viewControllerInstanceSelected == undefined)
+            return false;
+
+        return self.name == applicationModel.viewControllerInstanceSelected.name &&
+            self.applicationName == applicationModel.viewControllerInstanceSelected.applicationName;
     });
 
     self.getTabsNumber = function() {
@@ -83,6 +87,14 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
 
         // Calculate the position of the notification and add it
         self._notification = self.addUINotification();
+
+        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
+            self.render();
+        });
+
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, function() {
+            self.render();
+        });
     }();
 
     // Destructor
