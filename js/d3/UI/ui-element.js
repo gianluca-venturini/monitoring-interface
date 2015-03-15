@@ -121,7 +121,6 @@ var defaultPalette = {
     }
 };
 
-
 var UIElement = function(delegate) {
     var self = {};
 
