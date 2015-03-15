@@ -26,7 +26,8 @@
 
         this.attr("transform", function(d) { return "translate(" + d.radius*Math.sin(d.angle) + ", " + (-d.radius*Math.cos(d.angle)) + ")" +
                                                     "rotate(" + toDegrees(-Math.PI/2+d.angle) + ")" +
-                                                    (d.angle > Math.PI ? "rotate(180)" : ""); })
+                                                    (d.angle > Math.PI ? "rotate(180)" : "") +
+                                                    (d.angle > Math.PI ? "translate(0, 4)" : "translate(0, 2)")})   // Text alignment
             .attr("text-anchor", function(d) { return d.angle < Math.PI ? "start" : "end"; });
 
         /*

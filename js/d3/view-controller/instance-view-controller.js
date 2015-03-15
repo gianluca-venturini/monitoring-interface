@@ -7,11 +7,29 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
     // Public variables
     self.name = undefined;
     self.applicationName = undefined;
-    //self.selected = undefined;
     self.parentApplicationViewController = undefined;
+    self.tab = undefined;
 
     var render = self.render;
     self.render = function() {
+
+        // Position the graphical objects
+        self.tab.x = - windowViewController.width / 2 +
+            UITab.style.width / 2 +
+            UIApplication.style.margin;
+
+        self.tab.y = - windowViewController.height / 2 +
+            UITab.style.height / 2 +
+            UITab.style.height * index +
+            UIApplication.style.margin +
+            UIApplication.style.headerRectHeightExpanded;
+
+        if(parentApplicationViewController == applicationModel.viewControllerApplicationSelected) {
+            self.tab.show = true;
+        }
+        else {
+            self.tab.show = false;
+        }
 
         // Display notification only if errors are present
         if(applicationModel.viewControllerApplicationSelected == self.parentApplicationViewController &&
@@ -26,25 +44,24 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
     };
 
     self.clicked = function() {
-        if(!self.selected()) {
+        if(!self.selected) {
             applicationModel.viewControllerInstanceSelected = self;
-            //self.selected = true;
             notificationCenter.dispatch(Notifications.ui.INSTANCE_CLICKED);
-            //self.selected = true;
         }
     };
+
+    // Getters
+    self.__defineGetter__("selected", function() {
+        return self == applicationModel.viewControllerApplicationSelected;
+    });
 
     self.getTabsNumber = function() {
           return _.size(self.parentApplicationViewController._instanceViewControllers);
     };
 
-    self.selected = function() {
-        return applicationModel.viewControllerInstanceSelected == self;
-    };
-
     self.notification = function() {
-        return self.parentApplicationViewController.notification(name);
-        //return index+1;
+        //return self.parentApplicationViewController.notification(name);
+        return index + 1;
     };
 
     // Constructor
@@ -54,11 +71,16 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         self.applicationName = self.parentApplicationViewController.name;
         //self.selected = false;
 
-        var tab = self.addUITab(index);
+        self.tab = self.addUITab(self.name);
 
         // Calculate the position of the notification and add it
-        self._notification = self.addUINotification(tab.getLeftParent() + UITab.style.width,
-                                                    tab.getTopParent() + index * tab.getTabHeight() + UIApplication.style.titleBarHeight);
+        self._notification = self.addUINotification(- windowViewController.width / 2 +
+                                                    UITab.style.width +
+                                                    UIApplication.style.margin,
+                                                    - windowViewController.height / 2 +
+                                                    UITab.style.height * index +
+                                                    UIApplication.style.margin +
+                                                    UIApplication.style.headerRectHeightExpanded);
     }();
 
     // Destructor

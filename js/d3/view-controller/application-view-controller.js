@@ -118,7 +118,7 @@ var ApplicationViewController = function(name, view) {
                 .append("g")
                 .class("instance_tab")
                 .each(function(data, index) {
-                    this.instanceViewController = InstanceViewController(self, data.name, index, d3.select(this), self);
+                    this.instanceViewController = InstanceViewController(self, data.name, index, d3.select(this).newView());
                     self._instanceViewControllers[data.name] = this.instanceViewController;
                 });
 

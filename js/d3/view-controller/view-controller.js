@@ -33,8 +33,8 @@ var ViewController = function(view) {
         return uiConnectionView;
     };
 
-    self.addUITab = function(index) {
-        var uiTab = UITab(self, index);
+    self.addUITab = function(name) {
+        var uiTab = UITab(self, name);
         self.addUiComponent(uiTab);
         return uiTab;
     };
@@ -63,7 +63,7 @@ var ViewController = function(view) {
 
     // Destructor
     self.deinit = function() {
-        // Place here the code for dealloc eventual objects
+        self._view.remove();
     };
 
     return self;

@@ -125,25 +125,70 @@ var UIElement = function(delegate) {
 
     // Public variables
     self.delegate = undefined;
-    self.x = 0;
-    self.y = 0;
-    self.show = true;
 
     // Private variables
-    self._view = undefined;
+    var view = undefined;
+    var x = 0;
+    var y = 0;
+    var show = true;
 
     // Protected variables
     self.palette = defaultPalette;
 
+    // Getter and setter
+    self.__defineGetter__("x", function() {
+        return x;
+    });
+
+    self.__defineGetter__("y", function() {
+        return y;
+    });
+
+    self.__defineGetter__("view", function() {
+        return view;
+    });
+
+    self.__defineGetter__("show", function() {
+        return show;
+    });
+
+
+    self.__defineSetter__("x", function(newX) {
+        x = newX;
+        self.updateView();
+    });
+
+    self.__defineSetter__("y", function(newY) {
+        y = newY;
+        self.updateView();
+    });
+
+    self.__defineSetter__("view", function(newView) {
+        view = newView;
+        self.updateView();
+    });
+
+    self.__defineSetter__("show", function(newShow) {
+        show = newShow;
+        self.updateView();
+    });
+
+    self.updateView = function() {
+        if(view != undefined) {
+            view.attr("transform", "translate(" + x + ", " + y + ")");
+            view.opacity(show?1:0);
+        }
+    };
+
     // Constructor
     self.init = function() {
         self.delegate = delegate;
-        self._view = self.delegate.newView();
+        view = self.delegate.newView();
     }();
 
     // Destructor
     self.deinit = function() {
-        self._view.remove();
+        view.remove();
     };
 
     return self;

@@ -118,6 +118,7 @@
           "components": [
             {
               "name": "component1",
+              "problem": true,
               "publish": [
                 {
                   "channel": "channel1"
@@ -156,6 +157,7 @@
             },
             {
               "name": "component2",
+              "problem": true,
               "publish": [
                 {
                   "channel": "channel1"
@@ -228,7 +230,113 @@
         },
         {
           "name": "instance2",
-          "problems": 2
+          "problems": 2,
+          "components": [
+            {
+              "name": "component1",
+              "problem": false,
+              "publish": [
+                {
+                  "channel": "channel100"
+                },
+                {
+                  "channel": "channel102"
+                },
+                {
+                  "channel": "channel103"
+                }
+              ],
+              "subscribe": [
+                {
+                  "channel": "channel1"
+                }
+              ],
+              "request": [
+                {
+                  "channel": "channel6"
+                }
+              ],
+              "handle_request": [
+                {
+                  "channel": "channel8"
+                },
+                {
+                  "channel": "channel9"
+                }
+              ]
+            },
+            {
+              "name": "component2",
+              "problem": true,
+              "publish": [
+                {
+                  "channel": "channel1"
+                },
+                {
+                  "channel": "channel11"
+                }
+              ],
+              "subscribe": [
+                {
+                  "channel": "channel1"
+                },
+                {
+                  "channel": "channel13"
+                }
+              ],
+              "request": [
+                {
+                  "channel": "channel14"
+                },
+                {
+                  "channel": "channel15"
+                }
+              ],
+              "handle_request": [
+                {
+                  "channel": "channel16"
+                },
+                {
+                  "channel": "channel17"
+                }
+              ]
+            },
+            {
+              "name": "component3",
+              "publish": [
+                {
+                  "channel": "channel1"
+                },
+                {
+                  "channel": "channel19"
+                }
+              ],
+              "subscribe": [
+                {
+                  "channel": "channel20"
+                },
+                {
+                  "channel": "channel21"
+                }
+              ],
+              "request": [
+                {
+                  "channel": "channel22"
+                },
+                {
+                  "channel": "channel23"
+                }
+              ],
+              "handle_request": [
+                {
+                  "channel": "channel24"
+                },
+                {
+                  "channel": "channel25"
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "instance3",

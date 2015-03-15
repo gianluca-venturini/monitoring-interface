@@ -1,29 +1,32 @@
-var UITab = function(delegate, index) {
+var UITab = function(delegate, name) {
     var self = UIElement(delegate);
 
-
     UITab.style = {
-        maxHeight: 100,
-        width: 200,
-        delay: 500
+        height: 100,
+        width: 200
     };
+
+    // Public variables
+    self.name = undefined;
 
     self.render = function() {
 
-        var layer = self._view;
+        var layer = self.view;
 
+        // Tab background
         layer.selectAll(".instanceTab")
             .data([{}])
             .enter()
             .append("rect")
             .class("instanceTab")
             .class("pointer")
-            //.x(self.getLeftParent() - 400)
-            .x(self.getLeftParent())
+            .x(-UITab.style.width / 2)
+            .y(-UITab.style.height / 2)
             .margin(undefined)
-            .width(0.001)
+            .width(0)
+            .height(UITab.style.height)
             .on("mouseover", function () {
-                if (!delegate.selected()) {
+                if (!delegate.selected) {
                     d3.select(this).fill(self.palette.accent1.bright);
                 }
             })
@@ -35,6 +38,7 @@ var UITab = function(delegate, index) {
             })
             .fill(self.getTabColor());
 
+        // Tab text
         layer.selectAll(".instanceTabText")
             .data([{}])
             .enter()
@@ -42,40 +46,47 @@ var UITab = function(delegate, index) {
             .class("pointer")
             .class("instanceTabText")
             .class("no_interaction")
-            .fill(self.palette.text.bright)
-            .opacity(0)
-            .x(self.getLeftParent() + UITab.style.width/2);
+            .attr("text-anchor", "middle")
+            .x(-UITab.style.width / 2)
+            .fill(self.palette.text.bright);
 
         if(self.delegate.parentApplicationViewController.expanded) {
-            layer.selectAll(".instanceTab")
-                .transition()
-                .delay(UITab.style.delay)
-                .width(UITab.style.width)
-                .height(self.getTabHeight())
-                .x(self.getLeftParent())
-                .y(self.getTopParent() + index * self.getTabHeight() + UIApplication.style.titleBarHeight);
 
-            layer.selectAll(".instanceTabText")
+            // Tab background
+            layer.selectAll(".instanceTab")
+                .data([{}])
                 .transition()
-                .delay(UITab.style.delay)
-                .duration(1000)
-                // TODO: move all in Animations
-                .x(self.getLeftParent() + UITab.style.width/2)
-                .y(self.getTopParent() + index * self.getTabHeight() + UIApplication.style.titleBarHeight + self.getTabHeight()/2)
-                .attr("text-anchor", "middle")
+                .duration(Animations.instance.INSTANCE_ENTER.duration)
+                .delay(Animations.instance.INSTANCE_ENTER.delay)
+                .width(UITab.style.width)
+                .opacity(1);
+
+            // Tab text
+            layer.selectAll(".instanceTabText")
+                .data([{}])
+                .transition()
+                .duration(Animations.instance.INSTANCE_ENTER.duration)
+                .delay(Animations.instance.INSTANCE_ENTER.delay)
+                .x(0)
                 .opacity(1)
-                .text(self.delegate.name);
+                .text(name);
         }
         else {
-            layer.selectAll(".instanceTab")
-                .data([])
-                .exit()
-                .remove();
 
+            // Tab background
+            layer.selectAll(".instanceTab")
+                .data([{}])
+                .transition()
+                .duration(Animations.instance.INSTANCE_EXIT.duration)
+                .delay(Animations.instance.INSTANCE_EXIT.delay)
+                .width(0)
+                .opacity(0);
+
+            // Tab text
             layer.selectAll(".instanceTabText")
-                .data([])
-                .exit()
-                .remove();
+                .data([{}])
+                .x(-UITab.style.width / 2)
+                .opacity(0);
         }
     };
 
@@ -85,7 +96,7 @@ var UITab = function(delegate, index) {
 
     self.getTabColor = function() {
         var color;
-        if(delegate.selected()) {
+        if(delegate.selected) {
             color = self.palette.accent1.dark;
         }
         else {
@@ -112,6 +123,8 @@ var UITab = function(delegate, index) {
 
     // Constructor
     self.init = function() {
+        self.name = name;
+
         notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
             //self.updateColor();
         });
@@ -119,7 +132,6 @@ var UITab = function(delegate, index) {
 
     // Destructor
     self.deinit = function() {
-        // TODO?
     };
 
     return self;

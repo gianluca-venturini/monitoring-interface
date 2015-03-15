@@ -11,6 +11,8 @@ var UIConnectionView = function(delegate) {
         componentThickness: 10,
         arrow_thick: 11,
         arrow_ratio: 1.5,
+        square_side: 10.0,
+        componentNameFontSize: 12.0
     };
 
     // Private variables
@@ -20,7 +22,7 @@ var UIConnectionView = function(delegate) {
     // Render the element
     self.render = function() {
 
-        var layer = self._view;
+        var layer = self.view;
 
         // Take the width of the screen
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
@@ -66,7 +68,10 @@ var UIConnectionView = function(delegate) {
             .enter()
             .append("path")
             .style("fill", function(d){
-                return "#E4F1FE";
+                if(d.problem == true)
+                    return defaultPalette.state.red;
+                else
+                    return defaultPalette.state.green;
             })
             .attr("d", arcZeroRadius);
 
@@ -84,6 +89,50 @@ var UIConnectionView = function(delegate) {
             .exit()
             .remove();
 
+        // Create new component name
+        components.selectAll(".componentName")
+            .data(radialLayout.components)
+            .enter()
+            .append("text")
+            .class("componentName")
+            .fill(defaultPalette.text.dark)
+            .opacity(0);
+
+        components.selectAll(".componentName")
+            .data(radialLayout.components)
+            .transition()
+            .duration(Animations.connectionView.LINK_FADE_IN.duration)
+            .delay(Animations.connectionView.LINK_FADE_IN.delay)
+            .attr("x", function(component) {
+                return Math.cos(component.startAngle - Math.PI/2) * self._innerRadius;
+            })
+            .attr("y", function(component) {
+                return Math.sin(component.startAngle - Math.PI/2) * self._innerRadius;
+            })
+            .attr("text-anchor", function(component) {
+                if(component.startAngle % (2*Math.PI) < Math.PI / 2) {
+                    // 0 <= angle < 90
+                    return "end";
+                }
+                else if(component.startAngle% (2*Math.PI) > Math.PI / 2 &&
+                    component.startAngle% (2*Math.PI) < Math.PI) {
+                    // 90 <= angle < 180
+                    return "start";
+                }
+                else if(component.startAngle% (2*Math.PI) > Math.PI &&
+                    component.startAngle% (2*Math.PI) < 3 / 4 * Math.PI) {
+                    // 180 <= angle < 270
+                    return "end";
+                }
+                else {
+                    // 270 <= angle < 360
+                    return "start";
+                }
+            })
+            .attr("font-size", UIConnectionView.style.componentNameFontSize)
+            .text(function(component) {return component.name; })
+            .opacity(1);
+
         // Create new publish channels
         channelTexts.selectAll(".channel")
             .data(radialLayout.channels)
@@ -91,8 +140,8 @@ var UIConnectionView = function(delegate) {
             .append("text")
             .class("channel")
             .fill(self.palette.text.dark)
-            .rotateTextZeroAngle()
-            .text(function(channel) { return channel.channel; });
+            //.rotateTextZeroAngle()
+            .opacity(0);
 
         // Update already present text
         channelTexts.selectAll(".channel")
@@ -101,7 +150,17 @@ var UIConnectionView = function(delegate) {
             .delay(Animations.connectionView.CIRCLE_EXPANSION.delay)
             .duration(Animations.connectionView.CIRCLE_EXPANSION.duration)
             .rotateText()
-            .text(function(channel) {return channel.channel;});
+            .text(function(channel) {return channel.channel;})
+            .opacity(1);
+
+        // Delete old text
+        channelTexts.selectAll(".channel")
+            .data(radialLayout.channels)
+            .exit()
+            .transition()
+            .opacity(0)
+            .remove();
+
 
         // Create arg generator utility
         var lineGenerator = d3.svg.line.radial()
@@ -163,17 +222,54 @@ var UIConnectionView = function(delegate) {
             .append("path")
             .class("subscribeTriangle")
             .attr("d", lineFunction(arrowData))
-            .attr("fill", self.palette.accent1.dark);
+            .attr("fill", self.palette.accent1.dark)
+            .rotateLayer()
+            .opacity(0);
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
             .transition()
             .duration(Animations.connectionView.ARROW_EXPANSION.duration)
-            .rotateLayer();
+            .rotateLayer()
+            .opacity(1);
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
             .exit()
+            .transition()
+            .opacity(0)
+            .remove();
+
+        // Create circles for the handle_requests channels
+        var squareData = [
+            { "x":  -1*UIConnectionView.style.square_side/2, "y": 0.0},
+            { "x":  1*UIConnectionView.style.square_side/2, "y": 0.0},
+            { "x":  1*UIConnectionView.style.square_side/2, "y": 1*UIConnectionView.style.square_side},
+            { "x":  -1*UIConnectionView.style.square_side/2, "y": 1*UIConnectionView.style.square_side},
+        ];
+
+        components.selectAll(".handleRequestsaCircle")
+            .data(radialLayout.handleRequestChannels)
+            .enter()
+            .append("path")
+            .class("handleRequestsaCircle")
+            .attr("d", lineFunction(squareData))
+            .attr("fill", self.palette.accent1.dark)
+            .rotateLayer()
+            .opacity(0);
+
+        components.selectAll(".handleRequestsaCircle")
+            .data(radialLayout.handleRequestChannels)
+            .transition()
+            .duration(Animations.connectionView.ARROW_EXPANSION.duration)
+            .rotateLayer()
+            .opacity(1);
+
+        components.selectAll(".handleRequestsaCircle")
+            .data(radialLayout.handleRequestChannels)
+            .exit()
+            .transition()
+            .opacity(0)
             .remove();
     };
 

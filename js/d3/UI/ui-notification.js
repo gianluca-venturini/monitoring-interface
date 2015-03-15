@@ -12,7 +12,7 @@ var UINotification = function(delegate) {
 
     self.render = function() {
 
-        var layer = self._view;
+        var layer = self.view;
 
         var notificationGroup = layer.layerWithName("notificationGroup");
 
@@ -36,8 +36,8 @@ var UINotification = function(delegate) {
             .enter()
             .append("circle")
             .class("notificationCircle")
-            .cx(self.x)
-            .cy(self.y)
+            .cx(0)
+            .cy(0)
             .r(UINotification.style.notificationRadius)
             .fill(self.palette.accent2.normal);
 
@@ -48,8 +48,7 @@ var UINotification = function(delegate) {
             .class("notificationText")
             .attr("text-anchor", "middle")
             .attr("font-size", UINotification.style.notificationFontSize)
-            .x(self.x)
-            .y(self.y+UINotification.style.notificationFontSize/3)
+            .y(UINotification.style.notificationFontSize/3)
             .text(delegate.notification(self.name));
     };
 

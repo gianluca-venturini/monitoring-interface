@@ -28,7 +28,7 @@ var UIApplication = function(delegate) {
 
     self.render = function() {
 
-        var layer = self._view;
+        var layer = self.view;
 
         // Background rect
         layer.selectAll(".applicationBackground")
