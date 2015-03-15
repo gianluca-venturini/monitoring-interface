@@ -1,4 +1,4 @@
-
+/*
 // palette 1
 var defaultPalette = {
     primary: {
@@ -37,6 +37,7 @@ var defaultPalette = {
         green: "#019875"
     }
 };
+*/
 
 /*
 // palette 2
@@ -79,7 +80,6 @@ var defaultPalette = {
 };
 */
 
-/*
 // palette 3
 var defaultPalette = {
     primary: {
@@ -112,13 +112,15 @@ var defaultPalette = {
 
     },
     state: {
-        red: "#C0392B",
+        red: "#D24D57",
+        //red: "#E74C3C",
+        //red: "#C0392B",
         //red: "#96281B",
         //red: "#F26A4B",
-        green: "#019875"
+        green: "#26A65B"
     }
 };
-*/
+
 
 var UIElement = function(delegate) {
     var self = {};

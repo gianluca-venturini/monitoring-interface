@@ -88,6 +88,7 @@ var UIApplication = function(delegate) {
 
         // Create the status rect
         nameGroup.append("rect")
+            .class("no_interaction")
             .class("headerRect");
 
         // Update the status rect

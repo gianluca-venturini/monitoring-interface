@@ -5,6 +5,7 @@ var UINotification = function(delegate) {
     UINotification.style = {
         notificationRadius: 10,
         notificationFontSize: 14,
+        margin: 5
     };
 
     // Public attributes
