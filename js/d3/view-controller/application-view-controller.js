@@ -157,7 +157,9 @@ var ApplicationViewController = function(name, view) {
         // Add graphic components
         self.addUIApplication();    // Graphical visualization of the application
         self.addUIConnectionView(); // Connection view component
-        self._notification = self.addUINotification(50, -50);   // Application notification
+        self._notification = self.addUINotification();   // Application notification
+        self._notification.x = 50;
+        self._notification.y = -50;
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.render();

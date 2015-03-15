@@ -39,10 +39,8 @@ var ViewController = function(view) {
         return uiTab;
     };
 
-    self.addUINotification = function(x, y, notificationName) {
+    self.addUINotification = function(notificationName) {
         var uiNotification = UINotification(self);
-        uiNotification.x = x;
-        uiNotification.y = y;
         uiNotification.name = notificationName;
         self.addUiComponent(uiNotification);
         return uiNotification;

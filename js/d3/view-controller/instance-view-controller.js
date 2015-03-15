@@ -1,14 +1,12 @@
 var InstanceViewController = function(parentApplicationViewController, name, index, layer) {
     var self = ViewController(layer);
 
-    // Private variables
-    self._notification = undefined;
-
     // Public variables
     self.name = undefined;
     self.applicationName = undefined;
     self.parentApplicationViewController = undefined;
     self.tab = undefined;
+    self._notification = undefined;
 
     var render = self.render;
     self.render = function() {
@@ -30,6 +28,16 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         else {
             self.tab.show = false;
         }
+
+        self._notification.x = - windowViewController.width / 2 +
+            UITab.style.width +
+            UIApplication.style.margin
+
+
+        self._notification.y = - windowViewController.height / 2 +
+            UITab.style.height * index +
+            UIApplication.style.margin +
+            UIApplication.style.headerRectHeightExpanded;
 
         // Display notification only if errors are present
         if(applicationModel.viewControllerApplicationSelected == self.parentApplicationViewController &&
@@ -74,13 +82,7 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         self.tab = self.addUITab(self.name);
 
         // Calculate the position of the notification and add it
-        self._notification = self.addUINotification(- windowViewController.width / 2 +
-                                                    UITab.style.width +
-                                                    UIApplication.style.margin,
-                                                    - windowViewController.height / 2 +
-                                                    UITab.style.height * index +
-                                                    UIApplication.style.margin +
-                                                    UIApplication.style.headerRectHeightExpanded);
+        self._notification = self.addUINotification();
     }();
 
     // Destructor
