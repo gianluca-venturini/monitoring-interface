@@ -56,7 +56,19 @@
 
     applicationModel.fetchData("data/data.json");
 
-    //var windowManager = WindowManager(svg);
+    var c = 0;
+    window.setInterval(function(){
+        console.log("change");
+        if(c%4 == 0)
+            applicationModel.fetchData("data/data2.json");
+        else if(c%4 == 1)
+            applicationModel.fetchData("data/data3.json");
+        else if(c%4 == 2)
+            applicationModel.fetchData("data/data4.json");
+        else
+            applicationModel.fetchData("data/data.json");
+        c++;
+    }, 5000);
 
 </script>
 

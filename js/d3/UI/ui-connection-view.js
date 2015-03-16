@@ -12,7 +12,9 @@ var UIConnectionView = function(delegate) {
         arrow_thick: 11,
         arrow_ratio: 1.5,
         square_side: 10.0,
-        componentNameFontSize: 12.0
+        componentNameFontSize: 12.0,
+        linkTextSize: 10,
+        linkTextSizeHold: 13
     };
 
     // Private variables
@@ -30,6 +32,7 @@ var UIConnectionView = function(delegate) {
 
         var links = layer.layerWithName("links");
         var components = layer.layerWithName("components");
+        var componentNames = layer.layerWithName("componentNames");
         var channelTexts = layer.layerWithName("channelTexts");
 
         var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
@@ -39,6 +42,7 @@ var UIConnectionView = function(delegate) {
             components.remove();
             channelTexts.remove();
             links.remove();
+            componentNames.remove();
             return;
         }
 
@@ -63,10 +67,11 @@ var UIConnectionView = function(delegate) {
             .endAngle(function(d){return d.endAngle;});
 
         // Create new component arcs
-        components.selectAll("path")
+        components.selectAll(".componentArc")
             .data(radialLayout.components)
             .enter()
             .append("path")
+            .class("componentArc")
             .style("fill", function(d){
                 if(d.problem == true)
                     return defaultPalette.state.red;
@@ -76,62 +81,24 @@ var UIConnectionView = function(delegate) {
             .attr("d", arcZeroRadius);
 
         // Update component arcs
-        components.selectAll("path")
+        components.selectAll(".componentArc")
             .data(radialLayout.components)
             .transition()
             .delay(Animations.connectionView.CIRCLE_EXPANSION.delay)
             .duration(Animations.connectionView.CIRCLE_EXPANSION.duration)
-            .attr("d", arc);
+            .attr("d", arc)
+            .style("fill", function(d){
+                if(d.problem == true)
+                    return defaultPalette.state.red;
+                else
+                    return defaultPalette.state.green;
+            });
 
         // Remove component arcs
-        components.selectAll("path")
+        components.selectAll(".componentArc")
             .data(radialLayout.components)
             .exit()
             .remove();
-
-        // Create new component name
-        components.selectAll(".componentName")
-            .data(radialLayout.components)
-            .enter()
-            .append("text")
-            .class("componentName")
-            .fill(defaultPalette.text.dark)
-            .opacity(0);
-
-        components.selectAll(".componentName")
-            .data(radialLayout.components)
-            .transition()
-            .duration(Animations.connectionView.LINK_FADE_IN.duration)
-            .delay(Animations.connectionView.LINK_FADE_IN.delay)
-            .attr("x", function(component) {
-                return Math.cos(component.startAngle - Math.PI/2) * self._innerRadius;
-            })
-            .attr("y", function(component) {
-                return Math.sin(component.startAngle - Math.PI/2) * self._innerRadius;
-            })
-            .attr("text-anchor", function(component) {
-                if(component.startAngle % (2*Math.PI) < Math.PI / 2) {
-                    // 0 <= angle < 90
-                    return "end";
-                }
-                else if(component.startAngle% (2*Math.PI) > Math.PI / 2 &&
-                    component.startAngle% (2*Math.PI) < Math.PI) {
-                    // 90 <= angle < 180
-                    return "start";
-                }
-                else if(component.startAngle% (2*Math.PI) > Math.PI &&
-                    component.startAngle% (2*Math.PI) < 3 / 4 * Math.PI) {
-                    // 180 <= angle < 270
-                    return "end";
-                }
-                else {
-                    // 270 <= angle < 360
-                    return "start";
-                }
-            })
-            .attr("font-size", UIConnectionView.style.componentNameFontSize)
-            .text(function(component) {return component.name; })
-            .opacity(1);
 
         // Create new publish channels
         channelTexts.selectAll(".channel")
@@ -140,7 +107,7 @@ var UIConnectionView = function(delegate) {
             .append("text")
             .class("channel")
             .fill(self.palette.text.dark)
-            //.rotateTextZeroAngle()
+            .attr("font-size", UIConnectionView.style.linkTextSize)
             .opacity(0);
 
         // Update already present text
@@ -179,9 +146,16 @@ var UIConnectionView = function(delegate) {
             .class("link")
             .class("pointer")
             .opacity(0)
-            .attr("class", "link")
             .attr("stroke", self.palette.accent2.bright)
-            .attr("d", lineGenerator);
+            .attr("d", lineGenerator)
+            .on("mouseover", function(link) {
+                d3.select(this).attr("stroke", "#000000");
+                //d3.select(link.source.name).attr("font-size", UIConnectionView.style.linkTextSizeHold);
+            })
+            .on("mouseout", function(link) {
+                d3.select(this).attr("stroke", "#FFFFFF");
+                //d3.select(link.source.name).attr("font-size", UIConnectionView.style.linkTextSize);
+            });
 
         // Update already present links between
         links.selectAll(".link")
@@ -202,6 +176,7 @@ var UIConnectionView = function(delegate) {
             .exit()
             .transition()
             .duration(Animations.connectionView.LINK_FADE_IN.duration)
+            .opacity(0)
             .remove();
 
         // Create triangles for the subscribed channels
@@ -267,6 +242,57 @@ var UIConnectionView = function(delegate) {
 
         components.selectAll(".handleRequestsaCircle")
             .data(radialLayout.handleRequestChannels)
+            .exit()
+            .transition()
+            .opacity(0)
+            .remove();
+
+        // Create new component name
+        componentNames.selectAll(".componentName")
+            .data(radialLayout.components)
+            .enter()
+            .append("text")
+            .class("componentName")
+            .fill(defaultPalette.text.dark)
+            .opacity(0);
+
+        componentNames.selectAll(".componentName")
+            .data(radialLayout.components)
+            .transition()
+            .duration(Animations.connectionView.LINK_FADE_IN.duration)
+            .delay(Animations.connectionView.LINK_FADE_IN.delay)
+            .attr("x", function(component) {
+                return Math.cos(component.startAngle - Math.PI/2) * self._innerRadius;
+            })
+            .attr("y", function(component) {
+                return Math.sin(component.startAngle - Math.PI/2) * self._innerRadius;
+            })
+            .attr("text-anchor", function(component) {
+                if(component.startAngle % (2*Math.PI) < Math.PI / 2) {
+                    // 0 <= angle < 90
+                    return "end";
+                }
+                else if(component.startAngle% (2*Math.PI) > Math.PI / 2 &&
+                    component.startAngle% (2*Math.PI) < Math.PI) {
+                    // 90 <= angle < 180
+                    return "start";
+                }
+                else if(component.startAngle% (2*Math.PI) > Math.PI &&
+                    component.startAngle% (2*Math.PI) < 3 / 4 * Math.PI) {
+                    // 180 <= angle < 270
+                    return "end";
+                }
+                else {
+                    // 270 <= angle < 360
+                    return "start";
+                }
+            })
+            .attr("font-size", UIConnectionView.style.componentNameFontSize)
+            .text(function(component) {return component.name; })
+            .opacity(1);
+
+        componentNames.selectAll(".componentName")
+            .data(radialLayout.components)
             .exit()
             .transition()
             .opacity(0)

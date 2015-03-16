@@ -175,15 +175,20 @@
     },
     {
       "name": "application3",
+      "problems": 1,
       "instances": [
         {
           "name": "instance1",
+          "problems": 1,
           "components": [
             {
               "name": "component1",
               "publish": [
                 {
-                  "channel": "channel2"
+                  "channel": "channel12"
+                },
+                {
+                  "channel": "channel10"
                 }
               ],
               "subscribe": [
@@ -192,6 +197,9 @@
                 },
                 {
                   "channel": "channel5"
+                },
+                {
+                  "channel": "channel12"
                 }
               ],
               "request": [
@@ -200,6 +208,9 @@
                 },
                 {
                   "channel": "channel7"
+                },
+                {
+                  "channel": "channel2"
                 }
               ],
               "handle_request": [
@@ -213,9 +224,16 @@
             },
             {
               "name": "component2",
+              "problem": true,
               "publish": [
                 {
                   "channel": "channel10"
+                },
+                {
+                  "channel": "channel26"
+                },
+                {
+                  "channel": "channel26"
                 },
                 {
                   "channel": "channel1"
@@ -224,6 +242,9 @@
               "subscribe": [
                 {
                   "channel": "channel12"
+                },
+                {
+                  "channel": "channel30"
                 },
                 {
                   "channel": "channel13"
@@ -235,6 +256,9 @@
                 },
                 {
                   "channel": "channel15"
+                },
+                {
+                  "channel": "channel31"
                 }
               ],
               "handle_request": [
@@ -472,7 +496,7 @@
                 }
               ]
             }
-        ]
+          ]
         },
         {
           "name": "instance2",

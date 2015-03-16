@@ -32,14 +32,14 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         self._notification.x = - windowViewController.width / 2 +
             UITab.style.width +
             UIApplication.style.margin -
-            UINotification.style.margin;
+            UINotification.style.margin.x;
 
 
         self._notification.y = - windowViewController.height / 2 +
             UITab.style.height * index +
             UIApplication.style.margin +
             UIApplication.style.headerRectHeightExpanded +
-            UINotification.style.margin;
+            UINotification.style.margin.y;
 
         // Display notification only if errors are present
         if(applicationModel.viewControllerApplicationSelected == self.parentApplicationViewController &&
@@ -74,8 +74,7 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
     };
 
     self.notification = function() {
-        //return self.parentApplicationViewController.notification(name);
-        return index + 1;
+        return self.parentApplicationViewController.notification(name);
     };
 
     // Constructor

@@ -5,7 +5,7 @@ var UINotification = function(delegate) {
     UINotification.style = {
         notificationRadius: 10,
         notificationFontSize: 14,
-        margin: 5
+        margin: {x: 0, y: 10}
     };
 
     // Public attributes
@@ -48,7 +48,10 @@ var UINotification = function(delegate) {
             .append("text")
             .class("notificationText")
             .attr("text-anchor", "middle")
-            .attr("font-size", UINotification.style.notificationFontSize)
+            .attr("font-size", UINotification.style.notificationFontSize);
+
+        notificationGroup.selectAll(".notificationText")
+            .data([{}])
             .y(UINotification.style.notificationFontSize/3)
             .text(delegate.notification(self.name));
     };
