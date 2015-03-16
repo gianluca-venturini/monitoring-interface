@@ -476,7 +476,7 @@
         },
         {
           "name": "instance2",
-          "problems": 2,
+          "problems": 1,
           "components": [
             {
               "name": "component1",
@@ -586,7 +586,7 @@
         },
         {
           "name": "instance3",
-          "problems": 5,
+          "problems": 1,
           "components": [
             {
               "name": "component1",

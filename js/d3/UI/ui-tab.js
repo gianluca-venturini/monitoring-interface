@@ -9,62 +9,68 @@ var UITab = function(delegate, name) {
     // Public variables
     self.name = undefined;
 
+
+    // Private variables
+    var instanceTab = undefined;
+    var instanceTabText = undefined;
+
     self.render = function() {
+
+        console.log("Render: tab "+name+" "+delegate.parentApplicationViewController.name);
 
         var layer = self.view;
 
         // Tab background
-        layer.selectAll(".instanceTab")
-            .data([{}])
-            .enter()
-            .append("rect")
-            .class("instanceTab")
-            .class("pointer")
-            .x(-UITab.style.width / 2)
-            .y(-UITab.style.height / 2)
-            .margin(undefined)
-            .width(0)
-            .height(UITab.style.height)
-            .on("mouseover", function () {
-                if (!delegate.selected) {
-                    d3.select(this).fill(self.palette.accent1.bright);
-                }
-            })
-            .on("mouseout", function () {
-                d3.select(this).fill(self.getTabColor());
-            })
-            .on("click", function () {
-                self.delegate.clicked();
-            })
-            .fill(self.getTabColor());
+        if(instanceTab == undefined) {
+            instanceTab = layer.append("rect")
+                .class("instanceTab")
+                .class("pointer")
+                .x(-UITab.style.width / 2)
+                .y(-UITab.style.height / 2)
+                .margin(undefined)
+                .width(0)
+                .height(UITab.style.height)
+                .on("mouseover", function () {
+                    if (!delegate.selected) {
+                        d3.select(this).fill(self.palette.accent1.bright);
+                    }
+                })
+                .on("mouseout", function () {
+                    d3.select(this).fill(self.getTabColor());
+                })
+                .on("click", function () {
+                    self.delegate.clicked();
+                })
+                .fill(self.getTabColor());
+        }
 
         // Tab text
-        layer.selectAll(".instanceTabText")
-            .data([{}])
-            .enter()
-            .append("text")
-            .class("pointer")
-            .class("instanceTabText")
-            .class("no_interaction")
-            .attr("text-anchor", "middle")
-            .x(-UITab.style.width / 2)
-            .fill(self.palette.text.bright);
+        if(instanceTabText == undefined) {
+
+            instanceTabText = layer
+                .append("text")
+                .class("pointer")
+                .class("instanceTabText")
+                .class("no_interaction")
+                .attr("text-anchor", "middle")
+                .x(-UITab.style.width / 2)
+                .fill(self.palette.text.bright);
+        }
 
         if(self.delegate.parentApplicationViewController.expanded) {
 
             // Tab background
-            layer.selectAll(".instanceTab")
-                .data([{}])
+            instanceTab
                 .transition()
                 .duration(Animations.instance.INSTANCE_ENTER.duration)
                 .delay(Animations.instance.INSTANCE_ENTER.delay)
+                .margin(undefined)
                 .width(UITab.style.width)
                 .fill(self.getTabColor())
                 .opacity(1);
 
             // Tab text
-            layer.selectAll(".instanceTabText")
-                .data([{}])
+            instanceTabText
                 .transition()
                 .duration(Animations.instance.INSTANCE_ENTER.duration)
                 .delay(Animations.instance.INSTANCE_ENTER.delay)
@@ -75,16 +81,16 @@ var UITab = function(delegate, name) {
         else {
 
             // Tab background
-            layer.selectAll(".instanceTab")
-                .data([{}])
+            instanceTab
                 .transition()
                 .duration(Animations.instance.INSTANCE_EXIT.duration)
                 .delay(Animations.instance.INSTANCE_EXIT.delay)
+                .margin(undefined)
                 .width(0)
                 .opacity(0);
 
             // Tab text
-            layer.selectAll(".instanceTabText")
+            instanceTabText
                 .data([{}])
                 .x(-UITab.style.width / 2)
                 .opacity(0);

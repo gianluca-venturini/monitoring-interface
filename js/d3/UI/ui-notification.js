@@ -11,11 +11,21 @@ var UINotification = function(delegate) {
     // Public attributes
     self.name = undefined;   // Name of the notification
 
+    // Private variables
+    var notificationGroup = undefined;
+    var notificationCircle = undefined;
+    var notificationText = undefined;
+
     self.render = function() {
+
+        return;
+
+        console.log("Render: notification");
 
         var layer = self.view;
 
-        var notificationGroup = layer.layerWithName("notificationGroup");
+        if(notificationGroup == undefined)
+            notificationGroup = layer.layerWithName("notificationGroup");
 
         if(self.show == false) {
             notificationGroup
@@ -32,26 +42,25 @@ var UINotification = function(delegate) {
                 .opacity(1);
         }
 
-        notificationGroup.selectAll(".notificationCircle")
-            .data([{}])
-            .enter()
-            .append("circle")
-            .class("notificationCircle")
-            .cx(0)
-            .cy(0)
-            .r(UINotification.style.notificationRadius)
-            .fill(self.palette.accent2.normal);
+        if(notificationCircle == undefined) {
+            notificationCircle = notificationGroup
+                .append("circle")
+                .class("notificationCircle")
+                .cx(0)
+                .cy(0)
+                .r(UINotification.style.notificationRadius)
+                .fill(self.palette.accent2.normal);
+        }
 
-        notificationGroup.selectAll(".notificationText")
-            .data([{}])
-            .enter()
-            .append("text")
-            .class("notificationText")
-            .attr("text-anchor", "middle")
-            .attr("font-size", UINotification.style.notificationFontSize);
+        if(notificationText == undefined) {
+            notificationText = notificationGroup
+                .append("text")
+                .class("notificationText")
+                .attr("text-anchor", "middle")
+                .attr("font-size", UINotification.style.notificationFontSize);
+        }
 
-        notificationGroup.selectAll(".notificationText")
-            .data([{}])
+        notificationText
             .y(UINotification.style.notificationFontSize/3)
             .text(delegate.notification(self.name));
     };

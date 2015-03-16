@@ -156,27 +156,35 @@ var UIElement = function(delegate) {
 
     self.__defineSetter__("x", function(newX) {
         x = newX;
-        self.updateView();
+        self.updateViewPosition();
     });
 
     self.__defineSetter__("y", function(newY) {
         y = newY;
-        self.updateView();
+        self.updateViewPosition();
     });
 
     self.__defineSetter__("view", function(newView) {
         view = newView;
-        self.updateView();
+        self.updateViewPosition();
+        self.updateViewOpacity();
     });
 
     self.__defineSetter__("show", function(newShow) {
-        show = newShow;
-        self.updateView();
+        if(show != newShow) {
+            show = newShow;
+            self.updateViewOpacity();
+        }
     });
 
-    self.updateView = function() {
+    self.updateViewPosition = function() {
         if(view != undefined) {
             view.attr("transform", "translate(" + x + ", " + y + ")");
+        }
+    };
+
+    self.updateViewOpacity = function() {
+        if(view != undefined) {
             view.opacity(show?1:0);
         }
     };

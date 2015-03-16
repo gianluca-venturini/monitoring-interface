@@ -89,18 +89,14 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         // Calculate the position of the notification and add it
         self._notification = self.addUINotification();
 
-        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
-            self.render();
-        });
-
-        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, function() {
-            self.render();
-        });
+        notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, self.render);
+        notificationCenter.subscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, self.render);
     }();
 
     // Destructor
     self.deinit = function() {
-        // Place here the code for dealloc eventual objects
+        notificationCenter.unsubscribe(Notifications.ui.INSTANCE_CLICKED, self.render);
+        notificationCenter.unsubscribe(Notifications.ui.APPLICATION_EXPANSION_FINISHED, self.render);
     };
 
     return self;

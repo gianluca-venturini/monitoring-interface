@@ -34,6 +34,20 @@ var ApplicationViewController = function(name, view) {
         self.clicked();
     };
 
+    self.reduce = function() {
+        if(self.expanded == true) {
+            applicationModel.viewControllerApplicationSelected = undefined;
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_CLICKED);
+            windowViewController.resetCenter();
+            notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_STARTED);
+
+            // Notify the end of the animation
+            setTimeout(function(){
+                notificationCenter.dispatch(Notifications.ui.APPLICATION_REDUCTION_FINISHED);
+            }, Animations.application.APPLICATION_REDUCTION.delay + Animations.application.APPLICATION_REDUCTION.duration);
+        }
+    };
+
     self.clicked = function() {
 
         if(self.expanded == false) {
@@ -197,7 +211,6 @@ var ApplicationViewController = function(name, view) {
         notificationCenter.subscribe(Notifications.ui.INSTANCE_CLICKED, function() {
             self.render();
         });
-
     }();
 
     // Destructor

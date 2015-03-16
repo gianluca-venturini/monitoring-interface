@@ -23,7 +23,7 @@ var UIConnectionView = function(delegate) {
 
     // Render the element
     self.render = function() {
-
+        
         var layer = self.view;
 
         // Take the width of the screen

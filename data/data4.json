@@ -175,11 +175,11 @@
     },
     {
         "name": "application3",
-        "problems": 2,
+        "problems": 1,
         "instances": [
             {
                 "name": "instance1",
-                "problems": 1,
+                "problems": 2,
                 "components": [
                     {
                         "name": "component1",
@@ -525,7 +525,7 @@
             },
             {
                 "name": "instance2",
-                "problems": 2,
+                "problems": 1,
                 "components": [
                     {
                         "name": "component1",
@@ -635,7 +635,7 @@
             },
             {
                 "name": "instance3",
-                "problems": 5,
+                "problems": 1,
                 "components": [
                     {
                         "name": "component1",

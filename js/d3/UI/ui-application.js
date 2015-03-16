@@ -13,8 +13,6 @@ var UIApplication = function(delegate) {
         disabledStatusColor: defaultPalette.state.red
     };
 
-    // Private
-
     // Public variables
     self.data = undefined;
     self.expanded = false;
@@ -26,26 +24,34 @@ var UIApplication = function(delegate) {
         return UIApplication.style.disabledStatusColor;
     };
 
+    // Private variables
+    var applicationBackground = undefined;
+    var nameGroup = undefined;
+    var headerRect = undefined;
+    var appName = undefined;
+    var closeIcon = undefined;
+
     self.render = function() {
+
+        console.log("Render: application");
 
         var layer = self.view;
 
         // Background rect
-        layer.selectAll(".applicationBackground")
-            .data([{}])
-            .enter()
-            .append("rect")
-            .on("mouseover", function() {
-                d3.select(this).fill(self.palette.accent1.bright);
-            })
-            .on("mouseout", function() {
-                d3.select(this).fill(self.palette.accent1.normal);
-            })
-            .fill(self.palette.primary.normal)
-            .class("applicationBackground");
+        if(applicationBackground == undefined) {
+            applicationBackground = layer.append("rect")
+                .on("mouseover", function () {
+                    d3.select(this).fill(self.palette.accent1.bright);
+                })
+                .on("mouseout", function () {
+                    d3.select(this).fill(self.palette.accent1.normal);
+                })
+                .fill(self.palette.primary.normal)
+                .class("applicationBackground");
+        }
 
         if(self.delegate.expanded) {
-            layer.selectAll(".applicationBackground")
+            applicationBackground
                 .classRemove("pointer")
                 .on("click", null)
                 .on("mouseover", null)
@@ -59,7 +65,7 @@ var UIApplication = function(delegate) {
                 .y(-windowViewController.height / 2 + UIApplication.style.margin);
         }
         else {
-            layer.selectAll(".applicationBackground")
+            applicationBackground
                 .class("pointer")
                 .on("click", function() {
                     delegate.clicked();
@@ -80,63 +86,68 @@ var UIApplication = function(delegate) {
         }
 
         // Application name group
-        nameGroup = layer.selectAll(".nameGroup")
-            .data([{}])
-            .enter()
-            .append("g")
-            .class("nameGroup");
+        if(nameGroup == undefined) {
+            nameGroup = layer.append("g")
+                .class("nameGroup");
+        }
 
         // Create the status rect
-        nameGroup.append("rect")
-            .class("no_interaction")
-            .class("headerRect");
+        if(headerRect == undefined) {
+            headerRect = nameGroup.append("rect")
+                .class("no_interaction")
+                .class("headerRect");
+        }
 
         // Update the status rect
-        layer.selectAll(".headerRect")
+        headerRect
             .fill(self.statusColor());
 
-        nameGroup.append("text")
-            .class("name")
-            .class("pointer")
-            .class("no_interaction")
-            .attr("text-anchor", "middle")
-            .fill(self.palette.text.bright)
-            .text(delegate.name);
+        if(appName == undefined) {
+            appName = nameGroup.append("text")
+                .class("name")
+                .class("pointer")
+                .class("no_interaction")
+                .attr("text-anchor", "middle")
+                .fill(self.palette.text.bright);
+        }
+
+        appName.text(delegate.name);
 
         // add close button
-        nameGroup.append("svg:image")
-            .attr('width', 20)
-            .attr('height', 20)
-            .attr("xlink:href","img/cross_red_border_white.svg")
-            .class("closeApp")
-            .class("pointer")
-            .style("opacity", 0)
-            .on("click", function() {
-                delegate.closeButtonClicked();
-            });
+        if(closeIcon == undefined) {
+            closeIcon = nameGroup.append("svg:image")
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr("xlink:href", "img/cross_red_border_white.svg")
+                .class("closeApp")
+                .class("pointer")
+                .style("opacity", 0)
+                .on("click", function () {
+                    delegate.closeButtonClicked();
+                });
+        }
 
         // Application name
         if(self.delegate.expanded) {
             // move the name
-            layer.selectAll(".nameGroup").selectAll(".name")
+            appName
                 .transition()
                 .duration(Animations.application.APPLICATION_EXPANSION.duration)
                 .x(0)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 20);
 
             // move the rect
-            layer.selectAll(".nameGroup").selectAll(".headerRect")
+            headerRect
                 .transition()
                 .x(-windowViewController.width / 2 + UIApplication.style.margin )
                 .y(-windowViewController.height / 2 + UIApplication.style.margin)
                 .attr('width', windowViewController.width - UIApplication.style.margin * 2)
                 .transition()
                 .attr('height', UIApplication.style.headerRectHeightExpanded)
-                .transition()
-                ;
+                .transition();
 
             // move close button
-            layer.selectAll(".nameGroup").selectAll(".closeApp")
+            closeIcon
                 .on("mouseover", function() {
                     d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
                 })
@@ -146,6 +157,8 @@ var UIApplication = function(delegate) {
                 .transition()
                 .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
+                .width(40)
+                .height(40)
                 .attr("xlink:href","img/cross_red_border_white.svg")
                 .transition()
                 .delay(750)
@@ -153,27 +166,29 @@ var UIApplication = function(delegate) {
 
         }
         else {
-            layer.selectAll(".nameGroup").selectAll(".name")
+            appName
                 .transition()
                 .x(0)
                 .y(0);
 
-            layer.selectAll(".nameGroup").selectAll(".headerRect")
+            headerRect
                 .transition()
                 .attr('width', UIApplication.style.applicationBackgroundWidthNotExpanded)
                 .attr('height', UIApplication.style.headerRectHeightNotExpanded)
                 .x(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
 
-            layer.selectAll(".nameGroup").selectAll(".closeApp")
+            closeIcon
                 .on("mouseover", null)
                 .on("mouseout", null)
                 .x(0)
                 .y(0)
+                .width(0)
+                .height(0)
                 .style("opacity", 0);
         }
 
-        layer.selectAll(".nameGroup").selectAll(".name")
+        appName
             .text(delegate.name);
 
 
