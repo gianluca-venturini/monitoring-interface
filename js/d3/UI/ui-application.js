@@ -7,6 +7,7 @@ var UIApplication = function(delegate) {
         titleBarHeight: 50,
         applicationBackgroundWidthNotExpanded: 100,
         applicationBackgroundHeightNotExpanded: 100,
+        optionRectHeight: 50,
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
@@ -24,9 +25,22 @@ var UIApplication = function(delegate) {
         return UIApplication.style.disabledStatusColor;
     };
 
+    self.openOptionRect = function (backGroundRect) {
+        backGroundRect
+            .transition()
+            .style("opacity", 1);
+    };
+
+    self.closeOptionRect = function (backGroundRect) {
+        backGroundRect
+            .transition()
+            .style("opacity", 0);
+    };
+
     // Private variables
     var applicationBackground = undefined;
     var nameGroup = undefined;
+    var optionRect = undefined;
     var headerRect = undefined;
     var appName = undefined;
     var closeIcon = undefined;
@@ -42,9 +56,11 @@ var UIApplication = function(delegate) {
             applicationBackground = layer.append("rect")
                 .on("mouseover", function () {
                     d3.select(this).fill(self.palette.accent1.bright);
+                    self.openOptionRect(optionRect);
                 })
                 .on("mouseout", function () {
                     d3.select(this).fill(self.palette.accent1.normal);
+                    self.closeOptionRect(optionRect);
                 })
                 .fill(self.palette.primary.normal)
                 .class("applicationBackground");
@@ -72,9 +88,11 @@ var UIApplication = function(delegate) {
                 })
                 .on("mouseover", function() {
                     d3.select(this).fill(self.palette.accent1.bright);
+                    self.openOptionRect(optionRect);
                 })
                 .on("mouseout", function() {
                     d3.select(this).fill(self.palette.accent1.normal);
+                    self.closeOptionRect(optionRect);
                 })
                 .transition()
                 .fill(self.palette.accent1.normal)
@@ -89,6 +107,18 @@ var UIApplication = function(delegate) {
         if(nameGroup == undefined) {
             nameGroup = layer.append("g")
                 .class("nameGroup");
+        }
+
+        // Create option rectangle
+        if(optionRect == undefined) {
+            optionRect = nameGroup.append("rect")
+                .class("optionRect")
+                .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
+                .height(UIApplication.style.optionRectHeight)
+                .x( - UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
+                .y( UIApplication.style.optionRectHeight)
+                .style("opacity", 0)
+                .fill(self.palette.accent1.normal);
         }
 
         // Create the status rect
