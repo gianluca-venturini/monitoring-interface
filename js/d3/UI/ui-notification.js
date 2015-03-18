@@ -17,9 +17,7 @@ var UINotification = function(delegate) {
     var notificationText = undefined;
 
     self.render = function() {
-
-        return;
-
+        
         console.log("Render: notification");
 
         var layer = self.view;
