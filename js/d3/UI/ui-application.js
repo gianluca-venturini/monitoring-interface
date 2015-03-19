@@ -7,7 +7,7 @@ var UIApplication = function(delegate) {
         titleBarHeight: 50,
         applicationBackgroundWidthNotExpanded: 100,
         applicationBackgroundHeightNotExpanded: 100,
-        optionRectHeight: 25,
+        optionRectHeight: 26,
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
@@ -25,21 +25,22 @@ var UIApplication = function(delegate) {
         return UIApplication.style.disabledStatusColor;
     };
 
-    self.openOptionRect = function (backGroundRect) {
-        backGroundRect
+    self.openOptionRect = function (optionGroup) {
+        optionGroup
             .transition()
-            .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 );
+            .attr("transform", "translate(0," + UIApplication.style.optionRectHeight + ")");
     };
 
-    self.closeOptionRect = function (backGroundRect) {
-        backGroundRect
+    self.closeOptionRect = function (optionGroup) {
+        optionGroup
             .transition()
-            .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight);
+            .attr("transform", "translate(0," + (- UIApplication.style.optionRectHeight) + ")");
     };
 
     // Private variables
     var applicationBackground = undefined;
     var nameGroup = undefined;
+    var optionGroup = undefined;
     var optionRect = undefined;
     var headerRect = undefined;
     var appName = undefined;
@@ -52,13 +53,12 @@ var UIApplication = function(delegate) {
 
         var layer = self.view;
 
-        // Create option rectangle
+        // Create option group
         // it must be created before the app bg to perform the slide
-        if(optionRect == undefined) {
-            optionRect = layer.append("rect")
-                .class("optionRect");
+        if(optionGroup == undefined) {
+            optionGroup = layer.append("g")
+                .class("optionGroup");
         }
-
 
         // Background rect
         if(applicationBackground == undefined) {
@@ -97,11 +97,11 @@ var UIApplication = function(delegate) {
                 })
                 .on("mouseover", function() {
                     d3.select(this).fill(self.palette.accent1.bright);
-                    self.openOptionRect(optionRect);
+                    self.openOptionRect(optionGroup);
                 })
                 .on("mouseout", function() {
                     d3.select(this).fill(self.palette.accent1.normal);
-                    self.closeOptionRect(optionRect);
+                    self.closeOptionRect(optionGroup);
                 })
                 .transition()
                 .fill(self.palette.accent1.normal)
@@ -154,10 +154,38 @@ var UIApplication = function(delegate) {
                 });
         }
 
+        if(optionRect == undefined) {
+            optionRect = optionGroup.append("rect")
+                .class("optionRect");
+        }
 
+        // add mail icon to the option group
+        if(mailIcon == undefined) {
+            mailIcon = optionGroup.append("svg:image")
+                .on("mouseover", function() {
+                    self.openOptionRect(optionGroup);
+                    delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
+                    d3.select(this).attr("xlink:href","img/email_highlighted.svg");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("xlink:href","img/email.svg");
+                })
+                .on("click", function() {
+                    alert("ciao simona");
+                })
+                .attr('width', 34)
+                .attr('height', 24)
+                .x(-17)
+                .y(UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight +1)
+                .attr("xlink:href", "img/email.svg")
+                .class("mailIcon")
+                .class("pointer");
+        }
 
         // Application name
         if(self.delegate.expanded) {
+            self.closeOptionRect(optionGroup);
+
             // move the name
             appName
                 .transition()
@@ -193,7 +221,7 @@ var UIApplication = function(delegate) {
                 .delay(750)
                 .style("opacity", 1);
 
-                self.closeOptionRect(optionRect);
+
 
         }
         else {
@@ -220,11 +248,11 @@ var UIApplication = function(delegate) {
 
             optionRect
                 .on("mouseover", function () {
-                    self.openOptionRect(optionRect);
+                    self.openOptionRect(optionGroup);
                     delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
                 })
                 .on("mouseout", function () {
-                    self.closeOptionRect(optionRect);
+                    self.closeOptionRect(optionGroup);
                     delegate.mouseOverEffect(applicationBackground, self.palette.accent1.normal);
                 })
                 .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
