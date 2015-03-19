@@ -7,7 +7,7 @@ var UIApplication = function(delegate) {
         titleBarHeight: 50,
         applicationBackgroundWidthNotExpanded: 100,
         applicationBackgroundHeightNotExpanded: 100,
-        optionRectHeight: 50,
+        optionRectHeight: 25,
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
@@ -28,13 +28,13 @@ var UIApplication = function(delegate) {
     self.openOptionRect = function (backGroundRect) {
         backGroundRect
             .transition()
-            .style("opacity", 1);
+            .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 );
     };
 
     self.closeOptionRect = function (backGroundRect) {
         backGroundRect
             .transition()
-            .style("opacity", 0);
+            .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight);
     };
 
     // Private variables
@@ -43,6 +43,7 @@ var UIApplication = function(delegate) {
     var optionRect = undefined;
     var headerRect = undefined;
     var appName = undefined;
+    var mailIcon = undefined;
     var closeIcon = undefined;
 
     self.render = function() {
@@ -51,15 +52,23 @@ var UIApplication = function(delegate) {
 
         var layer = self.view;
 
+        // Create option rectangle
+        // it must be created before the app bg to perform the slide
+        if(optionRect == undefined) {
+            optionRect = layer.append("rect")
+                .class("optionRect");
+        }
+
+
         // Background rect
         if(applicationBackground == undefined) {
             applicationBackground = layer.append("rect")
                 .on("mouseover", function () {
-                    d3.select(this).fill(self.palette.accent1.bright);
+                    delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
                     self.openOptionRect(optionRect);
                 })
                 .on("mouseout", function () {
-                    d3.select(this).fill(self.palette.accent1.normal);
+                    delegate.mouseOutEffect(applicationBackground, self.palette.accent1.normal);
                     self.closeOptionRect(optionRect);
                 })
                 .fill(self.palette.primary.normal)
@@ -109,18 +118,6 @@ var UIApplication = function(delegate) {
                 .class("nameGroup");
         }
 
-        // Create option rectangle
-        if(optionRect == undefined) {
-            optionRect = nameGroup.append("rect")
-                .class("optionRect")
-                .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
-                .height(UIApplication.style.optionRectHeight)
-                .x( - UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
-                .y( UIApplication.style.optionRectHeight)
-                .style("opacity", 0)
-                .fill(self.palette.accent1.normal);
-        }
-
         // Create the status rect
         if(headerRect == undefined) {
             headerRect = nameGroup.append("rect")
@@ -156,6 +153,8 @@ var UIApplication = function(delegate) {
                     delegate.closeButtonClicked();
                 });
         }
+
+
 
         // Application name
         if(self.delegate.expanded) {
@@ -194,6 +193,8 @@ var UIApplication = function(delegate) {
                 .delay(750)
                 .style("opacity", 1);
 
+                self.closeOptionRect(optionRect);
+
         }
         else {
             appName
@@ -216,6 +217,21 @@ var UIApplication = function(delegate) {
                 .width(0)
                 .height(0)
                 .style("opacity", 0);
+
+            optionRect
+                .on("mouseover", function () {
+                    self.openOptionRect(optionRect);
+                    delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
+                })
+                .on("mouseout", function () {
+                    self.closeOptionRect(optionRect);
+                    delegate.mouseOverEffect(applicationBackground, self.palette.accent1.normal);
+                })
+                .width(UIApplication.style.applicationBackgroundWidthNotExpanded)
+                .height(UIApplication.style.optionRectHeight)
+                .x( - UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
+                .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight)
+                .fill(self.palette.accent1.normal);
         }
 
         appName

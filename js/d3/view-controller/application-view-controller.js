@@ -13,6 +13,7 @@ var ApplicationViewController = function(name, view) {
 
     // Render function of the component
     var render = self.render;
+
     self.render = function() {
         var data = applicationModel.getApplicationData(self.name);
 
@@ -29,6 +30,15 @@ var ApplicationViewController = function(name, view) {
         self.renderInstances();
     };
 
+
+
+    self.mouseOverEffect = function (backGroundRect, color) {
+        backGroundRect.fill(color);
+    };
+
+    self.mouseOutEffect = function (backGroundRect, color) {
+        backGroundRect.fill(color);
+    };
 
     self.closeButtonClicked = function() {
         self.clicked();
