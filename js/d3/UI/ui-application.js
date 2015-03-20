@@ -65,11 +65,11 @@ var UIApplication = function(delegate) {
             applicationBackground = layer.append("rect")
                 .on("mouseover", function () {
                     delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
-                    self.openOptionRect(optionRect);
+                    self.openOptionRect(optionGroup);
                 })
                 .on("mouseout", function () {
                     delegate.mouseOutEffect(applicationBackground, self.palette.accent1.normal);
-                    self.closeOptionRect(optionRect);
+                    self.closeOptionRect(optionGroup);
                 })
                 .fill(self.palette.primary.normal)
                 .class("applicationBackground");

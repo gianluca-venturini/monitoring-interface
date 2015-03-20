@@ -17,6 +17,10 @@ Animations.instance = {
     INSTANCE_EXIT: {delay: 0, duration: 500}
 };
 
+Animations.optionRect = {
+    INSTANCE_ENTER : {delay: 500, duration: 500}
+};
+
 Animations.notification = {
     NOTIFICATION_FADE_IN: {delay: 400, duration: 500},
     NOTIFICATION_FADE_OUT: {delay: 0, duration: 100}
