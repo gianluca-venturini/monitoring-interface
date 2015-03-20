@@ -91,12 +91,6 @@ var UIConnectionView = function(delegate) {
             })
             .attr("d", arcZeroRadius)
             .each(function(component) {
-
-                var origin = {
-                    x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
-                    y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
-                };
-
                 componentToolBoxes.append("rect")
                     .class("toolBox")
                     .attr("id", function() {
@@ -105,19 +99,7 @@ var UIConnectionView = function(delegate) {
                     .margin(undefined)
                     .width(UIConnectionView.style.labelFieldSize)
                     .height(0)
-                    .x(function() {
-                        if(component.endAngle % (2*Math.PI) < Math.PI) {
-                            // 0 <= angle < 180
-                            return origin.x;
-                        }
-                        else {
-                            // 180 <= angle < 360
-                            return origin.x - UIConnectionView.style.labelFieldSize;
-                        }
-                    })
-                    .y(function() {
-                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength);
-                    })
+
 
             });
 
@@ -133,14 +115,36 @@ var UIConnectionView = function(delegate) {
                     return defaultPalette.state.red;
                 else
                     return defaultPalette.state.green;
+            })
+            .each(function(component) {
+
+                var origin = {
+                    x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                    y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+                };
+
+                componentToolBoxes.select("#"+component.name)
+                    .x(function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize;
+                        }
+                    })
+                    .y(function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength);
+                    })
             });
 
         // Remove component arcs
         components.selectAll(".componentArc")
             .data(radialLayout.components)
             .exit()
-            .each(function() {
-                componentToolBoxes.select("#"+d.name)
+            .each(function(component) {
+                componentToolBoxes.select("#"+component.name)
                     .remove();
             })
             .remove();
