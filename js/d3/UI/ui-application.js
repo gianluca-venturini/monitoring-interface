@@ -7,7 +7,7 @@ var UIApplication = function(delegate) {
         titleBarHeight: 50,
         applicationBackgroundWidthNotExpanded: 100,
         applicationBackgroundHeightNotExpanded: 100,
-        optionRectHeight: 26,
+        optionRectHeight: 20,
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
@@ -156,12 +156,29 @@ var UIApplication = function(delegate) {
 
         if(optionRect == undefined) {
             optionRect = optionGroup.append("rect")
-                .class("optionRect");
+                .class("optionRect")
+                .class("pointer")
+                .on("click", function() {
+                    alert("ciao simona")
+                });
         }
 
         // add mail icon to the option group
         if(mailIcon == undefined) {
-            mailIcon = optionGroup.append("svg:image")
+            mailIcon = optionGroup.append("text")
+                .class("mailIcon")
+                .class("pointer")
+                .class("no_interaction")
+                .attr("text-anchor", "middle")
+                .fill(self.palette.text.bright)
+                .on("mouseover", function() {
+                    self.openOptionRect(optionGroup);
+                    delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
+                })
+                .y(UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight + 15)
+                .text("subscribe");
+
+            /*mailIcon = optionGroup.append("svg:image")
                 .on("mouseover", function() {
                     self.openOptionRect(optionGroup);
                     delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
@@ -179,7 +196,7 @@ var UIApplication = function(delegate) {
                 .y(UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight +1)
                 .attr("xlink:href", "img/email.svg")
                 .class("mailIcon")
-                .class("pointer");
+                .class("pointer");*/
         }
 
         // Application name
