@@ -12,9 +12,17 @@ var UIConnectionView = function(delegate) {
         arrow_thick: 11,
         arrow_ratio: 1.5,
         square_side: 10.0,
-        componentNameFontSize: 12.0,
+        componentNameFontSize: 15.0,
         linkTextSize: 10,
-        linkTextSizeHold: 13
+        linkTextSizeHold: 13,
+
+        labelLinkLength: 80,
+        labelLinkWidth: 1,
+        labelLinkColor: defaultPalette.text.dark,
+        labelFieldSize: 120,
+        toolBoxHeight: 50
+
+
     };
 
     // Private variables
@@ -27,13 +35,16 @@ var UIConnectionView = function(delegate) {
         var layer = self.view;
 
         // Take the width of the screen
-        self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin;
+        self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin
+                            - UIConnectionView.style.labelLinkLength;
         self._outerRadius = self._innerRadius + UIConnectionView.style.componentThickness;
 
         var links = layer.layerWithName("links");
         var components = layer.layerWithName("components");
         var componentNames = layer.layerWithName("componentNames");
         var channelTexts = layer.layerWithName("channelTexts");
+        var componentLabels = layer.layerWithName("componentLabels");
+        var componentToolBoxes = layer.layerWithName("componentToolBoxes")
 
         var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
 
@@ -78,7 +89,37 @@ var UIConnectionView = function(delegate) {
                 else
                     return defaultPalette.state.green;
             })
-            .attr("d", arcZeroRadius);
+            .attr("d", arcZeroRadius)
+            .each(function(component) {
+
+                var origin = {
+                    x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                    y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+                };
+
+                componentToolBoxes.append("rect")
+                    .class("toolBox")
+                    .attr("id", function() {
+                        return component.name;
+                    })
+                    .margin(undefined)
+                    .width(UIConnectionView.style.labelFieldSize)
+                    .height(0)
+                    .x(function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize;
+                        }
+                    })
+                    .y(function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength);
+                    })
+
+            });
 
         // Update component arcs
         components.selectAll(".componentArc")
@@ -98,6 +139,10 @@ var UIConnectionView = function(delegate) {
         components.selectAll(".componentArc")
             .data(radialLayout.components)
             .exit()
+            .each(function() {
+                componentToolBoxes.select("#"+d.name)
+                    .remove();
+            })
             .remove();
 
         // Create new publish channels
@@ -254,38 +299,39 @@ var UIConnectionView = function(delegate) {
             .append("text")
             .class("componentName")
             .fill(defaultPalette.text.dark)
-            .opacity(0);
+            .opacity(0)
+            .on("mouseover", function(d) {
+                componentToolBoxes
+                    .select("#"+d.name)
+                    .height(UIConnectionView.style.toolBoxHeight);
+
+            })
+            .on("mouseout", function(d) {
+                componentToolBoxes
+                    .select("#"+d.name)
+                    .height(0);
+            });
 
         componentNames.selectAll(".componentName")
             .data(radialLayout.components)
             .transition()
             .duration(Animations.connectionView.LINK_FADE_IN.duration)
             .delay(Animations.connectionView.LINK_FADE_IN.delay)
-            .attr("x", function(component) {
-                return Math.cos(component.startAngle - Math.PI/2) * self._innerRadius;
-            })
-            .attr("y", function(component) {
-                return Math.sin(component.startAngle - Math.PI/2) * self._innerRadius;
-            })
             .attr("text-anchor", function(component) {
-                if(component.startAngle % (2*Math.PI) < Math.PI / 2) {
-                    // 0 <= angle < 90
-                    return "end";
-                }
-                else if(component.startAngle% (2*Math.PI) > Math.PI / 2 &&
-                    component.startAngle% (2*Math.PI) < Math.PI) {
-                    // 90 <= angle < 180
+                if(component.endAngle % (2*Math.PI) < Math.PI) {
+                    // 0 <= angle < 180
                     return "start";
-                }
-                else if(component.startAngle% (2*Math.PI) > Math.PI &&
-                    component.startAngle% (2*Math.PI) < 3 / 4 * Math.PI) {
-                    // 180 <= angle < 270
-                    return "end";
                 }
                 else {
-                    // 270 <= angle < 360
-                    return "start";
+                    // 180 <= angle < 360
+                    return "end";
                 }
+            })
+            .x(function(component) {
+                return Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength + 10)
+            })
+            .y(function(component) {
+                return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 5
             })
             .attr("font-size", UIConnectionView.style.componentNameFontSize)
             .text(function(component) {return component.name; })
@@ -297,6 +343,67 @@ var UIConnectionView = function(delegate) {
             .transition()
             .opacity(0)
             .remove();
+
+
+        // Create new component label
+        componentLabels.selectAll(".componentLabel")
+            .data(radialLayout.components)
+            .enter()
+            .append("polyline")
+            .class("componentLabel")
+            .fill("none")
+            .attr("stroke-width", UIConnectionView.style.labelLinkWidth)
+            .attr("stroke", UIConnectionView.style.labelLinkColor)
+            .opacity(0);
+
+
+        componentLabels.selectAll(".componentLabel")
+            .data(radialLayout.components)
+            .transition()
+            .duration(Animations.connectionView.LINK_FADE_IN.duration)
+            .delay(Animations.connectionView.LINK_FADE_IN.delay)
+            .attr("points", function(component) {
+
+                var point0 = {
+                    x: Math.cos(component.endAngle - Math.PI / 2) * self._innerRadius,
+                    y: Math.sin(component.endAngle - Math.PI / 2) * self._innerRadius
+                };
+
+                var point1 = {
+                    x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                    y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+                };
+
+
+                var direction;
+                if(Math.sin(component.endAngle) >= 0) {
+                    direction = 1;
+                }
+                else {
+                    direction = -1;
+                }
+                //Math.sign(Math.sin(component.startAngle))
+                var point2 = {
+                    x: point1.x + direction * UIConnectionView.style.labelFieldSize,
+                    y: point1.y
+                };
+
+                return[
+                    point0.x, point0.y,
+                    point1.x, point1.y,
+                    point2.x, point2.y
+
+                ];
+            })
+            .opacity(1);
+
+        componentLabels.selectAll(".componentLabel")
+            .data(radialLayout.components)
+            .exit()
+            .transition()
+            .opacity(0)
+            .remove();
+
     };
 
     // Constructor
