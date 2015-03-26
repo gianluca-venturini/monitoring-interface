@@ -31,7 +31,3 @@ code {
     -ms-user-select: text;
     user-select: text;
 }
-
-.modal-backdrop {
-    position: fixed;
-}
