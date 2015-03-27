@@ -182,13 +182,15 @@ var UIConnectionView = function(delegate) {
         var lineGenerator = d3.svg.line.radial()
             .interpolate("bundle")
             .tension(UIConnectionView.style.linkTension)
-            .radius(function(d) { return d.radius; })
+            .radius(function(d) { return  d.radius; })
             .angle(function(d) { return d.angle; });
 
         // Create new links between channels
         links.selectAll(".link")
             .data(radialLayout.links.map(function(link) {
-                    return link.coordinates;
+                    var points = link.coordinates;
+                    points.forEach(function(p) {p.link = link});
+                    return points;
                 }))
             .enter()
             .append("path")
@@ -197,34 +199,44 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .attr("stroke", self.palette.accent2.bright)
             .attr("d", lineGenerator)
-            .on("mouseover", function(link) {
+            .on("mouseover", function() {
                 d3.select(this).attr("stroke", "#000000");
                 //d3.select(link.source.name).attr("font-size", UIConnectionView.style.linkTextSizeHold);
             })
-            .on("mouseout", function(link) {
+            .on("mouseout", function() {
                 d3.select(this).attr("stroke", "#FFFFFF");
                 //d3.select(link.source.name).attr("font-size", UIConnectionView.style.linkTextSize);
-            })
-            .on("click", function() {
-                // Display the modal view
-                $('#messageDisplay').modal({ show: true});
             });
 
         // Update already present links between
         links.selectAll(".link")
             .data(radialLayout.links.map(function(link) {
-                return link.coordinates;
+                var points = link.coordinates;
+                points.forEach(function(p) {p.link = link});
+                return points;
             }))
+            .on("click", function(points) {
+                // Insert the data in the messages model
+                messageModel.from = points[0].link.source.component;
+                messageModel.to = points[0].link.destination.component;
+                messageModel.type = points[0].link.type;
+
+                // Display the modal view
+                $('#messageDisplay').modal({ show: true});
+            })
             .transition()
             .delay(Animations.connectionView.LINK_FADE_IN.delay)
             .duration(Animations.connectionView.LINK_FADE_IN.duration)
             .opacity(1)
             .attr("d", lineGenerator);
 
+
         // Remove links no more present
         links.selectAll(".link")
             .data(radialLayout.links.map(function(link) {
-                return link.coordinates;
+                var points = link.coordinates;
+                points.forEach(function(p) {p.link = link});
+                return points;
             }))
             .exit()
             .transition()

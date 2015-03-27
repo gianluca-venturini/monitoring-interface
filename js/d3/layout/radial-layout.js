@@ -102,10 +102,14 @@
 
             // Calculate links
             self.components.forEach(function(component1) {
+
+                // Publish - Subscribe
                 component1.publish.forEach(function(publish) {
                     self.components.forEach(function(component2) {
                         component2.subscribe.forEach(function(subscribe) {
                             if(publish.channel == subscribe.channel) {
+                                publish.component = component1.name;
+                                subscribe.component = component2.name;
                                 var link = {
                                     type: "publish",
                                     source: publish,
@@ -122,10 +126,13 @@
                     });
                 });
 
+                // Request - Response
                 component1.request.forEach(function(request) {
                     self.components.forEach(function(component2) {
                         component2.handle_request.forEach(function(handle_request) {
                             if(request.channel == handle_request.channel) {
+                                request.component = component1.name;
+                                handle_request.component = component2.name;
                                 var link = {
                                     type: "request",
                                     source: request,

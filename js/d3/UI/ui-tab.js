@@ -32,8 +32,6 @@ var UITab = function(delegate, name) {
 
     self.render = function() {
 
-        console.log("Render: tab "+name+" "+delegate.parentApplicationViewController.name);
-
         var layer = self.view;
 
         if(optionGroup == undefined) {

@@ -18,8 +18,6 @@ var UINotification = function(delegate) {
 
     self.render = function() {
 
-        console.log("Render: notification");
-
         var layer = self.view;
 
         if(notificationGroup == undefined)

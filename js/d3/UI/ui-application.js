@@ -49,8 +49,6 @@ var UIApplication = function(delegate) {
 
     self.render = function() {
 
-        console.log("Render: application");
-
         var layer = self.view;
 
         // Create option group

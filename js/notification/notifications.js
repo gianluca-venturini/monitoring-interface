@@ -1,7 +1,8 @@
 var Notifications = Notifications || {};
 
 Notifications.data = {
-    APPLICATION_DATA_CHANGE: "data.APPLICATION_DATA_CHANGE"
+    APPLICATION_DATA_CHANGE: "data.APPLICATION_DATA_CHANGE",
+    MESSAGE_DATA_CHANGE: "data.MESSAGE_DATA_CHANGE"
 };
 
 Notifications.ui = {
