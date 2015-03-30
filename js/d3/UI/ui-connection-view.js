@@ -15,14 +15,11 @@ var UIConnectionView = function(delegate) {
         componentNameFontSize: 15.0,
         linkTextSize: 10,
         linkTextSizeHold: 13,
-
         labelLinkLength: 80,
         labelLinkWidth: 1,
         labelLinkColor: defaultPalette.text.dark,
         labelFieldSize: 120,
         toolBoxHeight: 50
-
-
     };
 
     // Private variables
@@ -93,17 +90,56 @@ var UIConnectionView = function(delegate) {
             })
             .attr("d", arcZeroRadius)
             .each(function(component) {
-                componentToolBoxes.append("rect")
+                componentToolBoxes.append("g")
+                    .class("toolBoxGroup")
+                    .class("pointer")
+                    .append("rect")
                     .class("toolBox")
+                    .class("pointer")
+                    .margin(undefined)
+                    .width(UIConnectionView.style.labelFieldSize)
+                    .height(UIConnectionView.style.toolBoxHeight)
+                    .fill(self.palette.accent1.normal)
+                    .on("mouseover", function() {
+                        self.openOptionRect(optionGroup);
+                    })
+                    .on("mouseout", function () {
+                        self.closeOptionRect(optionGroup);
+                    })
+                    .on("click", function() {
+                        alert("ciao simona")
+                    })
+                    .opacity(1)
                     .attr("id", function() {
                         return component.name;
                     })
-                    .margin(undefined)
-                    .width(UIConnectionView.style.labelFieldSize)
-                    .height(0)
-
+                ;
 
             });
+
+        /*
+         * componentToolBoxes.append("rect")
+         .class("toolBox")
+         .class("pointer")
+         .margin(undefined)
+         .width(UIConnectionView.style.labelFieldSize)
+         .height(UIConnectionView.style.toolBoxHeight)
+         .fill(self.palette.accent1.normal)
+         .on("mouseover", function() {
+         self.openOptionRect(optionGroup);
+         })
+         .on("mouseout", function () {
+         self.closeOptionRect(optionGroup);
+         })
+         .on("click", function() {
+         alert("ciao simona")
+         })
+         .opacity(1)
+         .attr("id", function() {
+         return component.name;
+         })
+         ;
+        * */
 
         // Update component arcs
         components.selectAll(".componentArc")
@@ -326,7 +362,6 @@ var UIConnectionView = function(delegate) {
                 componentToolBoxes
                     .select("#"+d.name)
                     .height(UIConnectionView.style.toolBoxHeight);
-
             })
             .on("mouseout", function(d) {
                 componentToolBoxes

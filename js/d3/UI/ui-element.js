@@ -79,7 +79,7 @@ var defaultPalette = {
     }
 };
 */
-
+/*
 // palette 3
 var defaultPalette = {
     primary: {
@@ -119,8 +119,48 @@ var defaultPalette = {
         //red: "#F26A4B",
         green: "#26A65B"
     }
-};
+};*/
 
+// palette 4
+var defaultPalette = {
+    primary: {
+        dark: "#0288D1",
+        normal: "#425266",
+        bright: "#B3E5FC"
+    },
+    text: {
+        dark: "#FFFFFF",
+        bright: "#FFFFFF"
+    },
+    accent1: {
+        dark: "#323e4d",
+        normal: "#425266",
+        bright: "#536780"
+    },
+    accent2: {
+        dark: "#FFFFFF",
+        normal: "#FF9800",
+        bright: "#FFFFFF"
+    },
+    accent3: {
+        dark: "#F57C00",
+        normal: "#FF9800",
+        bright: "#FFE0B2"
+    },
+    background: {
+        dark: "#ecf0f1",
+        normal: "#ecf0f1"
+
+    },
+    state: {
+        red: "#D24D57",
+        //red: "#E74C3C",
+        //red: "#C0392B",
+        //red: "#96281B",
+        //red: "#F26A4B",
+        green: "#26A65B"
+    }
+};
 var UIElement = function(delegate) {
     var self = {};
 

@@ -10,7 +10,6 @@ var UITab = function(delegate, name) {
     // Public variables
     self.name = undefined;
 
-
     // Private variables
     var instanceTab = undefined;
     var instanceTabText = undefined;
