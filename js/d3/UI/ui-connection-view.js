@@ -98,7 +98,7 @@ var UIConnectionView = function(delegate) {
                     .class("pointer")
                     .margin(undefined)
                     .width(UIConnectionView.style.labelFieldSize)
-                    .height(UIConnectionView.style.toolBoxHeight)
+                    .height(0)
                     .fill(self.palette.accent1.normal)
                     .on("mouseover", function() {
                         self.openOptionRect(optionGroup);
@@ -109,7 +109,6 @@ var UIConnectionView = function(delegate) {
                     .on("click", function() {
                         alert("ciao simona")
                     })
-                    .opacity(1)
                     .attr("id", function() {
                         return component.name;
                     })

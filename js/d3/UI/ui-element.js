@@ -129,7 +129,7 @@ var defaultPalette = {
         bright: "#B3E5FC"
     },
     text: {
-        dark: "#FFFFFF",
+        dark: "#636D6E",
         bright: "#FFFFFF"
     },
     accent1: {
@@ -148,7 +148,7 @@ var defaultPalette = {
         bright: "#FFE0B2"
     },
     background: {
-        dark: "#ecf0f1",
+        dark: "#C8CBCC",
         normal: "#ecf0f1"
 
     },
