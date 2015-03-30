@@ -44,7 +44,7 @@ var UIConnectionView = function(delegate) {
         var componentNames = layer.layerWithName("componentNames");
         var channelTexts = layer.layerWithName("channelTexts");
         var componentLabels = layer.layerWithName("componentLabels");
-        var componentToolBoxes = layer.layerWithName("componentToolBoxes")
+        var componentToolBoxes = layer.layerWithName("componentToolBoxes");
 
         var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
 
@@ -54,6 +54,8 @@ var UIConnectionView = function(delegate) {
             channelTexts.remove();
             links.remove();
             componentNames.remove();
+            componentLabels.remove();
+            componentToolBoxes.remove();
             return;
         }
 
