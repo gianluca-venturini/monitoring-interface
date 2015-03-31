@@ -50,7 +50,7 @@ var MessagesModel = function() {
             if (error)
                 return console.warn(error);
 
-            self._data = data;
+            self.data = data;
         });
     };
 

@@ -35,3 +35,7 @@ code {
 .modal-backdrop {
     position: fixed;
 }
+
+#modalLabel {
+    text-align: center;
+}

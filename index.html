@@ -20,6 +20,9 @@
     <script src="js/lib/bootstrap.min.js" charset="utf-8"></script>
     <script src="js/lib/highlight.min.js"></script>
 
+    <script src="js/lib/react-with-addons-0.12.2.js"></script>
+    <script src="js/lib/JSXTransformer-0.12.2.js"></script>
+
     <script src="js/d3/layout/radial-layout.js" charset="utf-8"></script>
     <script src="js/d3/layout/grid-layout.js" charset="utf-8"></script>
 
@@ -43,6 +46,13 @@
     <script src="js/d3/ui/ui-application.js" charset="utf-8"></script>
     <script src="js/d3/ui/ui-connection-view.js" charset="utf-8"></script>
     <script src="js/d3/ui/ui-tab.js" charset="utf-8"></script>
+
+    <script type="text/jsx" src="js/react/ui-messages.js" charset="utf-8"></script>
+
+    <!-- Scripts -->
+    <script src="bower_components/bower-mqttws/mqttws31.js" type="text/javascript" charset="utf-8"></script>
+    <script src="bower_components/nutella_lib/nutella_lib.js" type="text/javascript" charset="utf-8"></script>
+
 </head>
 <body style="margin: 0">
 
@@ -50,148 +60,28 @@
 
 <!-- Modal -->
 <div class="modal fade" id="messageDisplay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-messages">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Message display</h4>
-            </div>
-            <div class="modal-body">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                <h4 class="panel-title">
-                                    Message #1  03/26/2015 21:15
-                                </h4>
-                            </div>
-                        </a>
-                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                <pre>
-                                    <code class="JSON">
-                                        {"web-app": {
-                                        "servlet": [
-                                        {
-                                        "servlet-name": "cofaxCDS",
-                                        "servlet-class": "org.cofax.cds.CDSServlet",
-                                        "init-param": {
-                                        "configGlossary:installationAt": "Philadelphia, PA",
-                                        "configGlossary:adminEmail": "ksm@pobox.com",
-                                        "configGlossary:poweredBy": "Cofax",
-                                        "configGlossary:poweredByIcon": "/images/cofax.gif",
-                                        "configGlossary:staticPath": "/content/static",
-                                        "templateProcessorClass": "org.cofax.WysiwygTemplate",
-                                        "templateLoaderClass": "org.cofax.FilesTemplateLoader",
-                                        "templatePath": "templates",
-                                        "templateOverridePath": "",
-                                        "defaultListTemplate": "listTemplate.htm",
-                                        "defaultFileTemplate": "articleTemplate.htm",
-                                        "useJSP": false,
-                                        "jspListTemplate": "listTemplate.jsp",
-                                        "jspFileTemplate": "articleTemplate.jsp",
-                                        "cachePackageTagsTrack": 200,
-                                        "cachePackageTagsStore": 200,
-                                        "cachePackageTagsRefresh": 60,
-                                        "cacheTemplatesTrack": 100,
-                                        "cacheTemplatesStore": 50,
-                                        "cacheTemplatesRefresh": 15,
-                                        "cachePagesTrack": 200,
-                                        "cachePagesStore": 100,
-                                        "cachePagesRefresh": 10,
-                                        "cachePagesDirtyRead": 10,
-                                        "searchEngineListTemplate": "forSearchEnginesList.htm",
-                                        "searchEngineFileTemplate": "forSearchEngines.htm",
-                                        "searchEngineRobotsDb": "WEB-INF/robots.db",
-                                        "useDataStore": true,
-                                        "dataStoreClass": "org.cofax.SqlDataStore",
-                                        "redirectionClass": "org.cofax.SqlRedirection",
-                                        "dataStoreName": "cofax",
-                                        "dataStoreDriver": "com.microsoft.jdbc.sqlserver.SQLServerDriver",
-                                        "dataStoreUrl": "jdbc:microsoft:sqlserver://LOCALHOST:1433;DatabaseName=goon",
-                                        "dataStoreUser": "sa",
-                                        "dataStorePassword": "dataStoreTestQuery",
-                                        "dataStoreTestQuery": "SET NOCOUNT ON;select test='test';",
-                                        "dataStoreLogFile": "/usr/local/tomcat/logs/datastore.log",
-                                        "dataStoreInitConns": 10,
-                                        "dataStoreMaxConns": 100,
-                                        "dataStoreConnUsageLimit": 100,
-                                        "dataStoreLogLevel": "debug",
-                                        "maxUrlLength": 500}},
-                                        {
-                                        "servlet-name": "cofaxEmail",
-                                        "servlet-class": "org.cofax.cds.EmailServlet",
-                                        "init-param": {
-                                        "mailHost": "mail1",
-                                        "mailHostOverride": "mail2"}},
-                                        {
-                                        "servlet-name": "cofaxAdmin",
-                                        "servlet-class": "org.cofax.cds.AdminServlet"},
 
-                                        {
-                                        "servlet-name": "fileServlet",
-                                        "servlet-class": "org.cofax.cds.FileServlet"},
-                                        {
-                                        "servlet-name": "cofaxTools",
-                                        "servlet-class": "org.cofax.cms.CofaxToolsServlet",
-                                        "init-param": {
-                                        "templatePath": "toolstemplates/",
-                                        "log": 1,
-                                        "logLocation": "/usr/local/tomcat/logs/CofaxTools.log",
-                                        "logMaxSize": "",
-                                        "dataLog": 1,
-                                        "dataLogLocation": "/usr/local/tomcat/logs/dataLog.log",
-                                        "dataLogMaxSize": "",
-                                        "removePageCache": "/content/admin/remove?cache=pages&id=",
-                                        "removeTemplateCache": "/content/admin/remove?cache=templates&id=",
-                                        "fileTransferFolder": "/usr/local/tomcat/webapps/content/fileTransferFolder",
-                                        "lookInContext": 1,
-                                        "adminGroupID": 4,
-                                        "betaServer": true}}],
-                                        "servlet-mapping": {
-                                        "cofaxCDS": "/",
-                                        "cofaxEmail": "/cofaxutil/aemail/*",
-                                        "cofaxAdmin": "/admin/*",
-                                        "fileServlet": "/static/*",
-                                        "cofaxTools": "/tools/*"},
-
-                                        "taglib": {
-                                        "taglib-uri": "cofax.tld",
-                                        "taglib-location": "/WEB-INF/tlds/cofax.tld"}}}
-                                    </code>
-                                </pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 </body>
 
+<script  type="text/jsx">
+    // Initialize react components here
+
+    React.render(
+            <UIMessages/>,
+            document.getElementById('messageDisplay')
+    );
+</script>
+
 <script>
 
-    // Color the code
-    $(document).ready(function() {
-        $('pre code').each(function(i, block) {
-            try {
-                console.log(block);
-                var json = JSON.parse(block.innerHTML);
-                block.innerHTML = JSON.stringify(json, null, 4);
-                hljs.highlightBlock(block);
-                //hljs.highlightBlock(block)
-            }
-            catch(err) {
-                alert("Not json");
-            }
+    // Parse the query parameters
+    var query_parameters = NUTELLA.parseURLParameters();
+    var nutella = NUTELLA.init(query_parameters.run_id, query_parameters.broker, 'monitoring-interface');
 
-        });
-    });
+    // Nutella request
+    nutella.net.request("mail/send", {to: "prova@gmail.com", from: "prova@gmail.com", message: "message"});
 
     var svg = d3.select("#container");
 
@@ -202,7 +92,6 @@
     windowViewController.updateViewBox();
 
     applicationModel.fetchData("data/data.json");
-    messageModel.fetchData("data/message.json");
 
     /*
     var c = 0;
@@ -219,7 +108,6 @@
         c++;
     }, 5000);
     */
-
 </script>
 
 </html>
