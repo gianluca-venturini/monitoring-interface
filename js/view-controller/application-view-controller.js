@@ -6,6 +6,7 @@ var ApplicationViewController = function(name, view) {
     self._expansionAnimationFinished = undefined;
     self._reductionAnimationFinished = undefined;
     self._notification = undefined;
+    self._legend = undefined;
 
     // Public variables
     self.name = undefined;
@@ -23,6 +24,13 @@ var ApplicationViewController = function(name, view) {
         }
         else {
             self._notification.show = true;
+        }
+
+        if(self.expanded) {
+            self._legend.show = true;
+        }
+        else {
+            self._legend.show = false;
         }
 
         render();
@@ -192,6 +200,7 @@ var ApplicationViewController = function(name, view) {
         self._notification = self.addUINotification();   // Application notification
         self._notification.x = 50;
         self._notification.y = -50;
+        self._legend = self.addUILegend(); // Graph legend
 
         notificationCenter.subscribe(Notifications.ui.APPLICATION_CLICKED, function() {
             self.render();

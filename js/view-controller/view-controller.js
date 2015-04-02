@@ -46,6 +46,12 @@ var ViewController = function(view) {
         return uiNotification;
     };
 
+    self.addUILegend = function() {
+        var uiLegend = UILegend(self);
+        self.addUiComponent(uiLegend);
+        return uiLegend;
+    };
+
     self.addUiComponent = function(ui) {
         self._uis.push(ui);
     };
