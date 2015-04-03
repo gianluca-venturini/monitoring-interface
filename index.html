@@ -31,6 +31,7 @@
 
     <script src="js/model/applications-model.js" charset="utf-8"></script>
     <script src="js/model/messages-model.js" charset="utf-8"></script>
+    <script src="js/model/alerts-modello.js" charset="utf-8"></script>
 
     <script src="js/view-controller/view-controller.js" charset="utf-8"></script>
     <script src="js/view-controller/window-view-controller.js" charset="utf-8"></script>
@@ -49,6 +50,7 @@
     <script src="js/d3/ui/ui-tab.js" charset="utf-8"></script>
 
     <script type="text/jsx" src="js/react/ui-messages.js" charset="utf-8"></script>
+    <script type="text/jsx" src="js/react/ui-alerts.js" charset="utf-8"></script>
 
     <!-- Scripts -->
     <script src="bower_components/bower-mqttws/mqttws31.js" type="text/javascript" charset="utf-8"></script>
@@ -64,6 +66,11 @@
 
 </div>
 
+<!-- Mail -->
+<div class="modal fade" id="mailDisplay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+
 </body>
 
 <script  type="text/jsx">
@@ -73,6 +80,18 @@
             <UIMessages/>,
             document.getElementById('messageDisplay')
     );
+
+    React.render(
+            <UIAlerts/>,
+            document.getElementById('mailDisplay')
+    );
+</script>
+
+<script>
+    $("#subscribeButton").on("click", function() {
+        var email = $("#subscribeEmail").val();
+        alert("ciao " + email);
+    });
 </script>
 
 <script>

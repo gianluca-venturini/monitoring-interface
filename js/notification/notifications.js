@@ -5,6 +5,11 @@ Notifications.data = {
     MESSAGE_DATA_CHANGE: "data.MESSAGE_DATA_CHANGE"
 };
 
+
+Notifications.alerts = {
+    ALERT_CHANGE: "alerts.ALERT_CHANGE"
+};
+
 Notifications.ui = {
     INSTANCE_CLICKED: "ui.INSTANCE_CLICKED",
     APPLICATION_CLICKED: "ui.APPLICATION_CLICKED",
