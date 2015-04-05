@@ -153,7 +153,7 @@ var defaultPalette = {
 
     },
     state: {
-        red: "#D24D57",
+        red: "#CC4B55",
         //red: "#E74C3C",
         //red: "#C0392B",
         //red: "#96281B",
