@@ -32,9 +32,15 @@ var UIAlerts = React.createClass ({
     render: function() {
         var self = this;
 
-        var emails = this.state.emails.map(function(email) {
+                    //<div className="floatLeft"><h4>{email}</h4></div>
+                    //<div className="floatLeft"><h4><b>X</b></h4></div>
+        var emails = this.state.emails.map(function(email, index) {
             return (
-                <h4>{email}</h4>
+                <div>
+                    <button type="button" className="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 className="modal-title" id="myMailLabel">{email}</h4>
+                </div>
+
             )
         });
 
@@ -73,3 +79,7 @@ var UIAlerts = React.createClass ({
     }
 
 });
+
+var deleteEmail = function() {
+    alert("ciaooo");
+};
