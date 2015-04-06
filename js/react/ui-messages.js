@@ -62,10 +62,11 @@ var UIMessages = React.createClass({
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 className="modal-title" id="modalLabel">Message display</h4>
-                        <svg style={{height: "40px", width: "100%"}}>
-                            <text x="5%" y="10" textAnchor="middle" fill="black">{this.state.from}</text>
-                            <text x="95%" y="10" textAnchor="middle" fill="black">{this.state.to}</text>
-                            <line x1="0" y1="35" x2="100%" y2="35" style={{stroke: "rgb(255,0,0)", strokeWidth: "5"}} />
+                        <svg style={{height: "40px", width: "100%"}} viewBox="0 0 1000 40">
+                            <text x="50" y="20" textAnchor="middle" fill="black">{this.state.to}</text>
+                            <text x="950" y="20" textAnchor="middle" fill="black">{this.state.from}</text>
+                            <line x1="0" y1="35" x2="990" y2="35" style={{stroke: "#425266", strokeWidth: "5"}} />
+                            <polygon points="990,40 990,30 1000,35" style={{fill:"#425266",stroke:"#425266",strokeWidth:1}} />
                         </svg>
                     </div>
                     <div className="modal-body">
