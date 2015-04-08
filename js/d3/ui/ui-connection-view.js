@@ -257,6 +257,8 @@ var UIConnectionView = function(delegate) {
                 messageModel.from = points[0].link.source.component;
                 messageModel.to = points[0].link.destination.component;
                 messageModel.type = points[0].link.type;
+                messageModel.app_id = applicationModel.viewControllerApplicationSelected.name;
+                messageModel.run_id = applicationModel.viewControllerInstanceSelected.name;
 
                 // Display the modal view
                 $('#messageDisplay').modal({ show: true});

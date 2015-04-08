@@ -17,11 +17,15 @@ var UIMessages = React.createClass({
                 });
         });
 
+        messageModel.downloadMessages();
+
+        /*
         messageModel.fetchData("data/message.json");
 
         setTimeout(function() {
             messageModel.fetchData("data/message.json");
         }, 10000)
+        */
     },
     render: function () {
         var self = this;

@@ -5,6 +5,8 @@ var MessagesModel = function() {
     self._data = undefined;
     self._from = undefined;
     self._to = undefined;
+    self._app_id = undefined;
+    self._run_id = undefined;
     self._type = undefined;
 
     // Getter and setter
@@ -32,6 +34,22 @@ var MessagesModel = function() {
         notificationCenter.dispatch(Notifications.data.MESSAGE_DATA_CHANGE);
     });
 
+    self.__defineGetter__("app_id", function() {
+        return self._app_id;
+    });
+    self.__defineSetter__("app_id", function(app_id) {
+        self._app_id = app_id;
+        notificationCenter.dispatch(Notifications.data.MESSAGE_DATA_CHANGE);
+    });
+
+    self.__defineGetter__("run_id", function() {
+        return self._run_id;
+    });
+    self.__defineSetter__("run_id", function(run_id) {
+        self._run_id = run_id;
+        notificationCenter.dispatch(Notifications.data.MESSAGE_DATA_CHANGE);
+    });
+
     self.__defineGetter__("type", function() {
         return self._type;
     });
@@ -45,11 +63,21 @@ var MessagesModel = function() {
         // Place here the code for dealloc eventual objects
     };
 
+    /*
     self.fetchData = function(url) {
         d3.json(url, function(error, data) {
             if (error)
                 return console.warn(error);
 
+            self.data = data;
+        });
+    };
+    */
+
+    self.downloadMessages = function() {
+        console.log(self);
+        nutella.net.request("monitoring/message", {}, function(data) {
+            console.log(data);
             self.data = data;
         });
     };
