@@ -4,6 +4,7 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
             application: undefined,
             instance: undefined,
             component: undefined,
+            email: "",
             emails: []
 
         }
@@ -16,19 +17,56 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
             self.setState({
                 application: alertsModel.application,
                 instance: alertsModel.instance,
-                component: alertsModel.component,
-                emails: alertsModel.emails
+                component: alertsModel.component
             });
-
         });
 
-        alertsModel.fetchData("data/alert.json");
-
-        setTimeout(function() {
-            alertsModel.fetchData("data/alert.json");
-        }, 10000);
+        notificationCenter.subscribe(Notifications.alerts.EMAILS_CHANGE, function() {
+            self.setState({
+                emails: alertsModel.emails
+            });
+        });
     },
+    handleSubmit: function() {
 
+        var message = {
+            application: this.state.application,
+            mail: this.state.email
+        };
+
+        if(this.state.instance != undefined) {
+            message.instance = this.state.instance;
+        }
+
+        if(this.state.component != undefined) {
+            message.component = this.state.component;
+        }
+
+        nutella.net.publish("monitoring/alert/add", message);
+        alertsModel.fetchData();
+        console.log(message);
+    },
+    handleChange: function(event) {
+        this.setState({email: event.target.value});
+    },
+    handleDelete: function() {
+        alert("Delete ");
+        var message = {
+            application: this.state.application,
+            mail: this.state.email
+        };
+
+        if(this.state.instance != undefined) {
+            message.instance = this.state.instance;
+        }
+
+        if(this.state.component != undefined) {
+            message.component = this.state.component;
+        }
+
+        nutella.net.publish("monitoring/alert/remove", message);
+        alertsModel.fetchData();
+    },
     render: function() {
         var self = this;
 
@@ -37,7 +75,7 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
         var emails = this.state.emails.map(function(email, index) {
             return (
                 React.createElement("div", null, 
-                    React.createElement("button", {type: "button", className: "close", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
+                    React.createElement("button", {type: "button", className: "close", "aria-label": "Close", onClick: self.handleDelete}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
                     React.createElement("h4", {className: "modal-title", id: "myMailLabel"}, email)
                 )
 
@@ -54,9 +92,9 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
                     React.createElement("div", {className: "modal-body"}, 
                         React.createElement("div", {className: "input-group input-group-lg"}, 
                             React.createElement("span", {className: "input-group-addon", id: "sizing-addon1"}, "@"), 
-                            React.createElement("input", {type: "text", id: "subscribeEmail", className: "form-control", placeholder: "e-mail", "aria-describedby": "sizing-addon1"}), 
+                            React.createElement("input", {type: "text", id: "subscribeEmail", className: "form-control", placeholder: "e-mail", "aria-describedby": "sizing-addon1", value: this.state.email, onChange: this.handleChange}), 
                             React.createElement("span", {className: "input-group-btn"}, 
-                                React.createElement("button", {className: "btn btn-default", type: "button", id: "subscribeButton"}, "Subscribe")
+                                React.createElement("button", {className: "btn btn-default", type: "button", id: "subscribeButton", onClick: this.handleSubmit}, "Subscribe")
                             )
                         ), 
                         React.createElement("div", {className: "emails"}, 

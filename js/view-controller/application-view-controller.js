@@ -52,6 +52,14 @@ var ApplicationViewController = function(name, view) {
         self.clicked();
     };
 
+    self.subscribeButtonClicked = function() {
+        alertsModel.application = self.name;
+        alertsModel.instance = undefined;
+        alertsModel.component = undefined;
+        $('#mailDisplay').modal({ show: true});
+        alertsModel.fetchData();
+    };
+
     self.reduce = function() {
         if(self.expanded == true) {
             applicationModel.viewControllerApplicationSelected = undefined;

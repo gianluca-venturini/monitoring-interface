@@ -7,7 +7,8 @@ Notifications.data = {
 
 
 Notifications.alerts = {
-    ALERT_CHANGE: "alerts.ALERT_CHANGE"
+    ALERT_CHANGE: "alerts.ALERT_CHANGE",
+    EMAILS_CHANGE: "alerts.EMAILS_CHANGE"
 };
 
 Notifications.ui = {

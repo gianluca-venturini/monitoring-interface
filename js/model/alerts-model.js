@@ -37,7 +37,7 @@ var AlertsModel = function() {
     });
     self.__defineSetter__("emails", function(emails) {
         self._emails = emails;
-        notificationCenter.dispatch(Notifications.alerts.ALERT_CHANGE);
+        notificationCenter.dispatch(Notifications.alerts.EMAILS_CHANGE);
     });
 
     // Destructor
@@ -45,20 +45,24 @@ var AlertsModel = function() {
         // Place here the code for dealloc eventual objects
     };
 
-    self.fetchData = function(url) {
-        d3.json(url, function(error, data) {
-            if (error)
-                return console.warn(error);
+    self.fetchData = function() {
 
+        var request = {
+            application: self.application
+        };
+
+        if(self.instance != undefined) {
+            request.instance = self.instance;
+        }
+
+        if(self.component != undefined) {
+            request.component = self.component;
+        }
+
+        alert("fetch data");
+        nutella.net.request("monitoring/alert", request, function(data) {
+            alert("Dati pronti");
             self.emails = data.emails;
-            self.application = data.application;
-            if(data.instance) {
-                self.instance = data.instance;
-            }
-            if(data.component) {
-                self.component = data.component;
-            }
-
         });
     };
 
