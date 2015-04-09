@@ -99,6 +99,16 @@ var UILegend = function(delegate, name) {
             self._legendName = self._legendGroup
                 .append("text")
                 .class("legendName")
+                .class("title")
+                .fill(defaultPalette.text.dark)
+                .on("mouseover", function() {
+                    self._legendName.style("text-decoration", "underline");
+                    self._legendName.fill("black");
+                })
+                .on("mouseout", function() {
+                    self._legendName.style("text-decoration", "none");
+                    self._legendName.fill(defaultPalette.text.dark);
+                })
                 .text("Legend")
                 .class("pointer")
                 .y(0)
@@ -107,8 +117,11 @@ var UILegend = function(delegate, name) {
 
         if(self._expanded){
             self._legendName
+                .on("mouseout", null)
                 .transition()
-                .y(UILegend.style.legendPositionYExpanded);
+                .y(UILegend.style.legendPositionYExpanded)
+                .style("text-decoration", "underline")
+                .fill("black");
 
             self._arrowGroup
                 .attr("transform", "translate(0," + (UILegend.style.legendPositionYExpanded + UILegend.style.headerSpacing + UILegend.style.legendSpacing) +")")
@@ -125,8 +138,14 @@ var UILegend = function(delegate, name) {
 
         if(!self._expanded){
             self._legendName
+                .on("mouseout", function() {
+                    self._legendName.style("text-decoration", "none");
+                    self._legendName.fill(defaultPalette.text.dark);
+                })
                 .transition()
-                .y(0);
+                .y(0)
+                .style("text-decoration", "none")
+                .fill(defaultPalette.text.dark);
 
             self._arrowGroup
                 .attr("transform", "translate(0,0)")
