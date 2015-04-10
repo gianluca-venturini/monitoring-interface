@@ -59,9 +59,7 @@ var AlertsModel = function() {
             request.component = self.component;
         }
 
-        alert("fetch data");
         nutella.net.request("monitoring/alert", request, function(data) {
-            alert("Dati pronti");
             self.emails = data.emails;
         });
     };
