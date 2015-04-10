@@ -28,12 +28,13 @@ var UIApplication = function(delegate) {
     self.openOptionRect = function (optionGroup) {
         optionGroup
             .transition()
-            .attr("transform", "translate(0," + UIApplication.style.optionRectHeight + ")");
+            .attr("transform", "translate(0," + (UIApplication.style.optionRectHeight -1) + ")");
     };
 
     self.closeOptionRect = function (optionGroup) {
         optionGroup
             .transition()
+            .delay(250)
             .attr("transform", "translate(0," + (- UIApplication.style.optionRectHeight) + ")");
     };
 

@@ -54,6 +54,14 @@ var UIConnectionView = function(delegate) {
             d3.select("#"+component.name+"MessageBox")
                 .transition()
                 .height(UIConnectionView.style.toolBoxHeight);
+            d3.select("#"+component.name+"SubscribeText")
+                .transition()
+                .delay(250)
+                .opacity(1);
+            d3.select("#"+component.name+"SendMessageText")
+                .transition()
+                .delay(250)
+                .opacity(1);
         };
 
         var closeOptionRect = function(component){
@@ -61,6 +69,16 @@ var UIConnectionView = function(delegate) {
                 .transition()
                 .delay(250)
                 .height(0);
+            d3.select("#"+component.name+"SubscribeText")
+                .transition()
+                .duration(100)
+                .delay(250)
+                .opacity(0);
+            d3.select("#"+component.name+"SendMessageText")
+                .transition()
+                .duration(100)
+                .delay(250)
+                .opacity(0);
             d3.select("#"+component.name+"MessageBox")
                 .transition()
                 .delay(250)
@@ -132,7 +150,7 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("ciao simona")
+                        alert("SubscribeBox")
                     })
                     .attr("id", function() {
                         return component.name+"SubscribeBox";
@@ -154,7 +172,7 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("ciao simona")
+                        alert("MessageBox")
                     })
                     .attr("id", function() {
                         return component.name+"MessageBox";
@@ -163,14 +181,18 @@ var UIConnectionView = function(delegate) {
 
                 componentToolBoxesGroup
                     .append("text")
-                    .fill("white")
+                    .fill(defaultPalette.text.bright)
                     .text("subscribe")
+                    .opacity(0)
                     .attr("text-anchor", "middle")
                     .on("mouseover", function() {
                         openOptionRect(component);
                     })
                     .on("mouseout", function () {
                         closeOptionRect(component);
+                    })
+                    .on("click", function() {
+                        alert("SubscribeBox")
                     })
                     .attr("id", function() {
                         return component.name+"SubscribeText";
@@ -178,7 +200,8 @@ var UIConnectionView = function(delegate) {
 
                 componentToolBoxesGroup
                     .append("text")
-                    .fill("white")
+                    .opacity(0)
+                    .fill(defaultPalette.text.bright)
                     .text("message")
                     .attr("text-anchor", "middle")
                     .on("mouseover", function() {
@@ -186,6 +209,9 @@ var UIConnectionView = function(delegate) {
                     })
                     .on("mouseout", function () {
                         closeOptionRect(component);
+                    })
+                    .on("click", function() {
+                        alert("MessageBox")
                     })
                     .attr("id", function() {
                         return component.name+"SendMessageText";
@@ -459,12 +485,11 @@ var UIConnectionView = function(delegate) {
             .enter()
             .append("text")
             .class("componentName")
+            .class("pointer")
             .fill(defaultPalette.text.dark)
             .opacity(0)
             .on("mouseover", function(d) {
-
                 openOptionRect(d);
-
             })
             .on("mouseout", function(d) {
                 closeOptionRect(d);
