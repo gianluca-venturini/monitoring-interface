@@ -158,9 +158,7 @@ var UIApplication = function(delegate) {
                 .class("optionRect")
                 .class("pointer")
                 .on("click", function() {
-                    //alert("ciao simona")
                     delegate.subscribeButtonClicked();
-                    //$('#mailDisplay').modal({ show: true});
                 });
         }
 
