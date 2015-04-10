@@ -4,7 +4,7 @@ var UILegend = function(delegate, name) {
     // Static attributes
     UILegend.style = {
         legendBoxWidth: 100,
-        legendLeftMargin: 150,
+        legendRightMargin: 50,
         bottomMargin: 50,
         legendPositionYExpanded: -70,
         headerSpacing: 10,
@@ -48,7 +48,7 @@ var UILegend = function(delegate, name) {
             self._legendGroup = layer
                 .append("g")
                 .class("legendGroup")
-                .attr("transform", "translate(" + (windowViewController.width / 2 - UILegend.style.legendLeftMargin) + "," + (windowViewController.height / 2 - UILegend.style.bottomMargin) +")");
+                .attr("transform", "translate(" + (windowViewController.width / 2 - UILegend.style.legendBoxWidth - UILegend.style.legendRightMargin) + "," + (windowViewController.height / 2 - UILegend.style.bottomMargin) +")");
         }
 
         if(self._arrowGroup == undefined){
@@ -102,11 +102,9 @@ var UILegend = function(delegate, name) {
                 .class("title")
                 .fill(defaultPalette.text.dark)
                 .on("mouseover", function() {
-                    self._legendName.style("text-decoration", "underline");
                     self._legendName.fill("black");
                 })
                 .on("mouseout", function() {
-                    self._legendName.style("text-decoration", "none");
                     self._legendName.fill(defaultPalette.text.dark);
                 })
                 .text("Legend")
@@ -120,7 +118,6 @@ var UILegend = function(delegate, name) {
                 .on("mouseout", null)
                 .transition()
                 .y(UILegend.style.legendPositionYExpanded)
-                .style("text-decoration", "underline")
                 .fill("black");
 
             self._arrowGroup
@@ -139,12 +136,10 @@ var UILegend = function(delegate, name) {
         if(!self._expanded){
             self._legendName
                 .on("mouseout", function() {
-                    self._legendName.style("text-decoration", "none");
                     self._legendName.fill(defaultPalette.text.dark);
                 })
                 .transition()
                 .y(0)
-                .style("text-decoration", "none")
                 .fill(defaultPalette.text.dark);
 
             self._arrowGroup
