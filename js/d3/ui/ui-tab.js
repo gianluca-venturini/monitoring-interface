@@ -60,7 +60,8 @@ var UITab = function(delegate, name) {
                     }
                 })
                 .on("click", function() {
-                    alert("ciao simona")
+                    self.delegate.subscribeButtonClicked();
+                    //alert("ciao simona")
                 })
                 .opacity(0);
         }

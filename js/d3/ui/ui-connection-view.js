@@ -150,7 +150,12 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("SubscribeBox")
+                        alert("SubscribeBox " + component.name);
+                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
+                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
+                        alertsModel.component = component.name;
+                        $('#mailDisplay').modal({ show: true});
+                        alertsModel.fetchData();
                     })
                     .attr("id", function() {
                         return component.name+"SubscribeBox";
@@ -185,6 +190,7 @@ var UIConnectionView = function(delegate) {
                     .text("subscribe")
                     .opacity(0)
                     .attr("text-anchor", "middle")
+                    /*
                     .on("mouseover", function() {
                         openOptionRect(component);
                     })
@@ -192,8 +198,10 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("SubscribeBox")
+                        alert("SubscribeBox - 2")
                     })
+                    */
+                    .class("no_interaction")
                     .attr("id", function() {
                         return component.name+"SubscribeText";
                     });

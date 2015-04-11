@@ -60,6 +60,14 @@ var InstanceViewController = function(parentApplicationViewController, name, ind
         }
     };
 
+    self.subscribeButtonClicked = function() {
+        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
+        alertsModel.instance = self.name;
+        alertsModel.component = undefined;
+        $('#mailDisplay').modal({ show: true});
+        alertsModel.fetchData();
+    };
+
     // Getters
     self.__defineGetter__("selected", function() {
         if(applicationModel.viewControllerInstanceSelected == undefined)
