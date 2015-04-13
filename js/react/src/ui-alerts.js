@@ -136,14 +136,7 @@ var UIAlerts = React.createClass ({
                 </div>
             </div>
         );
-    },
-
-    componentDidUpdate: function() {
-        $('pre code').each(function(i, block) {
-            hljs.highlightBlock(block);
-        });
     }
-
 });
 
 function validateEmail(email) {

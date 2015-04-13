@@ -150,7 +150,6 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("SubscribeBox " + component.name);
                         alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
                         alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
                         alertsModel.component = component.name;

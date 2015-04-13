@@ -53,10 +53,10 @@ var ApplicationViewController = function(name, view) {
     };
 
     self.subscribeButtonClicked = function() {
+        $('#mailDisplay').modal({ show: true});
         alertsModel.application = self.name;
         alertsModel.instance = undefined;
         alertsModel.component = undefined;
-        $('#mailDisplay').modal({ show: true});
         alertsModel.fetchData();
     };
 

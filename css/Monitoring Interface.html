@@ -184,23 +184,6 @@
 
 <script>
 
-    // Color the code
-    $(document).ready(function() {
-        $('pre code').each(function(i, block) {
-            try {
-                console.log(block);
-                var json = JSON.parse(block.innerHTML);
-                block.innerHTML = JSON.stringify(json, null, 4);
-                hljs.highlightBlock(block);
-                //hljs.highlightBlock(block)
-            }
-            catch(err) {
-                alert("Not json");
-            }
-
-        });
-    });
-
     var svg = d3.select("#container");
 
     // Set background color
