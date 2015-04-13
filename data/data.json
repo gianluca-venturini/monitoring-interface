@@ -389,7 +389,7 @@
                   "channel": "channel6"
                 },
                 {
-                  "channel": "channel7"
+                  "channel": "channel1"
                 }
               ],
               "handle_request": [
@@ -499,7 +499,7 @@
               ],
               "request": [
                 {
-                  "channel": "channel6"
+                  "channel": "channel1"
                 }
               ],
               "handle_request": [
@@ -575,7 +575,7 @@
               ],
               "handle_request": [
                 {
-                  "channel": "channel24"
+                  "channel": "channel1"
                 },
                 {
                   "channel": "channel25"
@@ -610,6 +610,9 @@
               "request": [
                 {
                   "channel": "channel5"
+                },
+                {
+                  "channel": "channel1"
                 }
               ],
               "handle_request": [
