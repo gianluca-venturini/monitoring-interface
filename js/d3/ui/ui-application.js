@@ -175,8 +175,7 @@ var UIApplication = function(delegate) {
                     delegate.mouseOverEffect(applicationBackground, self.palette.accent1.bright);
                 })
                 .y(UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight + 15)
-                .text("subscribe")
-                .class("no_interaction");
+                .text("subscribe");
 
             /*mailIcon = optionGroup.append("svg:image")
                 .on("mouseover", function() {
