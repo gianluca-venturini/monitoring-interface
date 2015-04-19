@@ -1,131 +1,199 @@
-var UIMailInput = React.createClass ({displayName: "UIMailInput",
+var UIJSONAttribute = React.createClass ({displayName: "UIJSONAttribute",
     getInitialState: function() {
-        return {
-            email: "",
-            validMail: undefined
-        }
+        return({
+            type: "string",
+            value: "",
+            key: ""
+        })
     },
-    handleSubmit: function() {
-
-        if(validateEmail(this.state.email) == false)
-            return;
-
-        var message = {
-            application: this.props.application,
-            mail: this.state.email
-        };
-
-        if(this.props.instance != undefined) {
-            message.instance = this.props.instance;
+    handleTypeChange: function(type) {
+        this.setState({type: type})
+    },
+    handleKeyChange: function(event) {
+        switch(this.state.type) {
+            case "string":
+                this.setState({key: event.target.value});
+                break;
         }
-
-        if(this.props.component != undefined) {
-            message.component = this.props.component;
+        this.props.updateJSON();
+    },
+    handleValueChange: function() {
+        switch(this.state.type) {
+            case "string":
+                this.setState({value: event.target.value});
+                break;
         }
-
-        nutella.net.publish("monitoring/alert/add", message);
-        alertsModel.fetchData();
-        console.log(message);
+        this.props.updateJSON();
+    },
+    getJson: function() {
+        //alert("getJson UIJSONAttribute");
+        var json = {};
+        switch(this.state.type) {
+            case "string":
+                json[this.refs.key.getDOMNode().value] = this.refs.value.getDOMNode().value;
+                break;
+            case "object":
+                json[this.refs.key.getDOMNode().value] = this.refs.object.getJson();
+                break;
+        }
+        return json;
     },
     render: function() {
-        var error = "has-success";
-        var btn = "btn-success";
-        if(this.state.validMail == false) {
-            error = "has-error";
-            btn = "btn-danger";
-        }
-        if(this.state.validMail == undefined) {
-            error = "has-warning";
-            btn = "btn-warning";
+
+        var self = this;
+
+        var inputBox = "";
+        switch(this.state.type) {
+            case "string":
+                inputBox =  React.createElement("div", {className: "col-lg-4 col-md-4 col-sm-4", style: {padding: "10px"}}, 
+                                React.createElement("input", {
+                                    onChange: this.handleValueChange, 
+                                    type: "text", className: "form-control", 
+                                    placeholder: "String", 
+                                    "aria-describedby": "basic-addon2", 
+                                    value: this.state.value, 
+                                    ref: "value"})
+                            );
+                break;
+            case "object":
+                inputBox =  React.createElement("div", {className: "col-lg-12 col-md-12 col-sm-12", style: {padding: "10px"}}, 
+                                React.createElement(UIJSONObject, {updateJSON: this.props.updateJSON, ref: "object"})
+                            );
+                break;
         }
 
-        return(
-            React.createElement("div", {className: "input-group input-group-lg "+error}, 
-                React.createElement("span", {className: "input-group-addon", id: "sizing-addon1"}, "@"), 
-                React.createElement("input", {type: "text", id: "subscribeEmail", className: "form-control", placeholder: "e-mail", "aria-describedby": "sizing-addon1", value: this.state.email, onChange: this.handleChange}), 
-                React.createElement("span", {className: "input-group-btn"}, 
-                    React.createElement("button", {className: "btn "+btn, type: "button", id: "subscribeButton", onClick: this.handleSubmit}, "Subscribe")
-                )
+        return (
+            React.createElement("div", null, 
+                React.createElement("div", {className: "col-lg-6 col-md-6 col-sm-6 ", style: {padding: "10px"}}, 
+                    React.createElement("div", {className: "input-group"}, 
+                        React.createElement("input", {
+                            onChange: this.handleKeyChange, 
+                            type: "text", className: "form-control", 
+                            placeholder: "Key", 
+                            "aria-describedby": "basic-addon2", 
+                            value: this.state.key, 
+                            ref: "key"}), 
+                        React.createElement("div", {className: "input-group-btn"}, 
+                            React.createElement("button", {className: "btn btn-default dropdown-toggle", type: "button", id: "menu1", "data-toggle": "dropdown"}, self.state.type, 
+                                React.createElement("span", {className: "caret"})), 
+                            React.createElement("ul", {className: "dropdown-menu", role: "menu", "aria-labelledby": "menu1"}, 
+                                React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", tabindex: "-1", onClick: function() { self.handleTypeChange("string")}}, "String")), 
+                                React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", tabindex: "-1", onClick: function() { self.handleTypeChange("number")}}, "Number")), 
+                                React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", tabindex: "-1", onClick: function() { self.handleTypeChange("array")}}, "Array")), 
+                                React.createElement("li", {role: "presentation"}, React.createElement("a", {role: "menuitem", tabindex: "-1", onClick: function() { self.handleTypeChange("object")}}, "Object"))
+                            )
+                        )
+                    )
+                ), 
+                inputBox
             )
-        )
+        );
     }
 });
 
-var UIAlerts = React.createClass ({displayName: "UIAlerts",
+var UIJSONObject = React.createClass ({displayName: "UIJSONObject",
+    getInitialState: function() {
+        return({
+            attributes: 2
+        })
+    },
+    getJson: function() {
+        //alert("Get json UIJSONObject");
+        var json = {};
+
+        // Construct the json with the children
+        for(var i = 0; i < this.state.attributes; i++) {
+            var attribute = this.refs['object-attribute-' + i].getJson();
+            json = _.extend(json, attribute);
+        }
+        return json;
+    },
+    render: function() {
+        var attributes = [];
+
+        for(var i = 0; i < this.state.attributes; i++) {
+            attributes.push(React.createElement(UIJSONAttribute, {updateJSON: this.props.updateJSON, ref: "object-attribute-" + i}));
+        }
+
+        return(
+            React.createElement("div", {className: "panel panel-default"}, 
+                React.createElement("div", {className: "panel-body"}, 
+                    attributes
+                )
+            )
+        );
+    }
+});
+
+var UIJSONRender = React.createClass ({displayName: "UIJSONRender",
+    render: function() {
+        return(
+            React.createElement("pre", null, 
+                React.createElement("code", {className: "JSON"}, 
+                    JSON.stringify(this.props.json, null, 4)
+                )
+            )
+        );
+    },
+    /*
+    componentDidUpdate: function() {
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    }
+    */
+});
+
+var UIMessageSend = React.createClass ({displayName: "UIMessageSend",
     getInitialState: function() {
         return {
             application: undefined,
             instance: undefined,
             component: undefined,
-            emails: []
-
+            json: {}
         }
     },
 
     componentDidMount: function() {
         var self = this;
-
-        notificationCenter.subscribe(Notifications.alerts.ALERT_CHANGE, function() {
-            self.setState({
-                application: alertsModel.application,
-                instance: alertsModel.instance,
-                component: alertsModel.component
-            });
-        });
-
-        notificationCenter.subscribe(Notifications.alerts.EMAILS_CHANGE, function() {
-            self.setState({
-                emails: alertsModel.emails
-            });
-        });
     },
-    handleDelete: function(mail) {
-        var message = {
-            application: this.state.application,
-            mail: mail
-        };
-
-        if(this.state.instance != undefined) {
-            message.instance = this.state.instance;
-        }
-
-        if(this.state.component != undefined) {
-            message.component = this.state.component;
-        }
-
-        nutella.net.publish("monitoring/alert/remove", message);
-        alertsModel.fetchData();
+    updateJSON: function() {
+        //alert("Update JSON");
+        console.log(this.refs.jsonObject.getJson());
+        this.setState({json: this.refs.jsonObject.getJson()})
     },
     render: function() {
         var self = this;
 
-        //<div className="floatLeft"><h4>{email}</h4></div>
-        //<div className="floatLeft"><h4><b>X</b></h4></div>
-        var emails = this.state.emails.map(function(email, index) {
-            return (
-                React.createElement("div", {key: index}, 
-                    React.createElement("button", {type: "button", className: "close", "aria-label": "Close", onClick: _.partial(self.handleDelete, email)}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                    React.createElement("h4", {className: "modal-title", id: "myMailLabel"}, email)
-                )
+        subscription = [];
 
-            )
-        });
+        if(this.state.application != undefined) {
+            subscription.push(React.createElement("span", null, "application: ", React.createElement("span", {className: "label label-default"}, this.state.application)));
+        }
 
+        if(this.state.instance != undefined) {
+            subscription.push(React.createElement("span", null, " instance: ", React.createElement("span", {className: "label label-default"}, this.state.instance)));
+        }
+
+        if(this.state.component != undefined) {
+            subscription.push(React.createElement("span", null, " component: ", React.createElement("span", {className: "label label-default"}, this.state.component)));
+        }
 
         return (
             React.createElement("div", {className: "modal-dialog modal-messages"}, 
                 React.createElement("div", {className: "modal-content"}, 
                     React.createElement("div", {className: "modal-header"}, 
                         React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                        React.createElement("h4", {className: "modal-title", id: "myMailLabel"}, "Subscription")
+                        React.createElement("h4", {className: "modal-title text-center", id: "myMailLabel"}, "Send message to ", subscription)
                     ), 
                     React.createElement("div", {className: "modal-body"}, 
-                        React.createElement(UIMailInput, {application: self.state.application, instance: self.state.instance, component: self.state.component}), 
-                        React.createElement("div", {className: "emails"}, 
-                            emails
+                        React.createElement("div", {className: "col-lg-4 col-md-4 col-sm-4"}, 
+                            React.createElement(UIJSONRender, {json: this.state.json})
+                        ), 
+                        React.createElement("div", {className: "col-lg-8 col-md-8 col-sm-8"}, 
+                            React.createElement(UIJSONObject, {updateJSON: this.updateJSON, ref: "jsonObject"})
                         )
                     ), 
-
                     React.createElement("div", {className: "modal-footer"}, 
                         React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, "Close")
                     )
@@ -134,3 +202,4 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
         );
     }
 });
+

@@ -176,7 +176,7 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                     })
                     .on("click", function() {
-                        alert("MessageBox")
+                        $('#messageSend').modal({ show: true});
                     })
                     .attr("id", function() {
                         return component.name+"MessageBox";
@@ -211,6 +211,7 @@ var UIConnectionView = function(delegate) {
                     .fill(defaultPalette.text.bright)
                     .text("message")
                     .attr("text-anchor", "middle")
+                    /*
                     .on("mouseover", function() {
                         openOptionRect(component);
                     })
@@ -220,6 +221,8 @@ var UIConnectionView = function(delegate) {
                     .on("click", function() {
                         alert("MessageBox")
                     })
+                    */
+                    .class("no_interaction")
                     .attr("id", function() {
                         return component.name+"SendMessageText";
                     });

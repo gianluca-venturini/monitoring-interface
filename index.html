@@ -52,6 +52,7 @@
 
     <script type="application/javascript" src="js/react/dist/ui-messages.js"></script>
     <script type="application/javascript" src="js/react/dist/ui-alerts.js"></script>
+    <script type="application/javascript" src="js/react/dist/ui-message-send.js"></script>
 
     <!-- Scripts -->
     <script src="js/lib/nutella_lib.js"></script>
@@ -83,6 +84,11 @@
     React.render(
             <UIAlerts/>,
             document.getElementById('mailDisplay')
+    );
+
+    React.render(
+            <UIMessageSend/>,
+            document.getElementById('messageSend')
     );
 </script>
 

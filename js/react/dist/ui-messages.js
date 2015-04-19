@@ -28,7 +28,6 @@ var UIMessages = React.createClass({displayName: "UIMessages",
         */
     },
     render: function () {
-        console.log("Render");
         var self = this;
 
         var messages = this.state.messages.map(function(message, index) {
