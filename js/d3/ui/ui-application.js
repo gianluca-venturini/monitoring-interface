@@ -236,8 +236,12 @@ var UIApplication = function(delegate) {
 
             // move close button
             closeIcon
-                .on("mouseover", null)
-                .on("mouseout", null)
+                .on("mouseover", function(){
+                    d3.select(this).fill("#bdc3c7");
+                })
+                .on("mouseout", function () {
+                    d3.select(this).fill(self.palette.text.bright)
+                })
                 .transition()
                 .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backTextXMargin)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backTextYMargin)
@@ -280,10 +284,9 @@ var UIApplication = function(delegate) {
             closeIcon
                 .on("mouseover", null)
                 .on("mouseout", null)
+                .fill(self.palette.text.bright)
                 .x(0)
                 .y(0)
-                .width(0)
-                .height(0)
                 .style("opacity", 0);
 
             optionRect
