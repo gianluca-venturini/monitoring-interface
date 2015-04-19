@@ -11,7 +11,9 @@ var UIApplication = function(delegate) {
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
-        disabledStatusColor: defaultPalette.state.red
+        disabledStatusColor: defaultPalette.state.red,
+        backTextYMargin: 20,
+        backTextXMargin: 100
     };
 
     // Public variables
@@ -141,16 +143,29 @@ var UIApplication = function(delegate) {
 
         // add close button
         if(closeIcon == undefined) {
-            closeIcon = nameGroup.append("svg:image")
-                .attr('width', 20)
-                .attr('height', 20)
-                .attr("xlink:href", "img/cross_red_border_white.svg")
+            closeIcon = nameGroup.append("text")
+                .text("Back")
+                .fill(self.palette.text.bright)
                 .class("closeApp")
                 .class("pointer")
                 .style("opacity", 0)
+                .attr("text-anchor", "middle")
                 .on("click", function () {
                     delegate.closeButtonClicked();
                 });
+
+            /*
+             closeIcon = nameGroup.append("svg:image")
+             .attr('width', 20)
+             .attr('height', 20)
+             .attr("xlink:href", "img/cross_red_border_white.svg")
+             .class("closeApp")
+             .class("pointer")
+             .style("opacity", 0)
+             .on("click", function () {
+             delegate.closeButtonClicked();
+             });
+            */
         }
 
         if(optionRect == undefined) {
@@ -221,22 +236,31 @@ var UIApplication = function(delegate) {
 
             // move close button
             closeIcon
-                .on("mouseover", function() {
-                    d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
-                })
-                .on("mouseout", function() {
-                    d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
-                })
+                .on("mouseover", null)
+                .on("mouseout", null)
                 .transition()
-                .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
-                .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
-                .width(40)
-                .height(40)
-                .attr("xlink:href","img/cross_red_border_white.svg")
+                .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backTextXMargin)
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backTextYMargin)
                 .transition()
                 .delay(750)
                 .style("opacity", 1);
-
+            /*
+            * closeIcon
+             .on("mouseover", function() {
+             d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
+             })
+             .on("mouseout", function() {
+             d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
+             })
+             .transition()
+             .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
+             .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
+             .width(40)
+             .height(40)
+             .attr("xlink:href","img/cross_red_border_white.svg")
+             .transition()
+             .delay(750)
+             .style("opacity", 1);*/
 
 
         }
