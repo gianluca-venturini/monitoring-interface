@@ -92,7 +92,7 @@ var UILegend = function(delegate, name) {
                 .width(UILegend.style.square_side)
                 .attr("fill", self.palette.accent1.dark)
                 .x(-11)
-                .y(-8);;
+                .y(-8);
         }
 
         if(self._legendName == undefined) {

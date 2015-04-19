@@ -13,7 +13,11 @@ var UIApplication = function(delegate) {
         activeStatusColor: defaultPalette.state.green,
         disabledStatusColor: defaultPalette.state.red,
         backTextYMargin: 20,
-        backTextXMargin: 100
+        backTextXMargin: 100,
+        arrow_thick: 5,
+        arrow_width: 30,
+        arrow_bottom_margin: 2,
+        optionRectCloseDelay: 250
     };
 
     // Public variables
@@ -36,7 +40,7 @@ var UIApplication = function(delegate) {
     self.closeOptionRect = function (optionGroup) {
         optionGroup
             .transition()
-            .delay(250)
+            .delay(UIApplication.style.optionRectCloseDelay)
             .attr("transform", "translate(0," + (- UIApplication.style.optionRectHeight) + ")");
     };
 
@@ -49,10 +53,27 @@ var UIApplication = function(delegate) {
     var appName = undefined;
     var mailIcon = undefined;
     var closeIcon = undefined;
+    var optionSignifier = undefined;
 
     self.render = function() {
 
         var layer = self.view;
+
+        // function for the rendering of the triangle and square
+        var lineFunction = d3.svg.line()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .interpolate("linear");
+        // Triangle data
+        var arrowData = [
+            { "x":  0.0, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2 + UIApplication.style.arrow_bottom_margin},
+            { "x":  1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 - UIApplication.style.arrow_width, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x":  1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 - UIApplication.style.arrow_width - UIApplication.style.arrow_thick, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x":  0.0, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2 + UIApplication.style.arrow_bottom_margin + 2},
+            { "x":  -1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 + UIApplication.style.arrow_width + UIApplication.style.arrow_thick, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x": -1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 + UIApplication.style.arrow_width, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10}
+        ];
+
 
         // Create option group
         // it must be created before the app bg to perform the slide
@@ -99,10 +120,18 @@ var UIApplication = function(delegate) {
                 .on("mouseover", function() {
                     d3.select(this).fill(self.palette.accent1.bright);
                     self.openOptionRect(optionGroup);
+                    optionSignifier
+                        .opacity(0)
                 })
                 .on("mouseout", function() {
                     d3.select(this).fill(self.palette.accent1.normal);
                     self.closeOptionRect(optionGroup);
+                    optionSignifier
+                        .attr("d", lineFunction(arrowData))
+                        .transition()
+                        .delay(UIApplication.style.optionRectCloseDelay)
+                        .opacity(1);
+
                 })
                 .transition()
                 .fill(self.palette.accent1.normal)
@@ -177,6 +206,14 @@ var UIApplication = function(delegate) {
                 });
         }
 
+        if(optionSignifier == undefined) {
+            optionSignifier = layer
+                .append("path")
+                .attr("d", lineFunction(arrowData))
+                .attr("fill", self.palette.text.bright)
+                .attr("transform", "rotate(180)");
+        }
+
         // add mail icon to the option group
         if(mailIcon == undefined) {
             mailIcon = optionGroup.append("text")
@@ -234,8 +271,11 @@ var UIApplication = function(delegate) {
                 .attr('height', UIApplication.style.headerRectHeightExpanded)
                 .transition();
 
+
             // move close button
+
             closeIcon
+                .text("Back")
                 .on("mouseover", function(){
                     d3.select(this).fill("#bdc3c7");
                 })
@@ -248,6 +288,7 @@ var UIApplication = function(delegate) {
                 .transition()
                 .delay(750)
                 .style("opacity", 1);
+
             /*
             * closeIcon
              .on("mouseover", function() {
@@ -266,6 +307,8 @@ var UIApplication = function(delegate) {
              .delay(750)
              .style("opacity", 1);*/
 
+            optionSignifier.attr("d", null);
+
 
         }
         else {
@@ -282,12 +325,7 @@ var UIApplication = function(delegate) {
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
 
             closeIcon
-                .on("mouseover", null)
-                .on("mouseout", null)
-                .fill(self.palette.text.bright)
-                .x(0)
-                .y(0)
-                .style("opacity", 0);
+                .text("");
 
             optionRect
                 .on("mouseover", function () {
@@ -303,6 +341,12 @@ var UIApplication = function(delegate) {
                 .x( - UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
                 .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight)
                 .fill(self.palette.accent1.normal);
+
+            optionSignifier
+                .attr("d", lineFunction(arrowData))
+                .transition()
+                .delay(UIApplication.style.optionRectCloseDelay)
+                .opacity(1);
         }
 
         appName
