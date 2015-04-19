@@ -3,6 +3,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var react = require('gulp-react');
 var htmlreplace = require('gulp-html-replace');
+var plumber = require('gulp-plumber');
 
 var path = {
   HTML: 'index.html',
@@ -16,12 +17,13 @@ var path = {
 
 gulp.task('transform', function(){
   gulp.src(path.JS)
-    .pipe(react())
-    .pipe(gulp.dest(path.DEST_SRC));
+      .pipe(plumber())
+      .pipe(react())
+      .pipe(gulp.dest(path.DEST_SRC));
 });
 
 gulp.task('watch', function(){
   gulp.watch(path.ALL, ['transform']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['transform','watch']);

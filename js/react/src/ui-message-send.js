@@ -5,16 +5,10 @@ var UIMailInput = React.createClass ({
             validMail: undefined
         }
     },
-    handleChange: function(event) {
-        this.setState({email: event.target.value,
-            validMail: validateEmail(event.target.value) ? true : undefined});
-    },
     handleSubmit: function() {
 
-        if(validateEmail(this.state.email) == false) {
-            this.setState({validMail: false});
+        if(validateEmail(this.state.email) == false)
             return;
-        }
 
         var message = {
             application: this.props.application,
@@ -105,61 +99,30 @@ var UIAlerts = React.createClass ({
     render: function() {
         var self = this;
 
-                    //<div className="floatLeft"><h4>{email}</h4></div>
-                    //<div className="floatLeft"><h4><b>X</b></h4></div>
+        //<div className="floatLeft"><h4>{email}</h4></div>
+        //<div className="floatLeft"><h4><b>X</b></h4></div>
         var emails = this.state.emails.map(function(email, index) {
             return (
-                <tr key={index}>
-                    <td>
-                        Administrator
-                    </td>
-                    <td>
-                        {email}
-                    </td>
-                    <td>
-                        <button type="button" className="close" aria-label="Close" onClick={_.partial(self.handleDelete, email)}><span aria-hidden="true">&times;</span></button>
-                    </td>
-                </tr>
+                <div key={index}>
+                    <button type="button" className="close" aria-label="Close" onClick={_.partial(self.handleDelete, email)}><span aria-hidden="true">&times;</span></button>
+                    <h4 className="modal-title" id="myMailLabel">{email}</h4>
+                </div>
 
             )
         });
 
-        subscription = [];
-
-        if(this.state.application != undefined) {
-            subscription.push(<span>application: <span className="label label-default">{this.state.application}</span></span>);
-        }
-
-        if(this.state.instance != undefined) {
-            subscription.push(<span> instance: <span className="label label-default">{this.state.instance}</span></span>);
-        }
-
-        if(this.state.component != undefined) {
-            subscription.push(<span> component: <span className="label label-default">{this.state.component}</span></span>);
-        }
 
         return (
             <div className="modal-dialog modal-messages">
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 className="modal-title text-center" id="myMailLabel">Subscription to {subscription}</h4>
+                        <h4 className="modal-title" id="myMailLabel">Subscription</h4>
                     </div>
                     <div className="modal-body">
                         <UIMailInput application={self.state.application} instance={self.state.instance} component={self.state.component}/>
-                        <div className = "panel panel-default">
-                            <table className="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Role</th>
-                                    <th>Email</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {emails}
-                                </tbody>
-                            </table>
+                        <div className = "emails">
+                            {emails}
                         </div>
                     </div>
 
@@ -171,8 +134,3 @@ var UIAlerts = React.createClass ({
         );
     }
 });
-
-function validateEmail(email) {
-    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    return re.test(email);
-}
