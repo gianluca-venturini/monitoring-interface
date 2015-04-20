@@ -30,6 +30,7 @@ var UITab = function(delegate, name) {
             .attr("transform", "translate(" + (- UITab.style.optionRectWidth) + ", 0)");
     };
 
+
     self.render = function() {
 
         var layer = self.view;
