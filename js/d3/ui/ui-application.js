@@ -200,6 +200,7 @@ var UIApplication = function(delegate) {
             */
         }
 
+
         // add backButtonSensitiveArea
         if(backButtonSensitiveArea == undefined) {
             backButtonSensitiveArea = nameGroup.append("rect")
