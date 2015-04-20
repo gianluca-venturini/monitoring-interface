@@ -17,7 +17,8 @@ var UIApplication = function(delegate) {
         arrow_thick: 5,
         arrow_width: 30,
         arrow_bottom_margin: 2,
-        optionRectCloseDelay: 250
+        optionRectCloseDelay: 250,
+        closeButtonDelay: 750
     };
 
     // Public variables
@@ -286,7 +287,7 @@ var UIApplication = function(delegate) {
                 .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backTextXMargin)
                 .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backTextYMargin)
                 .transition()
-                .delay(750)
+                .delay(UIApplication.style.closeButtonDelay)
                 .style("opacity", 1);
 
             /*

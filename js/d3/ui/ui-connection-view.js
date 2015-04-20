@@ -33,6 +33,18 @@ var UIConnectionView = function(delegate) {
 
         var layer = self.view;
 
+        // Create triangles for the subscribed channels
+        var arrowData = [
+            { "x":  0.0, "y": 0.0},
+            { "x":  1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick},
+            { "x": -1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick}
+        ];
+
+        var lineFunction = d3.svg.line()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .interpolate("linear");
+
         // Take the width of the screen
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin
                             - UIConnectionView.style.labelLinkLength;
@@ -224,6 +236,15 @@ var UIConnectionView = function(delegate) {
                         return component.name+"SendMessageText";
                     });
 
+                // Add signifier
+                /*
+                componentToolBoxesGroup.append("path")
+                    .attr("d", lineFunction(arrowData))
+                    .attr("fill", self.palette.text.dark)
+                    .attr("id", function() {
+                        return component.name+"signifier";
+                    });*/
+
             });
 
         // Update component arcs
@@ -245,6 +266,27 @@ var UIConnectionView = function(delegate) {
                     x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
                     y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
                 };
+
+                /*
+                componentToolBoxes.select("#"+component.name+"signifier")
+                    .attr("transform","translate("+
+                    function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize;
+                        }
+                    }()
+                    +","+
+                    function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) -1;
+                    }()
+                    +")");
+
+                */
 
                 componentToolBoxes.select("#"+component.name+"SubscribeBox")
                     .x(function() {
@@ -349,7 +391,6 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .remove();
 
-
         // Create arg generator utility
         var lineGenerator = d3.svg.line.radial()
             .interpolate("bundle")
@@ -418,17 +459,7 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .remove();
 
-        // Create triangles for the subscribed channels
-        var arrowData = [
-            { "x":  0.0, "y": 0.0},
-            { "x":  1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick},
-            { "x": -1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick}
-        ];
 
-        var lineFunction = d3.svg.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; })
-            .interpolate("linear");
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
