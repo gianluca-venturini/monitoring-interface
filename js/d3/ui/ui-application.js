@@ -18,7 +18,8 @@ var UIApplication = function(delegate) {
         arrow_width: 30,
         arrow_bottom_margin: 2,
         optionRectCloseDelay: 250,
-        closeButtonDelay: 750
+        closeButtonDelay: 750,
+        backButtonSensitiveAreaWidth: 220
     };
 
     // Public variables
@@ -55,6 +56,7 @@ var UIApplication = function(delegate) {
     var mailIcon = undefined;
     var closeIcon = undefined;
     var optionSignifier = undefined;
+    var backButtonSensitiveArea = undefined;
 
     self.render = function() {
 
@@ -198,6 +200,18 @@ var UIApplication = function(delegate) {
             */
         }
 
+        // add backButtonSensitiveArea
+        if(backButtonSensitiveArea == undefined) {
+            backButtonSensitiveArea = nameGroup.append("rect")
+                .opacity(0)
+                .class("pointer")
+                .width(0)
+                .height(0)
+                .on("click", function () {
+                    delegate.closeButtonClicked();
+                })}
+        ;
+
         if(optionRect == undefined) {
             optionRect = optionGroup.append("rect")
                 .class("optionRect")
@@ -310,6 +324,17 @@ var UIApplication = function(delegate) {
 
             optionSignifier.attr("d", null);
 
+            backButtonSensitiveArea
+                .width(UIApplication.style.backButtonSensitiveAreaWidth)
+                .height(UIApplication.style.titleBarHeight)
+                .on("mouseover", function(){
+                    closeIcon.fill("#bdc3c7");
+                })
+                .on("mouseout", function () {
+                    closeIcon.fill(self.palette.text.bright)
+                })
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin );
 
         }
         else {
@@ -348,6 +373,16 @@ var UIApplication = function(delegate) {
                 .transition()
                 .delay(UIApplication.style.optionRectCloseDelay)
                 .opacity(1);
+
+            backButtonSensitiveArea
+                .width(0)
+                .height(0)
+                .on("mouseover", function(){
+                    closeIcon.fill("#bdc3c7");
+                })
+                .on("mouseout", function () {
+                    closeIcon.fill(self.palette.text.bright)
+                })
         }
 
         appName
