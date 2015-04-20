@@ -65,6 +65,9 @@ var UITab = function(delegate, name) {
                 .y(-UITab.style.height/2)
                 .fill(self.palette.accent1.normal)
                 .on("mouseover", function() {
+                    signifier
+                        .attr("d", null)
+                        .opacity(0);
                     self.openOptionRect(optionGroup);
                     if (!delegate.selected) {
                         instanceTab.fill(self.palette.accent1.bright);
@@ -72,6 +75,11 @@ var UITab = function(delegate, name) {
                 })
                 .on("mouseout", function () {
                     self.closeOptionRect(optionGroup);
+                    signifier
+                        .attr("d", lineFunction(arrowData))
+                        .transition()
+                        .delay(UIApplication.style.optionRectCloseDelay)
+                        .opacity(1);
                     if (!delegate.selected) {
                         instanceTab.fill(self.palette.accent1.normal);
                     }
@@ -113,12 +121,14 @@ var UITab = function(delegate, name) {
                     }
                     self.openOptionRect(optionGroup);
                     signifier
+                        .attr("d", null)
                         .opacity(0);
                 })
                 .on("mouseout", function () {
                     d3.select(this).fill(self.getTabColor());
                     self.closeOptionRect(optionGroup);
                     signifier
+                        .attr("d", lineFunction(arrowData))
                         .transition()
                         .delay(UIApplication.style.optionRectCloseDelay)
                         .opacity(1);

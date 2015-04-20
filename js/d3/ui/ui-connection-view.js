@@ -303,6 +303,24 @@ var UIConnectionView = function(delegate) {
                     })
                     .opacity(0);
 
+                // rect to create a muoseover sensitive area on the component name
+                componentToolBoxesGroup.append("rect")
+                    .fill("white")
+                    .width(UIConnectionView.style.labelFieldSize)
+                    .height(20)
+                    .on("mouseover", function() {
+                        openOptionRect(component);
+                        rotateArrowDown(component);
+                    })
+                    .on("mouseout", function () {
+                        closeOptionRect(component);
+                        rotateArrowRight(component);
+                    })
+                    .attr("id", function() {
+                        return component.name+"mouseoverRect";
+                    })
+                    .opacity(0);
+
             });
 
         // Update component arcs
@@ -347,7 +365,20 @@ var UIConnectionView = function(delegate) {
                     .delay(Animations.connectionView.ARROW_EXPANSION.duration)
                     .opacity(1);
 
-
+                componentToolBoxes.select("#"+component.name+"mouseoverRect")
+                    .x(function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize;
+                        }
+                    })
+                    .y(function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 20;
+                    });
 
                 componentToolBoxes.select("#"+component.name+"SubscribeBox")
                     .x(function() {
