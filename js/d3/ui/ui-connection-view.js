@@ -33,6 +33,18 @@ var UIConnectionView = function(delegate) {
 
         var layer = self.view;
 
+        // Create triangles for the subscribed channels
+        var arrowData = [
+            { "x":  0.0, "y": 0.0},
+            { "x":  1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick},
+            { "x": -1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick}
+        ];
+
+        var lineFunction = d3.svg.line()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .interpolate("linear");
+
         // Take the width of the screen
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin
                             - UIConnectionView.style.labelLinkLength;
@@ -83,6 +95,58 @@ var UIConnectionView = function(delegate) {
                 .transition()
                 .delay(250)
                 .height(0);
+        };
+
+        var rotateArrowDown = function(component){
+            var origin = {
+                x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+            };
+
+            d3.select("#"+component.name+"signifier")
+                .transition()
+                .attr("transform","translate("+
+                function() {
+                    if(component.endAngle % (2*Math.PI) < Math.PI) {
+                        // 0 <= angle < 180
+                        return origin.x + 10;
+                    }
+                    else {
+                        // 180 <= angle < 360
+                        return origin.x - UIConnectionView.style.labelFieldSize + 10;
+                    }
+                }()
+                +","+
+                function() {
+                    return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
+                }()
+                +") rotate(180)");
+        };
+
+        var rotateArrowRight = function(component){
+            var origin = {
+                x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+            };
+
+            d3.select("#"+component.name+"signifier")
+                .transition()
+                .attr("transform","translate("+
+                function() {
+                    if(component.endAngle % (2*Math.PI) < Math.PI) {
+                        // 0 <= angle < 180
+                        return origin.x + 10;
+                    }
+                    else {
+                        // 180 <= angle < 360
+                        return origin.x - UIConnectionView.style.labelFieldSize + 10;
+                    }
+                }()
+                +","+
+                function() {
+                    return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
+                }()
+                +") rotate(90)");
         };
 
         if(self.delegate.expanded == false ||
@@ -145,9 +209,11 @@ var UIConnectionView = function(delegate) {
                     .fill(self.palette.accent1.normal)
                     .on("mouseover", function() {
                         openOptionRect(component);
+                        rotateArrowDown(component);
                     })
                     .on("mouseout", function () {
                         closeOptionRect(component);
+                        rotateArrowRight(component);
                     })
                     .on("click", function() {
                         alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
@@ -171,9 +237,11 @@ var UIConnectionView = function(delegate) {
                     .fill(self.palette.accent1.normal)
                     .on("mouseover", function() {
                         openOptionRect(component);
+                        rotateArrowDown(component);
                     })
                     .on("mouseout", function () {
                         closeOptionRect(component);
+                        rotateArrowRight(component);
                     })
                     .on("click", function() {
                         $('#messageSend').modal({ show: true});
@@ -210,6 +278,7 @@ var UIConnectionView = function(delegate) {
                     .opacity(0)
                     .fill(defaultPalette.text.bright)
                     .text("message")
+                    .class("no_interaction")
                     .attr("text-anchor", "middle")
                     /*
                     .on("mouseover", function() {
@@ -226,6 +295,34 @@ var UIConnectionView = function(delegate) {
                     .attr("id", function() {
                         return component.name+"SendMessageText";
                     });
+
+                // Add signifier
+
+                componentToolBoxesGroup.append("path")
+                    .attr("d", lineFunction(arrowData))
+                    .attr("fill", self.palette.text.dark)
+                    .attr("id", function() {
+                        return component.name+"signifier";
+                    })
+                    .opacity(0);
+
+                // rect to create a muoseover sensitive area on the component name
+                componentToolBoxesGroup.append("rect")
+                    .fill("white")
+                    .width(UIConnectionView.style.labelFieldSize)
+                    .height(20)
+                    .on("mouseover", function() {
+                        openOptionRect(component);
+                        rotateArrowDown(component);
+                    })
+                    .on("mouseout", function () {
+                        closeOptionRect(component);
+                        rotateArrowRight(component);
+                    })
+                    .attr("id", function() {
+                        return component.name+"mouseoverRect";
+                    })
+                    .opacity(0);
 
             });
 
@@ -248,6 +345,43 @@ var UIConnectionView = function(delegate) {
                     x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
                     y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
                 };
+
+
+                componentToolBoxes.select("#"+component.name+"signifier")
+                    .attr("transform","translate("+
+                    function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x + 10;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize + 10;
+                        }
+                    }()
+                    +","+
+                    function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
+                    }()
+                    +") rotate(90)")
+                    .transition()
+                    .delay(Animations.connectionView.ARROW_EXPANSION.duration)
+                    .opacity(1);
+
+                componentToolBoxes.select("#"+component.name+"mouseoverRect")
+                    .x(function() {
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize;
+                        }
+                    })
+                    .y(function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 20;
+                    });
 
                 componentToolBoxes.select("#"+component.name+"SubscribeBox")
                     .x(function() {
@@ -352,7 +486,6 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .remove();
 
-
         // Create arg generator utility
         var lineGenerator = d3.svg.line.radial()
             .interpolate("bundle")
@@ -421,17 +554,7 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .remove();
 
-        // Create triangles for the subscribed channels
-        var arrowData = [
-            { "x":  0.0, "y": 0.0},
-            { "x":  1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick},
-            { "x": -1*UIConnectionView.style.arrow_thick/UIConnectionView.style.arrow_ratio, "y": 1*UIConnectionView.style.arrow_thick}
-        ];
 
-        var lineFunction = d3.svg.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; })
-            .interpolate("linear");
 
         components.selectAll(".subscribeTriangle")
             .data(radialLayout.publishChannels)
@@ -500,9 +623,11 @@ var UIConnectionView = function(delegate) {
             .opacity(0)
             .on("mouseover", function(d) {
                 openOptionRect(d);
+                rotateArrowDown(d);
             })
             .on("mouseout", function(d) {
                 closeOptionRect(d);
+                rotateArrowRight(d);
             });
 
         componentNames.selectAll(".componentName")
