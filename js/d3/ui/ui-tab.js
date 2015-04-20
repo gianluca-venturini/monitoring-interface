@@ -31,6 +31,7 @@ var UITab = function(delegate, name) {
     };
 
 
+
     self.render = function() {
 
         var layer = self.view;
