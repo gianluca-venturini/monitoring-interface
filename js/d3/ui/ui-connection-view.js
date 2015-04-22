@@ -207,14 +207,6 @@ var UIConnectionView = function(delegate) {
                     .width(UIConnectionView.style.toolBoxesWidth)
                     .height(0)
                     .fill(self.palette.accent1.normal)
-                    .on("mouseover", function() {
-                        openOptionRect(component);
-                        rotateArrowDown(component);
-                    })
-                    .on("mouseout", function () {
-                        closeOptionRect(component);
-                        rotateArrowRight(component);
-                    })
                     .on("click", function() {
                         alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
                         alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
@@ -224,8 +216,19 @@ var UIConnectionView = function(delegate) {
                     })
                     .attr("id", function() {
                         return component.name+"SubscribeBox";
+                    });
+
+                componentToolBoxesGroup.selectAll(".toolBox")
+                    /*
+                    .on("mouseover", function() {
+                        openOptionRect(component);
+                        rotateArrowDown(component);
                     })
-                ;
+                    .on("mouseout", function () {
+                        closeOptionRect(component);
+                        rotateArrowRight(component);
+                    });
+                    */
 
                 componentToolBoxesGroup
                     .append("rect")
@@ -235,6 +238,7 @@ var UIConnectionView = function(delegate) {
                     .width(UIConnectionView.style.toolBoxesWidth)
                     .height(0)
                     .fill(self.palette.accent1.normal)
+                    /*
                     .on("mouseover", function() {
                         openOptionRect(component);
                         rotateArrowDown(component);
@@ -243,6 +247,7 @@ var UIConnectionView = function(delegate) {
                         closeOptionRect(component);
                         rotateArrowRight(component);
                     })
+                    */
                     .on("click", function() {
                         $('#messageSend').modal({ show: true});
                     })
@@ -257,17 +262,6 @@ var UIConnectionView = function(delegate) {
                     .text("subscribe")
                     .opacity(0)
                     .attr("text-anchor", "middle")
-                    /*
-                    .on("mouseover", function() {
-                        openOptionRect(component);
-                    })
-                    .on("mouseout", function () {
-                        closeOptionRect(component);
-                    })
-                    .on("click", function() {
-                        alert("SubscribeBox - 2")
-                    })
-                    */
                     .class("no_interaction")
                     .attr("id", function() {
                         return component.name+"SubscribeText";
@@ -280,17 +274,6 @@ var UIConnectionView = function(delegate) {
                     .text("message")
                     .class("no_interaction")
                     .attr("text-anchor", "middle")
-                    /*
-                    .on("mouseover", function() {
-                        openOptionRect(component);
-                    })
-                    .on("mouseout", function () {
-                        closeOptionRect(component);
-                    })
-                    .on("click", function() {
-                        alert("MessageBox")
-                    })
-                    */
                     .class("no_interaction")
                     .attr("id", function() {
                         return component.name+"SendMessageText";
@@ -307,23 +290,27 @@ var UIConnectionView = function(delegate) {
                     .opacity(0);
 
                 // rect to create a muoseover sensitive area on the component name
+                // TODO: The problem is here!
                 componentToolBoxesGroup.append("rect")
                     .fill("white")
                     .width(UIConnectionView.style.labelFieldSize)
                     .height(20)
+                    .class("transparent-rect")
+                    .attr("id", function() {
+                        return component.name+"mouseoverRect";
+                    })
+                    .opacity(0);
+
+                componentToolBoxesGroup.selectAll(".transparent-rect")
                     .on("mouseover", function() {
+                        console.log(component);
                         openOptionRect(component);
                         rotateArrowDown(component);
                     })
                     .on("mouseout", function () {
                         closeOptionRect(component);
                         rotateArrowRight(component);
-                    })
-                    .attr("id", function() {
-                        return component.name+"mouseoverRect";
-                    })
-                    .opacity(0);
-
+                    });
             });
 
         // Update component arcs
@@ -620,15 +607,7 @@ var UIConnectionView = function(delegate) {
             .class("componentName")
             .class("pointer")
             .fill(defaultPalette.text.dark)
-            .opacity(0)
-            .on("mouseover", function(d) {
-                openOptionRect(d);
-                rotateArrowDown(d);
-            })
-            .on("mouseout", function(d) {
-                closeOptionRect(d);
-                rotateArrowRight(d);
-            });
+            .opacity(0);
 
         componentNames.selectAll(".componentName")
             .data(radialLayout.components)
