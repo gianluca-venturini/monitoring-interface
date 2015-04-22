@@ -7,19 +7,24 @@ var UIJSONAttribute = React.createClass ({displayName: "UIJSONAttribute",
         })
     },
     handleTypeChange: function(type) {
-        this.setState({type: type})
+        this.setState({type: type});
+        this.updateJson = true;
     },
     handleKeyChange: function(event) {
+        /*
         switch(this.state.type) {
             case "string":
                 this.setState({key: event.target.value});
                 break;
         }
+        */
+        this.setState({key: event.target.value});
         this.props.updateJSON();
     },
     handleValueChange: function() {
         switch(this.state.type) {
             case "string":
+            case "number":
                 this.setState({value: event.target.value});
                 break;
         }
@@ -31,6 +36,9 @@ var UIJSONAttribute = React.createClass ({displayName: "UIJSONAttribute",
         switch(this.state.type) {
             case "string":
                 json[this.refs.key.getDOMNode().value] = this.refs.value.getDOMNode().value;
+                break;
+            case "number":
+                json[this.refs.key.getDOMNode().value] = parseFloat(this.refs.value.getDOMNode().value);
                 break;
             case "object":
                 json[this.refs.key.getDOMNode().value] = this.refs.object.getJson();
@@ -45,19 +53,36 @@ var UIJSONAttribute = React.createClass ({displayName: "UIJSONAttribute",
         var inputBox = "";
         switch(this.state.type) {
             case "string":
-                inputBox =  React.createElement("div", {className: "col-lg-4 col-md-4 col-sm-4", style: {padding: "10px"}}, 
-                                React.createElement("input", {
-                                    onChange: this.handleValueChange, 
-                                    type: "text", className: "form-control", 
-                                    placeholder: "String", 
-                                    "aria-describedby": "basic-addon2", 
-                                    value: this.state.value, 
-                                    ref: "value"})
+            case "number":
+                inputBox =  React.createElement("div", null, 
+                                React.createElement("button", {type: "button", 
+                                        className: "close", 
+                                        "aria-label": "Close", 
+                                        onClick: _.partial(self.props.deleteAttribute, self.state.key)}, 
+                                    React.createElement("span", {"aria-hidden": "true"}, "×")
+                                ), 
+                                React.createElement("div", {className: "col-lg-4 col-md-4 col-sm-4", style: {padding: "10px"}}, 
+                                    React.createElement("input", {
+                                        onChange: this.handleValueChange, 
+                                        type: "text", className: "form-control", 
+                                        placeholder: "String", 
+                                        "aria-describedby": "basic-addon2", 
+                                        value: this.state.value, 
+                                        ref: "value"})
+                                )
                             );
                 break;
             case "object":
-                inputBox =  React.createElement("div", {className: "col-lg-12 col-md-12 col-sm-12", style: {padding: "10px"}}, 
-                                React.createElement(UIJSONObject, {updateJSON: this.props.updateJSON, ref: "object"})
+                inputBox =  React.createElement("div", null, 
+                                React.createElement("button", {type: "button", 
+                                        className: "close", 
+                                        "aria-label": "Close", 
+                                        onClick: _.partial(self.props.deleteAttribute, self.state.key)}, 
+                                    React.createElement("span", {"aria-hidden": "true"}, "×")
+                                ), 
+                                React.createElement("div", {className: "col-lg-12 col-md-12 col-sm-12", style: {padding: "10px"}}, 
+                                    React.createElement(UIJSONObject, {updateJSON: this.props.updateJSON, ref: "object"})
+                                )
                             );
                 break;
         }
@@ -88,13 +113,20 @@ var UIJSONAttribute = React.createClass ({displayName: "UIJSONAttribute",
                 inputBox
             )
         );
+    },
+    updateJson: false,
+    componentDidUpdate: function() {
+        if(this.updateJson) {
+            this.props.updateJSON();
+            this.updateJson = false;
+        }
     }
 });
 
 var UIJSONObject = React.createClass ({displayName: "UIJSONObject",
     getInitialState: function() {
         return({
-            attributes: 2
+            attributes: 1
         })
     },
     getJson: function() {
@@ -106,22 +138,51 @@ var UIJSONObject = React.createClass ({displayName: "UIJSONObject",
             var attribute = this.refs['object-attribute-' + i].getJson();
             json = _.extend(json, attribute);
         }
+
+        this.setState({oldJson: json});
         return json;
+
+    },
+    deleteAttribute: function(key) {
+        this.setState({
+            attributes: this.state.attributes - 1
+        });
+        this.updateJson = true;
+    },
+    addAttribute: function() {
+        this.setState({attributes: this.state.attributes + 1});
     },
     render: function() {
         var attributes = [];
 
         for(var i = 0; i < this.state.attributes; i++) {
-            attributes.push(React.createElement(UIJSONAttribute, {updateJSON: this.props.updateJSON, ref: "object-attribute-" + i}));
+            attributes.push(
+                React.createElement(UIJSONAttribute, {
+                    updateJSON: this.props.updateJSON, 
+                    ref: "object-attribute-" + i, 
+                    deleteAttribute: this.deleteAttribute})
+            );
         }
 
         return(
             React.createElement("div", {className: "panel panel-default"}, 
                 React.createElement("div", {className: "panel-body"}, 
-                    attributes
+                    attributes, 
+                    React.createElement("div", {className: "col-lg-12 col-md-12 col-sm-12"}, 
+                        React.createElement("button", {onClick: this.addAttribute, type: "button", className: "btn btn-default"}, 
+                            React.createElement("span", {className: "glyphicon glyphicon-plus", "aria-hidden": "true"}), " Add"
+                        )
+                    )
                 )
             )
         );
+    },
+    updateJson: false,
+    componentDidUpdate: function() {
+        if(this.updateJson) {
+            this.props.updateJSON();
+            this.updateJson = false;
+        }
     }
 });
 
@@ -159,8 +220,12 @@ var UIMessageSend = React.createClass ({displayName: "UIMessageSend",
     },
     updateJSON: function() {
         //alert("Update JSON");
-        console.log(this.refs.jsonObject.getJson());
         this.setState({json: this.refs.jsonObject.getJson()})
+    },
+    sendMessage: function() {
+        alert("Send message");
+        var payload = this.refs.jsonObject.getJson();
+        console.log(payload);
     },
     render: function() {
         var self = this;
@@ -195,6 +260,7 @@ var UIMessageSend = React.createClass ({displayName: "UIMessageSend",
                         )
                     ), 
                     React.createElement("div", {className: "modal-footer"}, 
+                        React.createElement("button", {type: "button", className: "btn btn-default", onClick: this.sendMessage}, "Send"), 
                         React.createElement("button", {type: "button", className: "btn btn-default", "data-dismiss": "modal"}, "Close")
                     )
                 )

@@ -70,7 +70,10 @@ var UIMessages = React.createClass({displayName: "UIMessages",
                             React.createElement("text", {x: "50", y: "20", textAnchor: "middle", fill: "black"}, this.state.to), 
                             React.createElement("text", {x: "950", y: "20", textAnchor: "middle", fill: "black"}, this.state.from), 
                             React.createElement("line", {x1: "0", y1: "35", x2: "990", y2: "35", style: {stroke: "#425266", strokeWidth: "5"}}), 
+                            self.state.type == messageModel.constant.type.publish ?
                             React.createElement("polygon", {points: "990,40 990,30 1000,35", style: {fill:"#425266",stroke:"#425266",strokeWidth:1}})
+                            :
+                            React.createElement("polygon", {points: "990,40 990,30 1000,30 1000,40", style: {fill:"#425266",stroke:"#425266",strokeWidth:1}})
                         )
                     ), 
                     React.createElement("div", {className: "modal-body"}, 
