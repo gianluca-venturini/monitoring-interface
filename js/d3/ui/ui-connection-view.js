@@ -59,51 +59,51 @@ var UIConnectionView = function(delegate) {
 
         var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
 
-        var openOptionRect = function(component){
-          d3.select("#"+component.name+"SubscribeBox")
+        var openOptionRect = function(component, index){
+          d3.select("#SubscribeBox"+index)
               .transition()
             .height(UIConnectionView.style.toolBoxHeight);
-            d3.select("#"+component.name+"MessageBox")
+            d3.select("#MessageBox"+index)
                 .transition()
                 .height(UIConnectionView.style.toolBoxHeight);
-            d3.select("#"+component.name+"SubscribeText")
+            d3.select("#SubscribeText"+index)
                 .transition()
                 .delay(250)
                 .opacity(1);
-            d3.select("#"+component.name+"SendMessageText")
+            d3.select("#SendMessageText"+index)
                 .transition()
                 .delay(250)
                 .opacity(1);
         };
 
-        var closeOptionRect = function(component){
-            d3.select("#"+component.name+"SubscribeBox")
+        var closeOptionRect = function(component, index){
+            d3.select("#SubscribeBox"+index)
                 .transition()
                 .delay(250)
                 .height(0);
-            d3.select("#"+component.name+"SubscribeText")
+            d3.select("#SubscribeText"+index)
                 .transition()
                 .duration(100)
                 .delay(250)
                 .opacity(0);
-            d3.select("#"+component.name+"SendMessageText")
+            d3.select("#SendMessageText"+index)
                 .transition()
                 .duration(100)
                 .delay(250)
                 .opacity(0);
-            d3.select("#"+component.name+"MessageBox")
+            d3.select("#MessageBox"+index)
                 .transition()
                 .delay(250)
                 .height(0);
         };
 
-        var rotateArrowDown = function(component){
+        var rotateArrowDown = function(component,index){
             var origin = {
                 x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
                 y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
             };
 
-            d3.select("#"+component.name+"signifier")
+            d3.select("#signifier"+index)
                 .transition()
                 .attr("transform","translate("+
                 function() {
@@ -123,13 +123,13 @@ var UIConnectionView = function(delegate) {
                 +") rotate(180)");
         };
 
-        var rotateArrowRight = function(component){
+        var rotateArrowRight = function(component,index){
             var origin = {
                 x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
                 y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
             };
 
-            d3.select("#"+component.name+"signifier")
+            d3.select("#signifier"+index)
                 .transition()
                 .attr("transform","translate("+
                 function() {
@@ -193,7 +193,7 @@ var UIConnectionView = function(delegate) {
                     return defaultPalette.state.green;
             })
             .attr("d", arcZeroRadius)
-            .each(function(component) {
+            .each(function(component, index) {
                 componentToolBoxesGroup = componentToolBoxes.append("g")
                     .class("toolBoxGroup")
                     .class("pointer")
@@ -207,15 +207,8 @@ var UIConnectionView = function(delegate) {
                     .width(UIConnectionView.style.toolBoxesWidth)
                     .height(0)
                     .fill(self.palette.accent1.normal)
-                    .on("click", function() {
-                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
-                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
-                        alertsModel.component = component.name;
-                        $('#mailDisplay').modal({ show: true});
-                        alertsModel.fetchData();
-                    })
                     .attr("id", function() {
-                        return component.name+"SubscribeBox";
+                        return "SubscribeBox"+index;
                     });
 
                 componentToolBoxesGroup.selectAll(".toolBox")
@@ -238,24 +231,8 @@ var UIConnectionView = function(delegate) {
                     .width(UIConnectionView.style.toolBoxesWidth)
                     .height(0)
                     .fill(self.palette.accent1.normal)
-                    /*
-                    .on("mouseover", function() {
-                        openOptionRect(component);
-                        rotateArrowDown(component);
-                    })
-                    .on("mouseout", function () {
-                        closeOptionRect(component);
-                        rotateArrowRight(component);
-                    })
-                    */
-                    .on("click", function() {
-                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
-                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
-                        alertsModel.component = component.name;
-                        $('#messageSend').modal({ show: true});
-                    })
                     .attr("id", function() {
-                        return component.name+"MessageBox";
+                        return "MessageBox"+index;
                     })
                 ;
 
@@ -267,7 +244,7 @@ var UIConnectionView = function(delegate) {
                     .attr("text-anchor", "middle")
                     .class("no_interaction")
                     .attr("id", function() {
-                        return component.name+"SubscribeText";
+                        return "SubscribeText"+index;
                     });
 
                 componentToolBoxesGroup
@@ -279,7 +256,7 @@ var UIConnectionView = function(delegate) {
                     .attr("text-anchor", "middle")
                     .class("no_interaction")
                     .attr("id", function() {
-                        return component.name+"SendMessageText";
+                        return "SendMessageText"+index;
                     });
 
                 // Add signifier
@@ -288,8 +265,30 @@ var UIConnectionView = function(delegate) {
                     .attr("d", lineFunction(arrowData))
                     .attr("fill", self.palette.text.dark)
                     .attr("id", function() {
-                        return component.name+"signifier";
+                        return "signifier"+index;
                     })
+                    .attr("transform","translate("+
+                    function() {
+                        var origin = {
+                            x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
+                            y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
+                        };
+                        
+                        if(component.endAngle % (2*Math.PI) < Math.PI) {
+                            // 0 <= angle < 180
+                            return origin.x + 10;
+                        }
+                        else {
+                            // 180 <= angle < 360
+                            return origin.x - UIConnectionView.style.labelFieldSize + 10;
+                        }
+                    }()
+                    +","+
+                    function() {
+                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
+                    }()
+                    +") rotate(90)"
+                )
                     .opacity(0);
 
                 // rect to create a muoseover sensitive area on the component name
@@ -300,20 +299,10 @@ var UIConnectionView = function(delegate) {
                     .height(20)
                     .class("transparent-rect")
                     .attr("id", function() {
-                        return component.name+"mouseoverRect";
+                        return "mouseoverRect"+index;
                     })
                     .opacity(0);
 
-                componentToolBoxesGroup.selectAll(".transparent-rect")
-                    .on("mouseover", function() {
-                        console.log(component);
-                        openOptionRect(component);
-                        rotateArrowDown(component);
-                    })
-                    .on("mouseout", function () {
-                        closeOptionRect(component);
-                        rotateArrowRight(component);
-                    });
             });
 
         // Update component arcs
@@ -329,36 +318,46 @@ var UIConnectionView = function(delegate) {
                 else
                     return defaultPalette.state.green;
             })
-            .each(function(component) {
+            .each(function(component, index) {
 
                 var origin = {
                     x: Math.cos(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength),
                     y: Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength)
                 };
 
-
-                componentToolBoxes.select("#"+component.name+"signifier")
-                    .attr("transform","translate("+
-                    function() {
-                        if(component.endAngle % (2*Math.PI) < Math.PI) {
-                            // 0 <= angle < 180
-                            return origin.x + 10;
-                        }
-                        else {
-                            // 180 <= angle < 360
-                            return origin.x - UIConnectionView.style.labelFieldSize + 10;
-                        }
-                    }()
-                    +","+
-                    function() {
-                        return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
-                    }()
-                    +") rotate(90)")
+                componentToolBoxes.select("#signifier"+index)
                     .transition()
-                    .delay(Animations.connectionView.ARROW_EXPANSION.duration)
+                    .duration(1000)
+                    .delay(500)
+                    .attr("transform","translate("+
+                        function() {
+                            if(component.endAngle % (2*Math.PI) < Math.PI) {
+                                // 0 <= angle < 180
+                                return origin.x + 10;
+                            }
+                            else {
+                                // 180 <= angle < 360
+                                return origin.x - UIConnectionView.style.labelFieldSize + 10;
+                            }
+                        }()
+                        +","+
+                        function() {
+                            return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 10;
+                        }()
+                        +") rotate(90)"
+                    )
+                    //.delay(Animations.application.APPLICATION_EXPANSION.delay)
                     .opacity(1);
 
-                componentToolBoxes.select("#"+component.name+"mouseoverRect")
+                componentToolBoxes.select("#mouseoverRect"+index)
+                    .on("mouseover", function() {
+                        openOptionRect(component, index);
+                        rotateArrowDown(component, index);
+                    })
+                    .on("mouseout", function () {
+                        closeOptionRect(component, index);
+                        rotateArrowRight(component, index);
+                    })
                     .x(function() {
                         if(component.endAngle % (2*Math.PI) < Math.PI) {
                             // 0 <= angle < 180
@@ -373,7 +372,23 @@ var UIConnectionView = function(delegate) {
                         return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) - 20;
                     });
 
-                componentToolBoxes.select("#"+component.name+"SubscribeBox")
+                componentToolBoxes.select("#SubscribeBox"+index)
+                    .on("mouseover", function() {
+                        openOptionRect(component, index);
+                        rotateArrowDown(component, index);
+                    })
+                    .on("mouseout", function () {
+                        closeOptionRect(component, index);
+                        rotateArrowRight(component, index);
+                    })
+                    .on("click", function() {
+                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
+                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
+                        alertsModel.component = component.name;
+                        $('#mailDisplay').modal({ show: true});
+                        alertsModel.fetchData();
+                    })
+                    //.transition()
                     .x(function() {
                         if(component.endAngle % (2*Math.PI) < Math.PI) {
                             // 0 <= angle < 180
@@ -388,7 +403,22 @@ var UIConnectionView = function(delegate) {
                         return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) -1;
                     });
 
-                componentToolBoxes.select("#"+component.name+"MessageBox")
+                componentToolBoxes.select("#MessageBox"+index)
+                    .on("mouseover", function() {
+                        openOptionRect(component, index);
+                        rotateArrowDown(component, index);
+                    })
+                    .on("mouseout", function () {
+                        closeOptionRect(component, index);
+                        rotateArrowRight(component, index);
+                    })
+                    .on("click", function() {
+                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
+                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
+                        alertsModel.component = component.name;
+                        $('#messageSend').modal({ show: true});
+                    })
+                    //.transition()
                     .x(function() {
                         if(component.endAngle % (2*Math.PI) < Math.PI) {
                             // 0 <= angle < 180
@@ -403,7 +433,8 @@ var UIConnectionView = function(delegate) {
                         return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) -1;
                     });
 
-                componentToolBoxes.select("#"+component.name+"SubscribeText")
+                componentToolBoxes.select("#SubscribeText"+index)
+                    //.transition()
                     .x(function() {
                         if(component.endAngle % (2*Math.PI) < Math.PI) {
                             // 0 <= angle < 180
@@ -418,7 +449,8 @@ var UIConnectionView = function(delegate) {
                         return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) + UIConnectionView.style.toolBoxTextTopMargin;
                     });
 
-                componentToolBoxes.select("#"+component.name+"SendMessageText")
+                componentToolBoxes.select("#SendMessageText"+index)
+                    //.transition()
                     .x(function() {
                         if(component.endAngle % (2*Math.PI) < Math.PI) {
                             // 0 <= angle < 180
@@ -432,6 +464,44 @@ var UIConnectionView = function(delegate) {
                     .y(function() {
                         return Math.sin(component.endAngle - Math.PI / 2) * (self._innerRadius + UIConnectionView.style.labelLinkLength) + UIConnectionView.style.toolBoxTextTopMargin;
                     });
+
+            });
+
+        // Delete component arcs
+        components.selectAll(".componentArc")
+            .data(radialLayout.components)
+            .exit()
+            .each(function(component, index) {
+
+                componentToolBoxes.select("#signifier"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
+
+                componentToolBoxes.select("#mouseoverRect"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
+
+                componentToolBoxes.select("#SubscribeBox"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
+
+                componentToolBoxes.select("#MessageBox"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
+
+                componentToolBoxes.select("#SubscribeText"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
+
+                componentToolBoxes.select("#SendMessageText"+index)
+                    .transition()
+                    .opacity(0)
+                    .remove();
 
             });
 
