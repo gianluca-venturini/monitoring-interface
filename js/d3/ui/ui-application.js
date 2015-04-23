@@ -367,6 +367,9 @@ var UIApplication = function(delegate) {
                 .delay(UIApplication.style.closeButtonDelay)
                 .style("opacity", 1);
 
+            optionSignifier
+                .opacity(0);
+
         }
         else {
 
