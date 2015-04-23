@@ -13,7 +13,9 @@ var UIApplication = function(delegate) {
         activeStatusColor: defaultPalette.state.green,
         disabledStatusColor: defaultPalette.state.red,
         backTextYMargin: 20,
-        backTextXMargin: 100,
+        backTextXMargin: 60,
+        backIconXMargin: 10,
+        backIconYMargin: 7,
         arrow_thick: 5,
         arrow_width: 30,
         arrow_bottom_margin: 2,
@@ -244,8 +246,8 @@ var UIApplication = function(delegate) {
             backArrow = layer.append("svg:image")
                 .attr('width', 0)
                 .attr('height', 0)
-                .x(0)
-                .y(0)
+                //.x(1000)
+                //.y(0)
                 .class("no_interaction")
                 .attr("xlink:href", "img/back.svg")
                 .class("pointer")
@@ -360,13 +362,15 @@ var UIApplication = function(delegate) {
                 .y(-windowViewController.height / 2 + UIApplication.style.margin );
 
             backArrow
-                .attr('width', 40)
-                .attr('height', 25)
-                .x(-windowViewController.width / 2 + UIApplication.style.margin )
-                .y(-windowViewController.height / 2 + UIApplication.style.margin + 2)
+                //.attr('width', 40)
+                //.attr('height', 25)
+                .attr('width', 30)
+                .attr('height', 17.75)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backIconXMargin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backIconYMargin)
                 .transition()
                 .delay(UIApplication.style.closeButtonDelay)
-                .style("opacity", 1);;
+                .style("opacity", 1);
 
         }
         else {
