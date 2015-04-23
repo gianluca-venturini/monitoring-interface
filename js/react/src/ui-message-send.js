@@ -3,7 +3,10 @@ var UIJSONAttribute = React.createClass ({
         return({
             type: "string",
             value: "",
-            key: ""
+            key: "",
+            application: undefined,
+            instance: undefined,
+            component: undefined
         })
     },
     handleTypeChange: function(type) {
@@ -31,20 +34,42 @@ var UIJSONAttribute = React.createClass ({
         this.props.updateJSON();
     },
     getJson: function() {
-        //alert("getJson UIJSONAttribute");
-        var json = {};
-        switch(this.state.type) {
-            case "string":
-                json[this.refs.key.getDOMNode().value] = this.refs.value.getDOMNode().value;
-                break;
-            case "number":
-                json[this.refs.key.getDOMNode().value] = parseFloat(this.refs.value.getDOMNode().value);
-                break;
-            case "object":
-                json[this.refs.key.getDOMNode().value] = this.refs.object.getJson();
-                break;
+        if(this.props.keyEnabled) {
+            var json = {};
+            switch (this.state.type) {
+                case "string":
+                    json[this.refs.key.getDOMNode().value] = this.refs.value.getDOMNode().value;
+                    break;
+                case "number":
+                    json[this.refs.key.getDOMNode().value] = parseFloat(this.refs.value.getDOMNode().value);
+                    break;
+                case "array":
+                    // TODO: check refs
+                    json[this.refs.key.getDOMNode().value] = this.refs.array.getJson();
+                    break;
+                case "object":
+                    json[this.refs.key.getDOMNode().value] = this.refs.object.getJson();
+                    break;
+            }
+            return json;
         }
-        return json;
+        else {
+            switch (this.state.type) {
+                case "string":
+                    return this.refs.value.getDOMNode().value;
+                    break;
+                case "number":
+                    return parseFloat(this.refs.value.getDOMNode().value);
+                    break;
+                case "array":
+                    // TODO: check refs
+                    return this.refs.array.getJson();
+                    break;
+                case "object":
+                    return this.refs.object.getJson();
+                    break;
+            }
+        }
     },
     render: function() {
 
@@ -72,6 +97,19 @@ var UIJSONAttribute = React.createClass ({
                                 </div>
                             </div>;
                 break;
+            case "array":
+                inputBox =  <div>
+                    <button type="button"
+                            className="close"
+                            aria-label="Close"
+                            onClick={_.partial(self.props.deleteAttribute, self.state.key)}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div className="col-lg-12 col-md-12 col-sm-12" style={{padding: "10px"}}>
+                        <UIJSONArray updateJSON={this.props.updateJSON} ref="array"/>
+                    </div>
+                </div>;
+                break;
             case "object":
                 inputBox =  <div>
                                 <button type="button"
@@ -91,13 +129,17 @@ var UIJSONAttribute = React.createClass ({
             <div>
                 <div className="col-lg-6 col-md-6 col-sm-6 " style={{padding: "10px"}}>
                     <div className="input-group">
-                        <input
-                            onChange={this.handleKeyChange}
-                            type="text" className="form-control"
-                            placeholder="Key"
-                            aria-describedby="basic-addon2"
-                            value={this.state.key}
-                            ref="key"/>
+                        { this.props.keyEnabled ?
+                            <input
+                                onChange={this.handleKeyChange}
+                                type="text" className="form-control"
+                                placeholder="Key"
+                                aria-describedby="basic-addon2"
+                                value={this.state.key}
+                                ref="key"/>
+                            :
+                            ""
+                        }
                         <div className="input-group-btn">
                             <button className="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">{self.state.type}
                                 <span className="caret"></span></button>
@@ -111,6 +153,69 @@ var UIJSONAttribute = React.createClass ({
                     </div>
                 </div>
                 {inputBox}
+            </div>
+        );
+    },
+    updateJson: false,
+    componentDidUpdate: function() {
+        if(this.updateJson) {
+            this.props.updateJSON();
+            this.updateJson = false;
+        }
+    }
+});
+
+var UIJSONArray = React.createClass ({
+    getInitialState: function () {
+        return ({
+            elements: 1
+        })
+    },
+    deleteElement: function(key) {
+        this.setState({
+            elements: this.state.elements - 1
+        });
+        this.updateJson = true;
+    },
+    addElement: function() {
+        this.setState({elements: this.state.elements + 1});
+    },
+    getJson: function() {
+        var array = [];
+
+        // Construct the json with the children
+        for(var i = 0; i < this.state.elements; i++) {
+            var element = this.refs['array-element-' + i].getJson();
+            array.push(element);
+        }
+
+        this.setState({oldJson: array});
+        return array;
+
+    },
+    render: function() {
+        var attributes = [];
+
+        for(var i = 0; i < this.state.elements; i++) {
+            attributes.push(
+                <UIJSONAttribute
+                    updateJSON={this.props.updateJSON}
+                    ref={"array-element-" + i}
+                    keyEnabled = {false}
+                    deleteAttribute = {this.deleteElement}/>
+            );
+        }
+
+        return(
+            <div className="panel panel-default">
+                <div className="panel-body">
+                    {attributes}
+                    <div className="col-lg-12 col-md-12 col-sm-12">
+                        <button onClick={this.addElement} type="button" className="btn btn-default">
+                            <span className="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     },
@@ -160,6 +265,7 @@ var UIJSONObject = React.createClass ({
                 <UIJSONAttribute
                     updateJSON={this.props.updateJSON}
                     ref={"object-attribute-" + i}
+                    keyEnabled = {true}
                     deleteAttribute = {this.deleteAttribute}/>
             );
         }
@@ -217,6 +323,14 @@ var UIMessageSend = React.createClass ({
 
     componentDidMount: function() {
         var self = this;
+
+        notificationCenter.subscribe(Notifications.alerts.ALERT_CHANGE, function() {
+            self.setState({
+                application: alertsModel.application,
+                instance: alertsModel.instance,
+                component: alertsModel.component
+            });
+        });
     },
     updateJSON: function() {
         //alert("Update JSON");

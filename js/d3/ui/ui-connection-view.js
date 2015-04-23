@@ -249,6 +249,9 @@ var UIConnectionView = function(delegate) {
                     })
                     */
                     .on("click", function() {
+                        alertsModel.application = applicationModel.viewControllerApplicationSelected.name;
+                        alertsModel.instance = applicationModel.viewControllerInstanceSelected.name;
+                        alertsModel.component = component.name;
                         $('#messageSend').modal({ show: true});
                     })
                     .attr("id", function() {
