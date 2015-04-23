@@ -226,16 +226,11 @@ var UIApplication = function(delegate) {
         }
 
         if(optionSignifier == undefined) {
-            /*optionSignifier = layer
-                .append("path")
-                .attr("d", lineFunction(arrowData))
-                .attr("fill", self.palette.text.bright)
-                .attr("transform", "rotate(180)");*/
             optionSignifier = layer.append("svg:image")
-                .attr('width', 40)
-                .attr('height', 13)
-                .x(-20)
-                .y(30)
+                .attr('width', 20)
+                .attr('height', 6.5)
+                .x(-10)
+                .y(40)
                 .class("no_interaction")
                 .attr("xlink:href", "img/arrow_white.svg")
                 .class("pointer")

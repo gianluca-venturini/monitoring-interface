@@ -156,10 +156,10 @@ var UITab = function(delegate, name) {
 
         if(signifier == undefined) {
             signifier = layer.append("svg:image")
-                .attr('width', 40)
-                .attr('height', 40)
-                .x(60)
-                .y(-20)
+                .attr('width', 20)
+                .attr('height', 20)
+                .x(80)
+                .y(-10)
                 .class("no_interaction")
                 .attr("xlink:href", "img/arrow_white_right.svg")
                 .class("pointer")
