@@ -57,6 +57,7 @@ var UIApplication = function(delegate) {
     var closeIcon = undefined;
     var optionSignifier = undefined;
     var backButtonSensitiveArea = undefined;
+    var backArrow = undefined;
 
     self.render = function() {
 
@@ -223,12 +224,34 @@ var UIApplication = function(delegate) {
         }
 
         if(optionSignifier == undefined) {
-            optionSignifier = layer
+            /*optionSignifier = layer
                 .append("path")
                 .attr("d", lineFunction(arrowData))
                 .attr("fill", self.palette.text.bright)
-                .attr("transform", "rotate(180)");
+                .attr("transform", "rotate(180)");*/
+            optionSignifier = layer.append("svg:image")
+                .attr('width', 40)
+                .attr('height', 13)
+                .x(-20)
+                .y(30)
+                .class("no_interaction")
+                .attr("xlink:href", "img/arrow_white.svg")
+                .class("pointer")
+                .style("opacity", 0);
         }
+
+        if(backArrow == undefined) {
+            backArrow = layer.append("svg:image")
+                .attr('width', 0)
+                .attr('height', 0)
+                .x(0)
+                .y(0)
+                .class("no_interaction")
+                .attr("xlink:href", "img/back.svg")
+                .class("pointer")
+                .style("opacity", 1);
+        }
+
 
         // add mail icon to the option group
         if(mailIcon == undefined) {
@@ -323,7 +346,6 @@ var UIApplication = function(delegate) {
              .delay(750)
              .style("opacity", 1);*/
 
-            optionSignifier.attr("d", null);
 
             backButtonSensitiveArea
                 .width(UIApplication.style.backButtonSensitiveAreaWidth)
@@ -337,8 +359,24 @@ var UIApplication = function(delegate) {
                 .x(-windowViewController.width / 2 + UIApplication.style.margin )
                 .y(-windowViewController.height / 2 + UIApplication.style.margin );
 
+            backArrow
+                .attr('width', 40)
+                .attr('height', 25)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + 2)
+                .transition()
+                .delay(UIApplication.style.closeButtonDelay)
+                .style("opacity", 1);;
+
         }
         else {
+
+            backArrow
+                .attr('width', 0)
+                .attr('height', 0)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + 2)
+                .opacity(0);
             appName
                 .transition()
                 .x(0)
@@ -352,7 +390,8 @@ var UIApplication = function(delegate) {
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
 
             closeIcon
-                .text("");
+                .text("")
+                .opacity(0);
 
             optionRect
                 .on("mouseover", function () {
@@ -370,7 +409,6 @@ var UIApplication = function(delegate) {
                 .fill(self.palette.accent1.normal);
 
             optionSignifier
-                .attr("d", lineFunction(arrowData))
                 .transition()
                 .delay(UIApplication.style.optionRectCloseDelay)
                 .opacity(1);

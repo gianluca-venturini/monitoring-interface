@@ -155,11 +155,21 @@ var UITab = function(delegate, name) {
         }
 
         if(signifier == undefined) {
-            signifier = layer
+            signifier = layer.append("svg:image")
+                .attr('width', 40)
+                .attr('height', 40)
+                .x(60)
+                .y(-20)
+                .class("no_interaction")
+                .attr("xlink:href", "img/arrow_white_right.svg")
+                .class("pointer")
+                .style("opacity", 0);
+
+            /*layer
                 .append("path")
                 .attr("d", lineFunction(arrowData))
                 .attr("fill", self.palette.text.bright)
-                //.attr("transform", "rotate(90) translate(0,-20)");
+                //.attr("transform", "rotate(90) translate(0,-20)");*/
         }
 
         if(self.delegate.parentApplicationViewController.expanded) {
@@ -183,12 +193,11 @@ var UITab = function(delegate, name) {
                 .opacity(1)
                 .text(name);
 
-
             signifier
                 .transition()
+                .delay(Animations.instance.INSTANCE_ENTER.delay + 400)
                 .duration(Animations.instance.INSTANCE_ENTER.duration)
-                .delay(Animations.instance.INSTANCE_ENTER.delay)
-                .attr("transform", "rotate(90) translate(0,-20)");
+                .opacity(1);
 
             // Option rect
             optionRect
