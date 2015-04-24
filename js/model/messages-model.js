@@ -9,6 +9,13 @@ var MessagesModel = function() {
     self._run_id = undefined;
     self._type = undefined;
 
+    self.constant = {
+        type: {
+            publish: "publish",
+            request: "request"
+        }
+    };
+
     // Getter and setter
     self.__defineGetter__("data", function() {
         return self._data;

@@ -50,6 +50,11 @@ var UILegend = function(delegate, name) {
                 .class("legendGroup")
                 .attr("transform", "translate(" + (windowViewController.width / 2 - UILegend.style.legendBoxWidth - UILegend.style.legendRightMargin) + "," + (windowViewController.height / 2 - UILegend.style.bottomMargin) +")");
         }
+        else {
+            // Move during window resize
+            self._legendGroup
+                .attr("transform", "translate(" + (windowViewController.width / 2 - UILegend.style.legendBoxWidth - UILegend.style.legendRightMargin) + "," + (windowViewController.height / 2 - UILegend.style.bottomMargin) +")");
+        }
 
         if(self._arrowGroup == undefined){
             self._arrowGroup = self._legendGroup
@@ -92,7 +97,7 @@ var UILegend = function(delegate, name) {
                 .width(UILegend.style.square_side)
                 .attr("fill", self.palette.accent1.dark)
                 .x(-11)
-                .y(-8);;
+                .y(-8);
         }
 
         if(self._legendName == undefined) {

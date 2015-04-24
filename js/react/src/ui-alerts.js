@@ -11,8 +11,10 @@ var UIMailInput = React.createClass ({
     },
     handleSubmit: function() {
 
-        if(validateEmail(this.state.email) == false)
+        if(validateEmail(this.state.email) == false) {
+            this.setState({validMail: false});
             return;
+        }
 
         var message = {
             application: this.props.application,
@@ -107,26 +109,57 @@ var UIAlerts = React.createClass ({
                     //<div className="floatLeft"><h4><b>X</b></h4></div>
         var emails = this.state.emails.map(function(email, index) {
             return (
-                <div key={index}>
-                    <button type="button" className="close" aria-label="Close" onClick={_.partial(self.handleDelete, email)}><span aria-hidden="true">&times;</span></button>
-                    <h4 className="modal-title" id="myMailLabel">{email}</h4>
-                </div>
+                <tr key={index}>
+                    <td>
+                        Administrator
+                    </td>
+                    <td>
+                        {email}
+                    </td>
+                    <td>
+                        <button type="button" className="close" aria-label="Close" onClick={_.partial(self.handleDelete, email)}><span aria-hidden="true">&times;</span></button>
+                    </td>
+                </tr>
 
             )
         });
 
+        subscription = [];
+
+        if(this.state.application != undefined) {
+            subscription.push(<span>application: <span className="label label-default">{this.state.application}</span></span>);
+        }
+
+        if(this.state.instance != undefined) {
+            subscription.push(<span> instance: <span className="label label-default">{this.state.instance}</span></span>);
+        }
+
+        if(this.state.component != undefined) {
+            subscription.push(<span> component: <span className="label label-default">{this.state.component}</span></span>);
+        }
 
         return (
             <div className="modal-dialog modal-messages">
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 className="modal-title" id="myMailLabel">Subscription</h4>
+                        <h4 className="modal-title text-center" id="myMailLabel">Subscription to {subscription}</h4>
                     </div>
                     <div className="modal-body">
                         <UIMailInput application={self.state.application} instance={self.state.instance} component={self.state.component}/>
-                        <div className = "emails">
-                            {emails}
+                        <div className = "panel panel-default">
+                            <table className="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Email</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {emails}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 

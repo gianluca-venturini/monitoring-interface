@@ -11,7 +11,17 @@ var UIApplication = function(delegate) {
         headerRectHeightNotExpanded: 10,
         headerRectHeightExpanded: 30,
         activeStatusColor: defaultPalette.state.green,
-        disabledStatusColor: defaultPalette.state.red
+        disabledStatusColor: defaultPalette.state.red,
+        backTextYMargin: 20,
+        backTextXMargin: 60,
+        backIconXMargin: 10,
+        backIconYMargin: 7,
+        arrow_thick: 5,
+        arrow_width: 30,
+        arrow_bottom_margin: 2,
+        optionRectCloseDelay: 250,
+        closeButtonDelay: 750,
+        backButtonSensitiveAreaWidth: 220
     };
 
     // Public variables
@@ -34,7 +44,7 @@ var UIApplication = function(delegate) {
     self.closeOptionRect = function (optionGroup) {
         optionGroup
             .transition()
-            .delay(250)
+            .delay(UIApplication.style.optionRectCloseDelay)
             .attr("transform", "translate(0," + (- UIApplication.style.optionRectHeight) + ")");
     };
 
@@ -47,10 +57,29 @@ var UIApplication = function(delegate) {
     var appName = undefined;
     var mailIcon = undefined;
     var closeIcon = undefined;
+    var optionSignifier = undefined;
+    var backButtonSensitiveArea = undefined;
+    var backArrow = undefined;
 
     self.render = function() {
 
         var layer = self.view;
+
+        // function for the rendering of the triangle and square
+        var lineFunction = d3.svg.line()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; })
+            .interpolate("linear");
+        // Triangle data
+        var arrowData = [
+            { "x":  0.0, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2 + UIApplication.style.arrow_bottom_margin},
+            { "x":  1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 - UIApplication.style.arrow_width, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x":  1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 - UIApplication.style.arrow_width - UIApplication.style.arrow_thick, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x":  0.0, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2 + UIApplication.style.arrow_bottom_margin + 2},
+            { "x":  -1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 + UIApplication.style.arrow_width + UIApplication.style.arrow_thick, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10},
+            { "x": -1*UIApplication.style.applicationBackgroundWidthNotExpanded/2 + UIApplication.style.arrow_width, "y": -UIApplication.style.applicationBackgroundHeightNotExpanded/2+10}
+        ];
+
 
         // Create option group
         // it must be created before the app bg to perform the slide
@@ -97,10 +126,18 @@ var UIApplication = function(delegate) {
                 .on("mouseover", function() {
                     d3.select(this).fill(self.palette.accent1.bright);
                     self.openOptionRect(optionGroup);
+                    optionSignifier
+                        .opacity(0)
                 })
                 .on("mouseout", function() {
                     d3.select(this).fill(self.palette.accent1.normal);
                     self.closeOptionRect(optionGroup);
+                    optionSignifier
+                        .attr("d", lineFunction(arrowData))
+                        .transition()
+                        .delay(UIApplication.style.optionRectCloseDelay)
+                        .opacity(1);
+
                 })
                 .transition()
                 .fill(self.palette.accent1.normal)
@@ -141,17 +178,43 @@ var UIApplication = function(delegate) {
 
         // add close button
         if(closeIcon == undefined) {
-            closeIcon = nameGroup.append("svg:image")
-                .attr('width', 20)
-                .attr('height', 20)
-                .attr("xlink:href", "img/cross_red_border_white.svg")
+            closeIcon = nameGroup.append("text")
+                .text("Back")
+                .fill(self.palette.text.bright)
                 .class("closeApp")
                 .class("pointer")
                 .style("opacity", 0)
+                .attr("text-anchor", "middle")
                 .on("click", function () {
                     delegate.closeButtonClicked();
                 });
+
+            /*
+             closeIcon = nameGroup.append("svg:image")
+             .attr('width', 20)
+             .attr('height', 20)
+             .attr("xlink:href", "img/cross_red_border_white.svg")
+             .class("closeApp")
+             .class("pointer")
+             .style("opacity", 0)
+             .on("click", function () {
+             delegate.closeButtonClicked();
+             });
+            */
         }
+
+
+        // add backButtonSensitiveArea
+        if(backButtonSensitiveArea == undefined) {
+            backButtonSensitiveArea = nameGroup.append("rect")
+                .opacity(0)
+                .class("pointer")
+                .width(0)
+                .height(0)
+                .on("click", function () {
+                    delegate.closeButtonClicked();
+                })}
+        ;
 
         if(optionRect == undefined) {
             optionRect = optionGroup.append("rect")
@@ -161,6 +224,31 @@ var UIApplication = function(delegate) {
                     delegate.subscribeButtonClicked();
                 });
         }
+
+        if(optionSignifier == undefined) {
+            optionSignifier = layer.append("svg:image")
+                .attr('width', 20)
+                .attr('height', 6.5)
+                .x(-10)
+                .y(40)
+                .class("no_interaction")
+                .attr("xlink:href", "img/arrow_white.svg")
+                .class("pointer")
+                .style("opacity", 0);
+        }
+
+        if(backArrow == undefined) {
+            backArrow = layer.append("svg:image")
+                .attr('width', 0)
+                .attr('height', 0)
+                //.x(1000)
+                //.y(0)
+                .class("no_interaction")
+                .attr("xlink:href", "img/back.svg")
+                .class("pointer")
+                .style("opacity", 1);
+        }
+
 
         // add mail icon to the option group
         if(mailIcon == undefined) {
@@ -219,28 +307,80 @@ var UIApplication = function(delegate) {
                 .attr('height', UIApplication.style.headerRectHeightExpanded)
                 .transition();
 
+
             // move close button
+
             closeIcon
-                .on("mouseover", function() {
-                    d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
+                .text("Back")
+                .on("mouseover", function(){
+                    d3.select(this).fill("#bdc3c7");
                 })
-                .on("mouseout", function() {
-                    d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
+                .on("mouseout", function () {
+                    d3.select(this).fill(self.palette.text.bright)
                 })
                 .transition()
-                .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
-                .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
-                .width(40)
-                .height(40)
-                .attr("xlink:href","img/cross_red_border_white.svg")
+                .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backTextXMargin)
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backTextYMargin)
                 .transition()
-                .delay(750)
+                .delay(UIApplication.style.closeButtonDelay)
                 .style("opacity", 1);
 
+            /*
+            * closeIcon
+             .on("mouseover", function() {
+             d3.select(this).attr("xlink:href","img/cross_red_border_white_mouseover.svg");
+             })
+             .on("mouseout", function() {
+             d3.select(this).attr("xlink:href","img/cross_red_border_white.svg");
+             })
+             .transition()
+             .x(windowViewController.width / 2 - UIApplication.style.margin - 25)
+             .y(-windowViewController.height / 2 + UIApplication.style.margin + 5)
+             .width(40)
+             .height(40)
+             .attr("xlink:href","img/cross_red_border_white.svg")
+             .transition()
+             .delay(750)
+             .style("opacity", 1);*/
 
+
+            backButtonSensitiveArea
+                .width(UIApplication.style.backButtonSensitiveAreaWidth)
+                .height(UIApplication.style.titleBarHeight)
+                .on("mouseover", function(){
+                    closeIcon.fill("#bdc3c7");
+                })
+                .on("mouseout", function () {
+                    closeIcon.fill(self.palette.text.bright)
+                })
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin );
+
+            backArrow
+                //.attr('width', 40)
+                //.attr('height', 25)
+                .attr('width', 30)
+                .attr('height', 17.75)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin + UIApplication.style.backIconXMargin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + UIApplication.style.backIconYMargin)
+                .transition()
+                .delay(UIApplication.style.closeButtonDelay)
+                .style("opacity", 1);
+
+            optionSignifier
+                .x(0)
+                .y(0)
+                .opacity(0);
 
         }
         else {
+
+            backArrow
+                .attr('width', 0)
+                .attr('height', 0)
+                .x(-windowViewController.width / 2 + UIApplication.style.margin )
+                .y(-windowViewController.height / 2 + UIApplication.style.margin + 2)
+                .opacity(0);
             appName
                 .transition()
                 .x(0)
@@ -254,13 +394,8 @@ var UIApplication = function(delegate) {
                 .y(-UIApplication.style.applicationBackgroundWidthNotExpanded / 2);
 
             closeIcon
-                .on("mouseover", null)
-                .on("mouseout", null)
-                .x(0)
-                .y(0)
-                .width(0)
-                .height(0)
-                .style("opacity", 0);
+                .text("")
+                .opacity(0);
 
             optionRect
                 .on("mouseover", function () {
@@ -276,6 +411,23 @@ var UIApplication = function(delegate) {
                 .x( - UIApplication.style.applicationBackgroundWidthNotExpanded / 2)
                 .y( UIApplication.style.applicationBackgroundHeightNotExpanded / 2 - UIApplication.style.optionRectHeight)
                 .fill(self.palette.accent1.normal);
+
+            optionSignifier
+                .x(-10)
+                .y(40)
+                .transition()
+                .delay(UIApplication.style.optionRectCloseDelay)
+                .opacity(1);
+
+            backButtonSensitiveArea
+                .width(0)
+                .height(0)
+                .on("mouseover", function(){
+                    closeIcon.fill("#bdc3c7");
+                })
+                .on("mouseout", function () {
+                    closeIcon.fill(self.palette.text.bright)
+                })
         }
 
         appName

@@ -11,8 +11,10 @@ var UIMailInput = React.createClass ({displayName: "UIMailInput",
     },
     handleSubmit: function() {
 
-        if(validateEmail(this.state.email) == false)
+        if(validateEmail(this.state.email) == false) {
+            this.setState({validMail: false});
             return;
+        }
 
         var message = {
             application: this.props.application,
@@ -107,26 +109,57 @@ var UIAlerts = React.createClass ({displayName: "UIAlerts",
                     //<div className="floatLeft"><h4><b>X</b></h4></div>
         var emails = this.state.emails.map(function(email, index) {
             return (
-                React.createElement("div", {key: index}, 
-                    React.createElement("button", {type: "button", className: "close", "aria-label": "Close", onClick: _.partial(self.handleDelete, email)}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                    React.createElement("h4", {className: "modal-title", id: "myMailLabel"}, email)
+                React.createElement("tr", {key: index}, 
+                    React.createElement("td", null, 
+                        "Administrator"
+                    ), 
+                    React.createElement("td", null, 
+                        email
+                    ), 
+                    React.createElement("td", null, 
+                        React.createElement("button", {type: "button", className: "close", "aria-label": "Close", onClick: _.partial(self.handleDelete, email)}, React.createElement("span", {"aria-hidden": "true"}, "×"))
+                    )
                 )
 
             )
         });
 
+        subscription = [];
+
+        if(this.state.application != undefined) {
+            subscription.push(React.createElement("span", null, "application: ", React.createElement("span", {className: "label label-default"}, this.state.application)));
+        }
+
+        if(this.state.instance != undefined) {
+            subscription.push(React.createElement("span", null, " instance: ", React.createElement("span", {className: "label label-default"}, this.state.instance)));
+        }
+
+        if(this.state.component != undefined) {
+            subscription.push(React.createElement("span", null, " component: ", React.createElement("span", {className: "label label-default"}, this.state.component)));
+        }
 
         return (
             React.createElement("div", {className: "modal-dialog modal-messages"}, 
                 React.createElement("div", {className: "modal-content"}, 
                     React.createElement("div", {className: "modal-header"}, 
                         React.createElement("button", {type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close"}, React.createElement("span", {"aria-hidden": "true"}, "×")), 
-                        React.createElement("h4", {className: "modal-title", id: "myMailLabel"}, "Subscription")
+                        React.createElement("h4", {className: "modal-title text-center", id: "myMailLabel"}, "Subscription to ", subscription)
                     ), 
                     React.createElement("div", {className: "modal-body"}, 
                         React.createElement(UIMailInput, {application: self.state.application, instance: self.state.instance, component: self.state.component}), 
-                        React.createElement("div", {className: "emails"}, 
-                            emails
+                        React.createElement("div", {className: "panel panel-default"}, 
+                            React.createElement("table", {className: "table table-striped"}, 
+                                React.createElement("thead", null, 
+                                React.createElement("tr", null, 
+                                    React.createElement("th", null, "Role"), 
+                                    React.createElement("th", null, "Email"), 
+                                    React.createElement("th", null)
+                                )
+                                ), 
+                                React.createElement("tbody", null, 
+                                    emails
+                                )
+                            )
                         )
                     ), 
 
