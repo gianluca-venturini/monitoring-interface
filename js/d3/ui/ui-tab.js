@@ -127,6 +127,9 @@ var UITab = function(delegate, name) {
                 .duration(Animations.instance.INSTANCE_ENTER.duration)
                 .delay(Animations.instance.INSTANCE_ENTER.delay)
                 .margin(undefined)
+                .x(-UITab.style.width / 2)
+                .y(-UITab.style.height / 2)
+                .height(UITab.style.height)
                 .width(UITab.style.width)
                 .fill(self.getTabColor())
                 .opacity(1);
@@ -144,6 +147,10 @@ var UITab = function(delegate, name) {
             optionRect
                 .opacity(1)
                 .transition()
+                .width(UITab.style.optionRectWidth)
+                .height(UITab.style.height)
+                .x(UITab.style.width / 2 - UITab.style.optionRectWidth)
+                .y(-UITab.style.height/2)
                 .duration(Animations.optionRect.INSTANCE_ENTER.duration)
                 .delay(Animations.optionRect.INSTANCE_ENTER.delay)
                 .width(UITab.style.optionRectWidth);
@@ -151,6 +158,8 @@ var UITab = function(delegate, name) {
             // Option message
             optionMessage
                 .transition()
+                .x(UITab.style.width / 2 - UITab.style.optionRectWidth + 50)
+                .y(0)
                 .duration(Animations.optionRect.INSTANCE_ENTER.duration)
                 .delay(Animations.optionRect.INSTANCE_ENTER.delay)
                 .opacity(1);
@@ -164,22 +173,36 @@ var UITab = function(delegate, name) {
                 .duration(Animations.instance.INSTANCE_EXIT.duration)
                 .delay(Animations.instance.INSTANCE_EXIT.delay)
                 .margin(undefined)
+                .opacity(0)
+                .x(0)
+                .y(0)
                 .width(0)
-                .opacity(0);
+                .height(0);
 
             // Tab text
             instanceTabText
                 .data([{}])
                 .x(-UITab.style.width / 2)
-                .opacity(0);
+                .opacity(0).x(0)
+                .y(0)
+                .width(0)
+                .height(0);
 
             // Option rect
             optionRect
+                .opacity(0)
+                .x(0)
+                .y(0)
                 .width(0)
-                .opacity(0);
+                .height(0);
+
             // Option message
             optionMessage
-                .opacity(0);
+                .opacity(0)
+                .x(0)
+                .y(0)
+                .width(0)
+                .height(0);
         }
     };
 

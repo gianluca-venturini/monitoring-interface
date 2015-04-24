@@ -31,6 +31,16 @@ var UINotification = function(delegate) {
                 .duration(Animations.notification.NOTIFICATION_FADE_OUT.duration)
                 .delay(Animations.notification.NOTIFICATION_FADE_OUT.delay)
                 .opacity(0);
+
+            notificationCircle
+                .transition()
+                .cx(0)
+                .cy(0)
+                .r(0);
+
+            notificationText
+                .transition()
+                .x(1000);
         }
         else {
             notificationGroup
@@ -38,6 +48,11 @@ var UINotification = function(delegate) {
                 .duration(Animations.notification.NOTIFICATION_FADE_IN.duration)
                 .delay(Animations.notification.NOTIFICATION_FADE_IN.delay)
                 .opacity(1);
+
+            notificationCircle
+                .cx(0)
+                .cy(0)
+                .r(UINotification.style.notificationRadius);
         }
 
         if(notificationCircle == undefined) {
@@ -53,6 +68,7 @@ var UINotification = function(delegate) {
         if(notificationText == undefined) {
             notificationText = notificationGroup
                 .append("text")
+                .class("no_interaction")
                 .class("notificationText")
                 .attr("text-anchor", "middle")
                 .attr("font-size", UINotification.style.notificationFontSize);
