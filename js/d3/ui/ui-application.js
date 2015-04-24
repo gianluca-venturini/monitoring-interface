@@ -368,6 +368,8 @@ var UIApplication = function(delegate) {
                 .style("opacity", 1);
 
             optionSignifier
+                .x(0)
+                .y(0)
                 .opacity(0);
 
         }
@@ -411,6 +413,8 @@ var UIApplication = function(delegate) {
                 .fill(self.palette.accent1.normal);
 
             optionSignifier
+                .x(-10)
+                .y(40)
                 .transition()
                 .delay(UIApplication.style.optionRectCloseDelay)
                 .opacity(1);
