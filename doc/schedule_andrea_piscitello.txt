@@ -5,3 +5,8 @@
 - InstanceModel development -- Mon 03/09 by 11pm (estimate: 1 hrs)
 - Implement application status and instance status -- Thu 03/12 by 11pm (estimate: 4 hrs)
 - UIErrorNotifications -- Sat 03/14 by 11pm (estimate: 2 hrs)
+
+- Email bot development -- Fri 03/27 by 11pm (estimate: 5 hrs)
+- React Email subscription form development -- Fri 03/27 by 11pm (estimate: 4 hrs)
+- Mandrill API set-up -- Fri 03/27 by 11pm (estimate: 2 hrs)
+- Mandrill Template development and connection with bot -- Fri 03/27 by 11pm (estimate: 2 hrs)
