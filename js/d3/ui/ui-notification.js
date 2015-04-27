@@ -60,6 +60,12 @@ var UINotification = function(delegate) {
                 .duration(Animations.notification.NOTIFICATION_FADE_IN.duration)
                 .delay(Animations.notification.NOTIFICATION_FADE_IN.delay)
                 .opacity(1);
+
+            notificationCircle
+                .cx(0)
+                .cy(0)
+                .r(UINotification.style.notificationRadius);
+
         }
 
 
