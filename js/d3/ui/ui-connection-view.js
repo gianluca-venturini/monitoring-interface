@@ -33,6 +33,41 @@ var UIConnectionView = function(delegate) {
 
         var layer = self.view;
 
+        var componentsData = self.delegate.instanceComponentData;
+
+        var noDataLayer = layer.layerWithName("no_data");
+        var links = layer.layerWithName("links");
+        var components = layer.layerWithName("components");
+        var componentNames = layer.layerWithName("componentNames");
+        var channelTexts = layer.layerWithName("channelTexts");
+        var componentLabels = layer.layerWithName("componentLabels");
+        var componentToolBoxes = layer.layerWithName("componentToolBoxes");
+
+        var noComponentLabel = noDataLayer.selectAll(".no_data_text")
+            .data([{}])
+            .enter()
+            .append("text")
+            .class("no_data_text")
+            .fill(defaultPalette.text.dark)
+            .attr("text-anchor", "middle")
+            .class("no_interaction")
+            .text("No component or channel present");
+
+        console.log(componentsData);
+        if((componentsData == undefined || componentsData.length == 0) && self.delegate.expanded == true) {
+            noDataLayer.selectAll(".no_data_text").opacity(1);
+            components.remove();
+            channelTexts.remove();
+            links.remove();
+            componentNames.remove();
+            componentLabels.remove();
+            componentToolBoxes.remove();
+            return;
+        }
+        else {
+            noDataLayer.selectAll(".no_data_text").opacity(0);
+        }
+
         // Create triangles for the subscribed channels
         var arrowData = [
             { "x":  0.0, "y": 0.0},
@@ -49,15 +84,6 @@ var UIConnectionView = function(delegate) {
         self._innerRadius = Math.min(windowViewController.height, windowViewController.width) / 2 - UIConnectionView.style.margin
                             - UIConnectionView.style.labelLinkLength;
         self._outerRadius = self._innerRadius + UIConnectionView.style.componentThickness;
-
-        var links = layer.layerWithName("links");
-        var components = layer.layerWithName("components");
-        var componentNames = layer.layerWithName("componentNames");
-        var channelTexts = layer.layerWithName("channelTexts");
-        var componentLabels = layer.layerWithName("componentLabels");
-        var componentToolBoxes = layer.layerWithName("componentToolBoxes");
-
-        var componentsData = self.delegate.instanceComponentData;  // applicationModel.getInstanceData("application6","instance1").components;
 
         var openOptionRect = function(component, index){
           d3.select("#SubscribeBox"+index)
@@ -157,6 +183,7 @@ var UIConnectionView = function(delegate) {
             componentNames.remove();
             componentLabels.remove();
             componentToolBoxes.remove();
+            noDataLayer.remove();
             return;
         }
 
@@ -617,7 +644,7 @@ var UIConnectionView = function(delegate) {
 
 
         components.selectAll(".subscribeTriangle")
-            .data(radialLayout.publishChannels)
+            .data(radialLayout.subscribeChannels)
             .enter()
             .append("path")
             .class("subscribeTriangle")
@@ -627,14 +654,14 @@ var UIConnectionView = function(delegate) {
             .opacity(0);
 
         components.selectAll(".subscribeTriangle")
-            .data(radialLayout.publishChannels)
+            .data(radialLayout.subscribeChannels)
             .transition()
             .duration(Animations.connectionView.ARROW_EXPANSION.duration)
             .rotateLayer()
             .opacity(1);
 
         components.selectAll(".subscribeTriangle")
-            .data(radialLayout.publishChannels)
+            .data(radialLayout.subscribeChannels)
             .exit()
             .transition()
             .opacity(0)

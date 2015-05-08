@@ -41,14 +41,27 @@ var ApplicationsModel = function() {
     };
 
     self.fetchData = function(url) {
-        d3.json(url, function(error, data) {
-            if (error)
-                return console.warn(error);
 
-            self.data = data;
 
-            notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
-        });
+         d3.json(url, function(error, data) {
+         if (error)
+         return console.warn(error);
+
+         self.data = data;
+
+         notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
+         });
+
+
+        /*
+         nutella.net.request("monitoring/application", {}, function(payload) {
+             self.data = payload;
+
+             notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
+         });
+         */
+
+
     };
 
     // Constructor
