@@ -40,7 +40,8 @@ var UIMessages = React.createClass({
                         <a data-toggle="collapse" data-parent="#accordion" href={"#collapse"+index} aria-expanded="true" aria-controls={"collapse"+index}>
                             <div className="panel-heading" role="tab" id="headingOne">
                                 <h4 className="panel-title">
-                                {date.getUTCDate()+"/"+(date.getUTCMonth()+1)+"/"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"."+date.getUTCMilliseconds()}
+                                {date.getUTCDate()+"/"+(date.getUTCMonth()+1)+"/"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"."+date.getUTCMilliseconds()+
+                                " - "+message.type}
                                 </h4>
                             </div>
                         </a>

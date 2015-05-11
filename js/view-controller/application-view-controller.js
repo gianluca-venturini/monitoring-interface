@@ -114,6 +114,13 @@ var ApplicationViewController = function(name, view) {
         var instanceData = applicationModel.getInstanceData(self.name, applicationModel.viewControllerInstanceSelected.name);
 
         return instanceData.components;
+        // TODO: fix here
+
+
+        if(instanceData != undefined)
+            return instanceData.components;
+        else
+            return undefined;
     });
 
     self.__defineGetter__("expanded", function() {

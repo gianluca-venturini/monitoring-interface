@@ -87,7 +87,16 @@ var MessagesModel = function() {
 
     self.downloadMessages = function() {
         console.log(self);
-        nutella.net.request("monitoring/message", {}, function(data) {
+
+        var request = {
+            application: messageModel.app_id,
+            instance: messageModel.run_id,
+            channel: messageModel.channel
+        };
+
+        console.log(request);
+
+        nutella.net.request("monitoring/message", request, function(data) {
             console.log(data);
             self.data = data;
         });

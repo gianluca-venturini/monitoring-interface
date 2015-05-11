@@ -40,7 +40,8 @@ var UIMessages = React.createClass({displayName: "UIMessages",
                         React.createElement("a", {"data-toggle": "collapse", "data-parent": "#accordion", href: "#collapse"+index, "aria-expanded": "true", "aria-controls": "collapse"+index}, 
                             React.createElement("div", {className: "panel-heading", role: "tab", id: "headingOne"}, 
                                 React.createElement("h4", {className: "panel-title"}, 
-                                date.getUTCDate()+"/"+(date.getUTCMonth()+1)+"/"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"."+date.getUTCMilliseconds()
+                                date.getUTCDate()+"/"+(date.getUTCMonth()+1)+"/"+date.getUTCFullYear()+" "+date.getUTCHours()+":"+date.getUTCMinutes()+":"+date.getUTCSeconds()+"."+date.getUTCMilliseconds()+
+                                " - "+message.type
                                 )
                             )
                         ), 
