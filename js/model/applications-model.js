@@ -42,7 +42,7 @@ var ApplicationsModel = function() {
 
     self.fetchData = function(url) {
 
-
+        /*
          d3.json(url, function(error, data) {
          if (error)
          return console.warn(error);
@@ -51,17 +51,21 @@ var ApplicationsModel = function() {
 
          notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
          });
+        */
 
+        nutella.net.request("monitoring/application", {}, function(payload) {
+            self.data = payload;
 
-        /*
-         nutella.net.request("monitoring/application", {}, function(payload) {
-             self.data = payload;
+            notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
+        });
 
-             notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
-         });
-         */
+        setInterval(function(){
+            nutella.net.request("monitoring/application", {}, function(payload) {
+                self.data = payload;
 
-
+                notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
+            });
+        }, 1000);
     };
 
     // Constructor

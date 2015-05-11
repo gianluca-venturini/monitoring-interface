@@ -51,10 +51,28 @@ var UIConnectionView = function(delegate) {
             .fill(defaultPalette.text.dark)
             .attr("text-anchor", "middle")
             .class("no_interaction")
-            .text("No component or channel present");
+            .text("No components or channels present");
+
+        var noChannels = true;  // True when all components don't have channels
+        if(componentsData != undefined) {
+            componentsData.forEach(function (component) {
+                if ((component.publish != undefined && component.publish.length > 0) ||
+                    (component.subscribe != undefined && component.subscribe.length > 0) ||
+                    (component.handle_request != undefined && component.handle_request.length > 0) ||
+                    (component.request != undefined && component.request.length > 0)) {
+                    noChannels = false;
+                }
+            });
+        }
+        else {
+            noChannels = false;
+        }
 
         console.log(componentsData);
-        if((componentsData == undefined || componentsData.length == 0) && self.delegate.expanded == true) {
+        if((componentsData == undefined ||
+            componentsData.length == 0 ||
+            noChannels == true) &&
+                self.delegate.expanded == true) {
             noDataLayer.selectAll(".no_data_text").opacity(1);
             components.remove();
             channelTexts.remove();
