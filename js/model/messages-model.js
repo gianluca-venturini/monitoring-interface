@@ -9,6 +9,10 @@ var MessagesModel = function() {
     self._run_id = undefined;
     self._type = undefined;
 
+
+    // Public variables
+    self.channel = undefined;
+
     self.constant = {
         type: {
             publish: "publish",

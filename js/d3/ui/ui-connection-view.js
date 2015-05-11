@@ -68,7 +68,6 @@ var UIConnectionView = function(delegate) {
             noChannels = false;
         }
 
-        console.log(componentsData);
         if((componentsData == undefined ||
             componentsData.length == 0 ||
             noChannels == true) &&
@@ -630,6 +629,8 @@ var UIConnectionView = function(delegate) {
             }))
             .on("click", function(points) {
                 // Insert the data in the messages model
+                messageModel.channel = points[0].link.channel;
+                alert(messageModel.channel);
                 messageModel.from = points[0].link.source.component;
                 messageModel.to = points[0].link.destination.component;
                 messageModel.type = points[0].link.type;

@@ -112,6 +112,7 @@
                                 subscribe.component = component2.name;
                                 var link = {
                                     type: "publish",
+                                    channel: publish.channel,
                                     source: publish,
                                     destination: subscribe,
                                     coordinates: [
@@ -135,6 +136,7 @@
                                 handle_request.component = component2.name;
                                 var link = {
                                     type: "request",
+                                    channel: request.channel,
                                     source: request,
                                     destination: handle_request,
                                     coordinates: [

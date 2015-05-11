@@ -340,6 +340,8 @@ var UIMessageSend = React.createClass ({displayName: "UIMessageSend",
         alert("Send message");
         var payload = this.refs.jsonObject.getJson();
         console.log(payload);
+        var channel = messageModel.channel;
+        nutellaFramework.f.net.publish_to_run(this.state.application, this.state.instance, channel, payload)
     },
     render: function() {
         var self = this;
@@ -357,6 +359,8 @@ var UIMessageSend = React.createClass ({displayName: "UIMessageSend",
         if(this.state.component != undefined) {
             subscription.push(React.createElement("span", null, " component: ", React.createElement("span", {className: "label label-default"}, this.state.component)));
         }
+
+        subscription.push(React.createElement("span", null, " on channel: ", React.createElement("span", {className: "label label-default"}, messageModel.channel)));
 
         return (
             React.createElement("div", {className: "modal-dialog modal-messages"}, 
