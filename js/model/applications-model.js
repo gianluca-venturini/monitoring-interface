@@ -65,7 +65,7 @@ var ApplicationsModel = function() {
 
                 notificationCenter.dispatch(Notifications.data.APPLICATION_DATA_CHANGE);
             });
-        }, 1000);
+        }, 2000);
     };
 
     // Constructor

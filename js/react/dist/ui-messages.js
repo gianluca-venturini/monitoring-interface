@@ -10,7 +10,13 @@ var UIMessages = React.createClass({displayName: "UIMessages",
     componentDidMount: function () {
         var self = this;
         notificationCenter.subscribe(Notifications.data.MESSAGE_DATA_CHANGE, function() {
-            self.setState({messages: messageModel.data.messages,
+
+            var messages = [];
+
+            if(messageModel.data != undefined)
+                messages = messageModel.data.messages;
+
+            self.setState({messages: messages,
                     from:  messageModel.from,
                     to: messageModel.to,
                     type: messageModel.type

@@ -95,7 +95,7 @@ var MessagesModel = function() {
         };
 
         console.log(request);
-
+        
         nutella.net.request("monitoring/message", request, function(data) {
             console.log(data);
             self.data = data;

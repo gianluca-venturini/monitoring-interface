@@ -630,12 +630,13 @@ var UIConnectionView = function(delegate) {
             .on("click", function(points) {
                 // Insert the data in the messages model
                 messageModel.channel = points[0].link.channel;
-                alert(messageModel.channel);
                 messageModel.from = points[0].link.source.component;
                 messageModel.to = points[0].link.destination.component;
                 messageModel.type = points[0].link.type;
                 messageModel.app_id = applicationModel.viewControllerApplicationSelected.name;
                 messageModel.run_id = applicationModel.viewControllerInstanceSelected.name;
+
+                messageModel.downloadMessages();
 
                 // Display the modal view
                 $('#messageDisplay').modal({ show: true});
